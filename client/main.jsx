@@ -1,6 +1,8 @@
 import { Meteor } from 'meteor/meteor';
 import React from 'react';
 import { render } from 'react-dom';
+import Button from "@material-ui/core/Button";
+
 
 Meteor.startup(() => {
   render(<HelloWorld />, document.getElementById('app'));
@@ -10,7 +12,10 @@ Meteor.startup(() => {
 class HelloWorld extends React.Component {
   render() {
     return (
-      <h1>Hello World!</h1>
+      <div>
+        <h1>Hello World!</h1>
+        <Button variant="contained" color="primary">Click Me!</Button>
+      </div>
     );
   }
 }
