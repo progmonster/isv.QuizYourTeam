@@ -9,9 +9,9 @@ import "perfect-scrollbar/css/perfect-scrollbar.css";
 import withStyles from "@material-ui/core/styles/withStyles";
 // core components
 import Navbar from "/imports/components/Navbars/Navbar.jsx";
-import Footer from "/imports/components/Footer/Footer.jsx";
+/*import Footer from "/imports/components/Footer/Footer.jsx";*/
 import Sidebar from "/imports/components/Sidebar/Sidebar.jsx";
-import FixedPlugin from "/imports/components/FixedPlugin/FixedPlugin.jsx";
+/*import FixedPlugin from "/imports/components/FixedPlugin/FixedPlugin.jsx";*/
 
 import routes from "/imports/routes.js";
 
@@ -116,7 +116,7 @@ class Dashboard extends React.Component {
           ) : (
             <div className={classes.map}>{switchRoutes}</div>
           )}
-          {this.getRoute() ? <Footer /> : null}
+          {/*{this.getRoute() ? <Footer /> : null}*/}
 {/*
           <FixedPlugin
             handleImageClick={this.handleImageClick}
