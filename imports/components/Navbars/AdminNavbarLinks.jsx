@@ -57,6 +57,7 @@ class HeaderLinks extends React.Component {
             <Search />
           </Button>
         </div>
+{/*
         <Button
           color={window.innerWidth > 959 ? "transparent" : "white"}
           justIcon={window.innerWidth > 959}
@@ -69,6 +70,8 @@ class HeaderLinks extends React.Component {
             <p className={classes.linkText}>Dashboard</p>
           </Hidden>
         </Button>
+*/}
+{/*
         <div className={classes.manager}>
           <Button
             buttonRef={node => {
@@ -150,6 +153,8 @@ class HeaderLinks extends React.Component {
             )}
           </Poppers>
         </div>
+*/}
+{/*
         <Button
           color={window.innerWidth > 959 ? "transparent" : "white"}
           justIcon={window.innerWidth > 959}
@@ -162,6 +167,7 @@ class HeaderLinks extends React.Component {
             <p className={classes.linkText}>Profile</p>
           </Hidden>
         </Button>
+*/}
       </div>
     );
   }
