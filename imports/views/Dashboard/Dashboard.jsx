@@ -58,6 +58,26 @@ class Dashboard extends React.Component {
         <GridContainer>
           <GridItem xs={12} sm={6} md={3}>
             <Card>
+              <CardHeader color="warning">
+                <h4 className={classes.cardTitleWhite}>Test Quiz</h4>
+              </CardHeader>
+              <CardBody>
+                <p className={classes.cardCategory}>
+                  Test yourself and get a gift!
+                </p>
+              </CardBody>
+              <CardFooter chart>
+                <div className={classes.stats}>
+                  <AccessTime /> updated 4 minutes ago
+                </div>
+              </CardFooter>
+            </Card>
+          </GridItem>
+
+
+{/*
+          <GridItem xs={12} sm={6} md={3}>
+            <Card>
               <CardHeader color="warning" stats icon>
                 <CardIcon color="warning">
                   <Icon>content_copy</Icon>
@@ -273,6 +293,7 @@ class Dashboard extends React.Component {
               </CardBody>
             </Card>
           </GridItem>
+*/}
         </GridContainer>
       </div>
     );
