@@ -9,7 +9,7 @@ import { Router, Route, Switch, Redirect } from "react-router-dom";
 // core components
 import Admin from "/imports/layouts/Admin.jsx";
 import RTL from "/imports/layouts/RTL.jsx";
-import "/imports/assets/css/material-dashboard-react.css?v=1.6.0";
+import "/imports/assets/css/material-dashboard-react.css";
 
 Meteor.startup(() => {
   const hist = createBrowserHistory();

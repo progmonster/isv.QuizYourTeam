@@ -42,7 +42,7 @@ import {
 
 import rtlStyle from "/imports/assets/jss/material-dashboard-react/views/rtlStyle.jsx";
 
-import avatar from "/imports/assets/img/faces/marc.jpg";
+const avatar = "/assets/img/faces/marc.jpg";
 
 let bugs = [
   "طراح گرافیک از این متن به عنوان عنصری از ترکیب بندی برای پر کردن؟",

@@ -2,10 +2,10 @@
 import React, { Component } from "react";
 import classnames from "classnames";
 
-import imagine1 from "/imports/assets/img/sidebar-1.jpg";
-import imagine2 from "/imports/assets/img/sidebar-2.jpg";
-import imagine3 from "/imports/assets/img/sidebar-3.jpg";
-import imagine4 from "/imports/assets/img/sidebar-4.jpg";
+const imagine1 = "/assets/img/sidebar-1.jpg";
+const imagine2 = "/assets/img/sidebar-2.jpg";
+const imagine3 = "/assets/img/sidebar-3.jpg";
+const imagine4 = "/assets/img/sidebar-4.jpg";
 
 import Button from "/imports/components/CustomButtons/Button.jsx";
 
