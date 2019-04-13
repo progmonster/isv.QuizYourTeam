@@ -1,11 +1,16 @@
 import React from "react";
 import PropTypes from "prop-types";
 // react plugin for creating charts
+/*
 import ChartistGraph from "react-chartist";
+*/
 // @material-ui/core
 import withStyles from "@material-ui/core/styles/withStyles";
+/*
 import Icon from "@material-ui/core/Icon";
+*/
 // @material-ui/icons
+/*
 import Store from "@material-ui/icons/Store";
 import Warning from "@material-ui/icons/Warning";
 import DateRange from "@material-ui/icons/DateRange";
@@ -17,9 +22,11 @@ import Accessibility from "@material-ui/icons/Accessibility";
 import BugReport from "@material-ui/icons/BugReport";
 import Code from "@material-ui/icons/Code";
 import Cloud from "@material-ui/icons/Cloud";
+*/
 // core components
 import GridItem from "/imports/components/Grid/GridItem.jsx";
 import GridContainer from "/imports/components/Grid/GridContainer.jsx";
+/*
 import Table from "/imports/components/Table/Table.jsx";
 import Tasks from "/imports/components/Tasks/Tasks.jsx";
 import CustomTabs from "/imports/components/CustomTabs/CustomTabs.jsx";
@@ -29,16 +36,23 @@ import CardHeader from "/imports/components/Card/CardHeader.jsx";
 import CardIcon from "/imports/components/Card/CardIcon.jsx";
 import CardBody from "/imports/components/Card/CardBody.jsx";
 import CardFooter from "/imports/components/Card/CardFooter.jsx";
+*/
 
+/*
 import { bugs, website, server } from "/imports/variables/general.jsx";
+*/
 
+/*
 import {
   dailySalesChart,
   emailsSubscriptionChart,
   completedTasksChart
 } from "/imports/variables/charts.jsx";
+*/
 
 import dashboardStyle from "/imports/assets/jss/material-dashboard-react/views/dashboardStyle.jsx";
+import QuizCard from "./QuizCard.jsx";
+
 
 class Dashboard extends React.Component {
   state = {
@@ -57,21 +71,59 @@ class Dashboard extends React.Component {
       <div>
         <GridContainer>
           <GridItem xs={12} sm={6} md={3}>
-            <Card>
-              <CardHeader color="warning">
-                <h4 className={classes.cardTitleWhite}>Test Quiz</h4>
-              </CardHeader>
-              <CardBody>
-                <p className={classes.cardCategory}>
-                  Test yourself and get a gift!
-                </p>
-              </CardBody>
-              <CardFooter chart>
-                <div className={classes.stats}>
-                  <AccessTime /> updated 4 minutes ago
-                </div>
-              </CardFooter>
-            </Card>
+            <QuizCard/>
+          </GridItem>
+
+          <GridItem xs={12} sm={6} md={3}>
+            <QuizCard/>
+          </GridItem>
+
+          <GridItem xs={12} sm={6} md={3}>
+            <QuizCard/>
+          </GridItem>
+
+          <GridItem xs={12} sm={6} md={3}>
+            <QuizCard/>
+          </GridItem>
+
+          <GridItem xs={12} sm={6} md={3}>
+            <QuizCard/>
+          </GridItem>
+
+          <GridItem xs={12} sm={6} md={3}>
+            <QuizCard/>
+          </GridItem>
+
+          <GridItem xs={12} sm={6} md={3}>
+            <QuizCard/>
+          </GridItem>
+
+          <GridItem xs={12} sm={6} md={3}>
+            <QuizCard/>
+          </GridItem>
+
+          <GridItem xs={12} sm={6} md={3}>
+            <QuizCard/>
+          </GridItem>
+
+          <GridItem xs={12} sm={6} md={3}>
+            <QuizCard/>
+          </GridItem>
+
+          <GridItem xs={12} sm={6} md={3}>
+            <QuizCard/>
+          </GridItem>
+
+          <GridItem xs={12} sm={6} md={3}>
+            <QuizCard/>
+          </GridItem>
+
+          <GridItem xs={12} sm={6} md={3}>
+            <QuizCard/>
+          </GridItem>
+
+          <GridItem xs={12} sm={6} md={3}>
+            <QuizCard/>
           </GridItem>
 
 
