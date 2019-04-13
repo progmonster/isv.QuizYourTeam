@@ -1,4 +1,4 @@
-import assert from "assert";
+import assert from "/imports/assert";
 
 describe("main", function () {
   it("package.json has correct name", async function () {

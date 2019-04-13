@@ -11,10 +11,10 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import Icon from "@material-ui/core/Icon";
 // core components
-import AdminNavbarLinks from "components/Navbars/AdminNavbarLinks.jsx";
-import RTLNavbarLinks from "components/Navbars/RTLNavbarLinks.jsx";
+import AdminNavbarLinks from "/imports/components/Navbars/AdminNavbarLinks.jsx";
+import RTLNavbarLinks from "/imports/components/Navbars/RTLNavbarLinks.jsx";
 
-import sidebarStyle from "assets/jss/material-dashboard-react/components/sidebarStyle.jsx";
+import sidebarStyle from "/imports/assets/jss/material-dashboard-react/components/sidebarStyle.jsx";
 
 const Sidebar = ({ ...props }) => {
   // verifies if routeName is the one active (in browser input)
