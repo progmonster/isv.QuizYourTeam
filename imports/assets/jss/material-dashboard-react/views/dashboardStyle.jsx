@@ -80,7 +80,8 @@ const dashboardStyle = theme => ({
   addCardFab: {
     position: 'fixed',
     bottom: theme.spacing.unit * 2,
-    right: theme.spacing.unit * 3
+    right: theme.spacing.unit * 3,
+    zIndex: 10000
   }
 });
 
