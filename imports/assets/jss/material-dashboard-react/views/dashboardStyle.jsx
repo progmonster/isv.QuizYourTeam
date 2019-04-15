@@ -5,7 +5,7 @@ import {
   hexToRgb
 } from "/imports/assets/jss/material-dashboard-react.jsx";
 
-const dashboardStyle = {
+const dashboardStyle = theme => ({
   successText: {
     color: successColor[0]
   },
@@ -76,7 +76,12 @@ const dashboardStyle = {
       fontWeight: "400",
       lineHeight: "1"
     }
+  },
+  addCardFab: {
+    position: 'fixed',
+    bottom: theme.spacing.unit * 2,
+    right: theme.spacing.unit * 3
   }
-};
+});
 
 export default dashboardStyle;

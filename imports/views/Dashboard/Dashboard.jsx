@@ -1,7 +1,10 @@
 import React from "react";
 import PropTypes from "prop-types";
+import classNames from 'classnames';
 import { EditorState } from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg';
+import Fab from '@material-ui/core/Fab';
+import AddIcon from '@material-ui/icons/Add';
 import '/node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 
 // react plugin for creating charts
@@ -83,6 +86,7 @@ class Dashboard extends React.Component {
   };
   render() {
     const { classes } = this.props;
+
     return (
       <div>
         <GridContainer>
@@ -382,6 +386,10 @@ class Dashboard extends React.Component {
           </GridItem>
 */}
         </GridContainer>
+
+        <Fab color="primary" className={classes.addCardFab}>
+          <AddIcon/>
+        </Fab>
       </div>
     );
   }
