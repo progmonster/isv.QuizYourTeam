@@ -58,8 +58,8 @@ import {
 } from "/imports/variables/charts.jsx";
 */
 
-import dashboardStyle from "/imports/assets/jss/material-dashboard-react/views/dashboardStyle.jsx";
-import QuizCard from "./QuizCard.jsx";
+import dashboardStyle from "./dashboardStyle.jsx";
+import QuizCard from "./quizCard.jsx";
 
 class Dashboard extends React.Component {
   constructor(props) {
@@ -111,58 +111,6 @@ class Dashboard extends React.Component {
                 </div>
               </CardFooter>
             </Card>
-          </GridItem>
-
-          <GridItem xs={12} sm={6} md={3}>
-            <QuizCard/>
-          </GridItem>
-
-          <GridItem xs={12} sm={6} md={3}>
-            <QuizCard/>
-          </GridItem>
-
-          <GridItem xs={12} sm={6} md={3}>
-            <QuizCard/>
-          </GridItem>
-
-          <GridItem xs={12} sm={6} md={3}>
-            <QuizCard/>
-          </GridItem>
-
-          <GridItem xs={12} sm={6} md={3}>
-            <QuizCard/>
-          </GridItem>
-
-          <GridItem xs={12} sm={6} md={3}>
-            <QuizCard/>
-          </GridItem>
-
-          <GridItem xs={12} sm={6} md={3}>
-            <QuizCard/>
-          </GridItem>
-
-          <GridItem xs={12} sm={6} md={3}>
-            <QuizCard/>
-          </GridItem>
-
-          <GridItem xs={12} sm={6} md={3}>
-            <QuizCard/>
-          </GridItem>
-
-          <GridItem xs={12} sm={6} md={3}>
-            <QuizCard/>
-          </GridItem>
-
-          <GridItem xs={12} sm={6} md={3}>
-            <QuizCard/>
-          </GridItem>
-
-          <GridItem xs={12} sm={6} md={3}>
-            <QuizCard/>
-          </GridItem>
-
-          <GridItem xs={12} sm={6} md={3}>
-            <QuizCard/>
           </GridItem>
 
 
@@ -387,7 +335,7 @@ class Dashboard extends React.Component {
 */}
         </GridContainer>
 
-        <Fab color="primary" className={classes.addCardFab}>
+        <Fab color="primary" className={classes.addCardFab} href="/admin/edit-quiz">
           <AddIcon/>
         </Fab>
       </div>

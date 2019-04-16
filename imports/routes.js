@@ -11,9 +11,10 @@ import Unarchive from "@material-ui/icons/Unarchive";
 import Language from "@material-ui/icons/Language";
 */
 // core components/views for Admin layout
-import DashboardPage from "/imports/views/Dashboard/Dashboard.jsx";
+import DashboardPage from "/imports/views/Dashboard/dashboard.jsx";
 /*import UserProfile from "/imports/views/UserProfile/UserProfile.jsx";*/
 import Team from "/imports/views/Team/Team.jsx";
+import EditQuiz from "./views/Quizzes/EditQuiz";
 /*
 import TableList from "/imports/views/TableList/TableList.jsx";
 import Typography from "/imports/views/Typography/Typography.jsx";
@@ -25,14 +26,25 @@ import UpgradeToPro from "/imports/views/UpgradeToPro/UpgradeToPro.jsx";
 // core components/views for RTL layout
 /*import RTLPage from "/imports/views/RTLPage/RTLPage.jsx";*/
 
-const dashboardRoutes = [
+export const routes = [
+  {
+    path: "/edit-quiz",
+    name: "Edit Quiz",
+    rtlName: "Edit Quiz",
+    icon: Dashboard,
+    component: EditQuiz,
+    layout: "/admin",
+    showInDrawer: false,
+  },
+
   {
     path: "/dashboard",
     name: "Quizzes",
     rtlName: "Quizzes",
     icon: Dashboard,
     component: DashboardPage,
-    layout: "/admin"
+    layout: "/admin",
+    showInDrawer: true,
   },
 /*
   {
@@ -50,7 +62,8 @@ const dashboardRoutes = [
     rtlName: "Team",
     icon: People,
     component: Team,
-    layout: "/admin"
+    layout: "/admin",
+    showInDrawer: true,
   },
 /*
   {
@@ -112,4 +125,4 @@ const dashboardRoutes = [
 */
 ];
 
-export default dashboardRoutes;
+export const drawerRoutes = routes.filter(({ showInDrawer }) => showInDrawer);

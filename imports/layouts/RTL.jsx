@@ -13,7 +13,7 @@ import Footer from "/imports/components/Footer/Footer.jsx";
 import Sidebar from "/imports/components/Sidebar/Sidebar.jsx";
 import FixedPlugin from "/imports/components/FixedPlugin/FixedPlugin.jsx";
 
-import routes from "/imports/routes.js";
+import { routes, drawerRoutes } from "/imports/routes.js";
 
 import rtlStyle from "/imports/assets/jss/material-dashboard-react/layouts/rtlStyle.jsx";
 
@@ -93,7 +93,7 @@ class RTL extends React.Component {
     return (
       <div className={classes.wrapper}>
         <Sidebar
-          routes={routes}
+          routes={drawerRoutes}
           logoText={"الإبداعية تيم"}
           logo={logo}
           image={this.state.image}
@@ -105,7 +105,7 @@ class RTL extends React.Component {
         />
         <div className={classes.mainPanel} ref="mainPanel">
           <Navbar
-            routes={routes}
+            routes={drawerRoutes}
             handleDrawerToggle={this.handleDrawerToggle}
             rtlActive
             {...rest}

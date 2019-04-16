@@ -13,7 +13,7 @@ import Navbar from "/imports/components/Navbars/Navbar.jsx";
 import Sidebar from "/imports/components/Sidebar/Sidebar.jsx";
 /*import FixedPlugin from "/imports/components/FixedPlugin/FixedPlugin.jsx";*/
 
-import routes from "/imports/routes.js";
+import { routes, drawerRoutes } from "/imports/routes.js";
 
 import dashboardStyle from "/imports/assets/jss/material-dashboard-react/layouts/dashboardStyle.jsx";
 
@@ -93,7 +93,7 @@ class Dashboard extends React.Component {
     return (
       <div className={classes.wrapper}>
         <Sidebar
-          routes={routes}
+          routes={drawerRoutes}
           logoText={"Quiz Your Team"}
           logo={logo}
           image={this.state.image}
@@ -104,7 +104,7 @@ class Dashboard extends React.Component {
         />
         <div className={classes.mainPanel} ref="mainPanel">
           <Navbar
-            routes={routes}
+            routes={drawerRoutes}
             handleDrawerToggle={this.handleDrawerToggle}
             {...rest}
           />

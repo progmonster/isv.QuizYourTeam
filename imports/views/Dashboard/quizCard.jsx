@@ -7,7 +7,7 @@ import CardIcon from "/imports/components/Card/CardIcon.jsx";
 import CardBody from "/imports/components/Card/CardBody.jsx";
 import CardFooter from "/imports/components/Card/CardFooter.jsx";
 import PropTypes from "prop-types";
-import dashboardStyle from "/imports/assets/jss/material-dashboard-react/views/dashboardStyle.jsx";
+import dashboardStyle from "/imports/views/Dashboard/dashboardStyle.jsx";
 
 class QuizCard extends React.Component {
   render() {
