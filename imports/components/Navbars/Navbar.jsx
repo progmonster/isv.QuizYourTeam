@@ -31,14 +31,17 @@ function Header({ ...props }) {
   const appBarClasses = classNames({
     [" " + classes[color]]: color
   });
+
+  const brand = makeBrand();
+
   return (
     <AppBar className={classes.appBar + appBarClasses}>
       <Toolbar className={classes.container}>
         <div className={classes.flex}>
           {/* Here we create navbar brand, based on route name */}
-          <Button color="transparent" href="#" className={classes.title}>
+          { !!brand && (<Button color="transparent" href="#" className={classes.title}>
             {makeBrand()}
-          </Button>
+          </Button>)}
         </div>
         <Hidden smDown implementation="css">
           {props.rtlActive ? <RTLNavbarLinks /> : <AdminNavbarLinks />}

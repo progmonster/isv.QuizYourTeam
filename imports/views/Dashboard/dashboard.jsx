@@ -1,18 +1,32 @@
 import React from "react";
 import PropTypes from "prop-types";
-import classNames from 'classnames';
 import { EditorState } from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
 import '/node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
-
 // react plugin for creating charts
 /*
 import ChartistGraph from "react-chartist";
 */
 // @material-ui/core
 import withStyles from "@material-ui/core/styles/withStyles";
+// core components
+import GridItem from "/imports/components/Grid/GridItem.jsx";
+import GridContainer from "/imports/components/Grid/GridContainer.jsx";
+/*
+import Table from "/imports/components/Table/Table.jsx";
+import Tasks from "/imports/components/Tasks/Tasks.jsx";
+import CustomTabs from "/imports/components/CustomTabs/CustomTabs.jsx";
+import Danger from "/imports/components/Typography/Danger.jsx";
+import CardIcon from "/imports/components/Card/CardIcon.jsx";
+import AccessTime from "@material-ui/icons/AccessTime";
+*/
+import Card from "/imports/components/Card/Card.jsx";
+import CardHeader from "/imports/components/Card/CardHeader.jsx";
+import CardBody from "/imports/components/Card/CardBody.jsx";
+import CardFooter from "/imports/components/Card/CardFooter.jsx";
+import dashboardStyle from "./dashboardStyle.jsx";
 /*
 import Icon from "@material-ui/core/Icon";
 */
@@ -30,22 +44,6 @@ import Code from "@material-ui/icons/Code";
 import Cloud from "@material-ui/icons/Cloud";
 */
 
-// core components
-import GridItem from "/imports/components/Grid/GridItem.jsx";
-import GridContainer from "/imports/components/Grid/GridContainer.jsx";
-/*
-import Table from "/imports/components/Table/Table.jsx";
-import Tasks from "/imports/components/Tasks/Tasks.jsx";
-import CustomTabs from "/imports/components/CustomTabs/CustomTabs.jsx";
-import Danger from "/imports/components/Typography/Danger.jsx";
-import CardIcon from "/imports/components/Card/CardIcon.jsx";
-import AccessTime from "@material-ui/icons/AccessTime";
-*/
-import Card from "/imports/components/Card/Card.jsx";
-import CardHeader from "/imports/components/Card/CardHeader.jsx";
-import CardBody from "/imports/components/Card/CardBody.jsx";
-import CardFooter from "/imports/components/Card/CardFooter.jsx";
-
 /*
 import { bugs, website, server } from "/imports/variables/general.jsx";
 */
@@ -57,9 +55,6 @@ import {
   completedTasksChart
 } from "/imports/variables/charts.jsx";
 */
-
-import dashboardStyle from "./dashboardStyle.jsx";
-import QuizCard from "./quizCard.jsx";
 
 class Dashboard extends React.Component {
   constructor(props) {
@@ -84,6 +79,7 @@ class Dashboard extends React.Component {
   handleChangeIndex = index => {
     this.setState({ value: index });
   };
+
   render() {
     const { classes } = this.props;
 
@@ -114,7 +110,7 @@ class Dashboard extends React.Component {
           </GridItem>
 
 
-{/*
+          {/*
           <GridItem xs={12} sm={6} md={3}>
             <Card>
               <CardHeader color="warning" stats icon>
@@ -336,7 +332,8 @@ class Dashboard extends React.Component {
         </GridContainer>
 
         <Fab color="primary" className={classes.addCardFab} href="/admin/edit-quiz">
-          <AddIcon/>
+          <AddIcon />
+
         </Fab>
       </div>
     );

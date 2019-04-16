@@ -145,7 +145,7 @@ function EditQuiz(props) {
               </GridContainer>
             </CardBody>
             <CardFooter>
-              <Button color="primary">Update Profile</Button>
+              {/*<Button color="primary">Update Profile</Button>*/}
             </CardFooter>
           </Card>
         </GridItem>
@@ -164,9 +164,11 @@ function EditQuiz(props) {
                 human foundation in truth And I love you like Kanye loves Kanye
                 I love Rick Owens’ bed design but the back is...
               </p>
+{/*
               <Button color="primary" round>
                 Follow
               </Button>
+*/}
             </CardBody>
           </Card>
         </GridItem>
