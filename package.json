@@ -21,6 +21,7 @@
     "prettier": "1.16.4",
     "prop-types": "15.7.1",
     "react": "^16.8.6",
+    "react-addons-update": "^15.6.2",
     "react-chartist": "0.13.3",
     "react-dom": "^16.8.6",
     "react-draft-wysiwyg": "^1.13.2",

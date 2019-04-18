@@ -27,6 +27,7 @@ import CardHeader from "/imports/components/Card/CardHeader.jsx";
 import CardBody from "/imports/components/Card/CardBody.jsx";
 import CardFooter from "/imports/components/Card/CardFooter.jsx";
 import dashboardStyle from "./dashboardStyle.jsx";
+import { Link } from "react-router-dom";
 /*
 import Icon from "@material-ui/core/Icon";
 */
@@ -330,10 +331,9 @@ class Dashboard extends React.Component {
           </GridItem>
 */}
         </GridContainer>
-
-        <Fab color="primary" className={classes.addCardFab} href="/admin/edit-quiz">
+        {/*todo replace url with something like "/quizzes/new". Use /quizzes/:id/edit for edit exists */}
+        <Fab color="primary" className={classes.addCardFab} component={Link} to="/admin/edit-quiz">
           <AddIcon />
-
         </Fab>
       </div>
     );
