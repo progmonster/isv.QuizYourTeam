@@ -1,8 +1,6 @@
-import React, { Component } from "react";
+import React from "react";
 import update from 'react-addons-update';
-// @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
-// core components
 import GridItem from "/imports/components/Grid/GridItem.jsx";
 import GridContainer from "/imports/components/Grid/GridContainer.jsx";
 import CustomInput from "/imports/components/CustomInput/CustomInput.jsx";
@@ -11,14 +9,11 @@ import CardHeader from "/imports/components/Card/CardHeader.jsx";
 import CardBody from "/imports/components/Card/CardBody.jsx";
 import CardFooter from "/imports/components/Card/CardFooter.jsx";
 import { EditorState } from 'draft-js';
-import { Editor } from 'react-draft-wysiwyg';
-import Paper from "@material-ui/core/Paper";
-import Typography from "@material-ui/core/Typography";
-import * as PropTypes from "prop-types";
 import Button from "@material-ui/core/Button";
 import QuizQuestion from "./QuizQuestion";
+import QuizParagraph from "./QuizParagraph";
 
-const styles = (theme) => ({
+const styles = {
   cardCategoryWhite: {/*todo remove?*/
     color: "rgba(255,255,255,.62)",
     margin: "0",
@@ -34,50 +29,7 @@ const styles = (theme) => ({
     fontFamily: "'Roboto', 'Helvetica', 'Arial', sans-serif",
     marginBottom: "3px",
     textDecoration: "none"
-  },
-  quizPaper: {
-    ...theme.mixins.gutters(),
-    paddingTop: theme.spacing.unit * 2,
-    paddingBottom: theme.spacing.unit * 2,
   }
-});
-
-const QuizParagraph = withStyles(styles)(class extends Component {
-  render() {
-    const { classes } = this.props;
-
-    return <Paper className={classes.quizPaper} elevation={1}>
-      <GridContainer>
-        <GridItem xs={12} sm={12} md={12}>
-          <Typography variant="h5" component="h3">
-            Paragraph #{this.props.number}
-          </Typography>
-        </GridItem>
-
-        <GridItem xs={12} sm={12} md={12}>
-          <Editor
-            editorState={this.props.paragraph.editorState}
-            wrapperClassName="demo-wrapper"
-            editorClassName="demo-editor"
-            onEditorStateChange={(editorState) => this.props.onParagraphEditorStateChange(this.props.number, editorState)}
-          />
-        </GridItem>
-
-        <GridItem xs={12} sm={12} md={8}>
-          <Button variant="contained" color="secondary" onClick={() => this.props.onParagraphRemove(this.props.number)}>
-            Remove paragraph
-          </Button>
-        </GridItem>
-      </GridContainer>
-    </Paper>;
-  }
-});
-
-QuizParagraph.propTypes = {
-  classes: PropTypes.any,
-  paragraph: PropTypes.any,
-  onParagraphEditorStateChange: PropTypes.func,
-  onParagraphRemove: PropTypes.func,
 };
 
 class EditQuiz extends React.Component {
