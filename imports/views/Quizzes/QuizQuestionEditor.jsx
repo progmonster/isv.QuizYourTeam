@@ -19,13 +19,13 @@ const styles = (theme) => ({
 
 class QuizQuestionEditor extends Component {
   render() {
-    const { classes } = this.props;
+    const { classes, number: questionNumber } = this.props;
 
     return <Paper className={classes.quizQuestionEditor} elevation={1}>
       <GridContainer>
         <GridItem xs={12} sm={12} md={12}>
           <Typography variant="h5" component="h3">
-            Question #{this.props.number}
+            Question #{questionNumber}
           </Typography>
         </GridItem>
 
@@ -34,7 +34,7 @@ class QuizQuestionEditor extends Component {
             editorState={this.props.question.editorState}
             wrapperClassName="demo-wrapper"/*todo remove these class*/
             editorClassName="demo-editor"
-            onEditorStateChange={(editorState) => this.props.onQuestionEditorStateChange(this.props.number, editorState)}
+            onEditorStateChange={(editorState) => this.props.onQuestionEditorStateChange(questionNumber, editorState)}
           />
         </GridItem>
 
@@ -47,12 +47,15 @@ class QuizQuestionEditor extends Component {
         <GridItem xs={12} sm={12} md={8}>
           <QuizAnswersEditor
             answers={this.props.question.answers}
-            onAnswerAdd={(title, checked) => this.props.onAnswerAdd(this.props.number, title, checked)}
+            onAnswerAdd={(title, checked) => this.props.onAnswerAdd(questionNumber, title, checked)}
+            onAnswerRemove={(answerNumber) => this.props.onAnswerRemove(questionNumber, answerNumber)}
+            onAnswerTitleChange={(answerNumber, title) => this.props.onAnswerTitleChange(questionNumber, answerNumber, title)}
+            onAnswerCheckStateChange={(answerNumber, checked) => this.props.onAnswerCheckStateChange(questionNumber, answerNumber, checked)}
           />
         </GridItem>
 
         <GridItem xs={12} sm={12} md={8}>
-          <Button variant="contained" color="secondary" onClick={() => this.props.onQuestionRemove(this.props.number)}>
+          <Button variant="contained" color="secondary" onClick={() => this.props.onQuestionRemove(questionNumber)}>
             Remove question
           </Button>
         </GridItem>
@@ -67,6 +70,9 @@ QuizQuestionEditor.propTypes = {
   onQuestionEditorStateChange: PropTypes.func,
   onQuestionRemove: PropTypes.func,
   onAnswerAdd: PropTypes.func,
+  onAnswerRemove: PropTypes.func,
+  onAnswerTitleChange: PropTypes.func,
+  onAnswerCheckStateChange: PropTypes.func,
 };
 
 export default withStyles(styles)(QuizQuestionEditor);

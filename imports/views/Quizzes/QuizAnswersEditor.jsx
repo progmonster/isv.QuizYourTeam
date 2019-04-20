@@ -6,7 +6,6 @@ import Button from "@material-ui/core/Button";
 import * as PropTypes from "prop-types";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
-import Checkbox from '@material-ui/core/Checkbox';
 import { ANSWER_TYPES } from "./AnswerTypes";
 import RadioGroup from "@material-ui/core/RadioGroup";
 import Radio from "@material-ui/core/Radio";
@@ -25,25 +24,32 @@ const styles = (theme) => ({
 
 class _SingleChoiceAnswerItem extends Component {
   render() {
-    const { classes, number, answerItem } = this.props;
+    const { number} = this.props;
 
     return (<FormControlLabel value={number.toString()} control={this._renderLabelChildren()} label="" />)
   }
 
   _renderLabelChildren() {
-    const { classes, number, answerItem } = this.props;
+    const { answerItem } = this.props;
 
     return (
       <Fragment>
-        <Radio checked={answerItem.checked} />
+        <Radio
+          checked={answerItem.checked}
+          onChange={() => this.props.onCheckStateChange(true)}
+        />
 
         <TextField
           value={answerItem.title}
-          /*onChange={this.handleChange('name')}*/
+          onChange={(event) => this.props.onTitleChange(event.target.value)}
           margin="normal"
         />
 
-        <IconButton aria-label="Delete the answer" color="secondary">
+        <IconButton
+          aria-label="Delete the answer"
+          color="secondary"
+          onClick={this.props.onDelete}
+        >
           <DeleteIcon />
         </IconButton>
       </Fragment>
@@ -54,11 +60,14 @@ class _SingleChoiceAnswerItem extends Component {
 _SingleChoiceAnswerItem.propTypes = {
   answerItem: PropTypes.any,
   number: PropTypes.number,
+  onDelete: PropTypes.func,
+  onTitleChange: PropTypes.func,
+  onCheckStateChange: PropTypes.func,
 };
 
 class _SingleChoiceAnswerBlock extends Component {
   render() {
-    const { classes, answerItems } = this.props;
+    const { answerItems } = this.props;
 
     return (<RadioGroup
       aria-label="Gender" /*todo*/
@@ -66,36 +75,43 @@ class _SingleChoiceAnswerBlock extends Component {
       value={0}
       onChange={this.handleChange}
     >
-      {answerItems.map((answerItem, answerItemIdx) => (
-        <_SingleChoiceAnswerItem key={answerItemIdx} number={answerItemIdx + 1} answerItem={answerItem} />
-      ))}
+      {answerItems.map((answerItem, answerItemIdx) => {
+        const answerItemNumber = answerItemIdx + 1;
+
+        return (
+          <_SingleChoiceAnswerItem
+            key={answerItemIdx}
+            number={answerItemNumber}
+            answerItem={answerItem}
+            onDelete={() => this.props.onAnswerItemRemove(answerItemNumber)}
+            onTitleChange={(title) => this.props.onAnswerItemTitleChange(answerItemNumber, title)}
+            onCheckStateChange={(checked) => this.props.onAnswerItemCheckStateChange(answerItemNumber, checked)}
+          />
+        );
+      })}
     </RadioGroup>)
   }
 }
 
 _SingleChoiceAnswerBlock.propTypes = {
   answerItems: PropTypes.any,
+  onAnswerItemRemove: PropTypes.func,
+  onAnswerItemTitleChange: PropTypes.func,
+  onAnswerItemCheckStateChange: PropTypes.func,
 };
 
+/*todo implement*/
 class _MultipleChoiceAnswerBlock extends Component {
   render() {
-    const { answerItems } = this.props;
-    /*          <Typography component="div" style={{ padding: 8 * 3 }}>
-                asdfasdf
-              </Typography>
-    */
-
-    /*
-    *           {answers.items.map((answerItem, answerItemIdx) => (
-                <_AnswerItem key={answerItemIdx} answerItem={answerItem} />
-              ))}
-    */
-    return <div><Checkbox></Checkbox></div>
+    return <div/>
   }
 }
 
 _MultipleChoiceAnswerBlock.propTypes = {
   answerItems: PropTypes.any,
+  onAnswerItemRemove: PropTypes.func,
+  onAnswerItemTitleChange: PropTypes.func,
+  onAnswerItemCheckStateChange: PropTypes.func,
 };
 
 class QuizAnswersEditor extends Component {
@@ -111,8 +127,8 @@ class QuizAnswersEditor extends Component {
           </Tabs>
 
           {answers.type === ANSWER_TYPES.SINGLE_CHOICE
-            ? <_SingleChoiceAnswerBlock answerItems={answers.items} />
-            : <_MultipleChoiceAnswerBlock answerItems={answers.items} />}
+            ? this._renderSingleChoiceAnswerBlock()
+            : this._renderMultipleChoiceAnswerBlock()}
         </GridItem>
 
         <GridItem xs={12} sm={12} md={8}>
@@ -124,6 +140,32 @@ class QuizAnswersEditor extends Component {
       </GridContainer>
     );
   }
+
+  _renderSingleChoiceAnswerBlock() {
+    const { answers } = this.props;
+
+    return (
+      <_SingleChoiceAnswerBlock
+        answerItems={answers.items}
+        onAnswerItemCheckStateChange={this.props.onAnswerCheckStateChange}
+        onAnswerItemTitleChange={this.props.onAnswerTitleChange}
+        onAnswerItemRemove={this.props.onAnswerRemove}
+      />
+    );
+  }
+
+  _renderMultipleChoiceAnswerBlock() {
+    const { answers } = this.props;
+
+    return (
+      <_MultipleChoiceAnswerBlock
+        answerItems={answers.items}
+        onAnswerItemCheckStateChange={this.props.onAnswerCheckStateChange}
+        onAnswerItemTitleChange={this.props.onAnswerTitleChange}
+        onAnswerItemRemove={this.props.onAnswerRemove}
+      />
+    );
+  }
 }
 
 QuizAnswersEditor.propTypes = {
@@ -131,6 +173,8 @@ QuizAnswersEditor.propTypes = {
   answers: PropTypes.any,
   onAnswerAdd: PropTypes.func,
   onAnswerRemove: PropTypes.func,
+  onAnswerTitleChange: PropTypes.func,
+  onAnswerCheckStateChange: PropTypes.func,
 };
 
 export default withStyles(styles)(QuizAnswersEditor);

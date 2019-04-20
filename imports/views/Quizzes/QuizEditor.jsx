@@ -53,6 +53,7 @@ class QuizEditor extends React.Component {
 
         const updatedParagraph = { ...state.paragraphs[paragraphIdx], editorState };
 
+        // todo progmonster improve via $set
         return update(state, { paragraphs: { $splice: [[paragraphIdx, 1, updatedParagraph]] } });
       }
     );
@@ -77,6 +78,7 @@ class QuizEditor extends React.Component {
 
         const updatedQuestion = { ...state.questions[questionIdx], editorState };
 
+        // todo progmonster improve via $set
         return update(state, { questions: { $splice: [[questionIdx, 1, updatedQuestion]] } });
       }
     );
@@ -104,6 +106,66 @@ class QuizEditor extends React.Component {
         );
       }
     );
+
+  onAnswerRemove = (questionNumber, answerNumber) =>
+    this.setState((state) => {
+        const questionIdx = (questionNumber - 1);
+
+        const answerIdx = (answerNumber - 1);
+
+        return update(
+          state,
+          { questions: { [questionIdx]: { answers: { items: { $splice: [[answerIdx, 1]] } } } } }
+        );
+      }
+    );
+
+  onAnswerTitleChange = (questionNumber, answerNumber, title) =>
+    this.setState((state) => {
+        const questionIdx = (questionNumber - 1);
+
+        const answerIdx = (answerNumber - 1);
+
+        return update(
+          state,
+          { questions: { [questionIdx]: { answers: { items: { [answerIdx]: { title: { $set: title } } } } } } }
+        );
+      }
+    );
+
+  onAnswerCheckStateChange = (questionNumber, answerNumber, checked) => {
+    this.setState((state) => {
+        const questionIdx = (questionNumber - 1);
+
+        const answerIdx = (answerNumber - 1);
+
+        const answerType = state.questions[questionIdx].answers.type;
+
+        const updateAnswerItems = (answerItems) => {
+          return answerItems.map((answerItem, idx) => {
+            let newCheckedState;
+
+            if (idx === answerIdx) {
+              newCheckedState = checked;
+            } else {
+              if (answerType === ANSWER_TYPES.SINGLE_CHOICE) {
+                newCheckedState = false;
+              } else {
+                newCheckedState = answerItem.checked;
+              }
+            }
+
+            return ({ ...answerItem, checked: newCheckedState });
+          });
+        };
+
+        return update(
+          state,
+          { questions: { [questionIdx]: { answers: { items: { $apply: updateAnswerItems } } } } }
+        );
+      }
+    );
+  };
 
   render() {
     const { classes } = this.props;
@@ -174,6 +236,9 @@ class QuizEditor extends React.Component {
                 onQuestionEditorStateChange={this.onQuestionEditorStateChange}
                 onQuestionRemove={this.onQuestionRemove}
                 onAnswerAdd={this.onAnswerAdd}
+                onAnswerRemove={this.onAnswerRemove}
+                onAnswerTitleChange={this.onAnswerTitleChange}
+                onAnswerCheckStateChange={this.onAnswerCheckStateChange}
               />
             </GridItem>)
           )}
