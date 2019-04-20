@@ -16,16 +16,17 @@ import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import * as PropTypes from "prop-types";
 import Button from "@material-ui/core/Button";
+import QuizQuestion from "./QuizQuestion";
 
 const styles = (theme) => ({
-  cardCategoryWhite: {
+  cardCategoryWhite: {/*todo remove?*/
     color: "rgba(255,255,255,.62)",
     margin: "0",
     fontSize: "14px",
     marginTop: "0",
     marginBottom: "0"
   },
-  cardTitleWhite: {
+  cardTitleWhite: {/*todo remove?*/
     color: "#FFFFFF",
     marginTop: "0px",
     minHeight: "auto",
@@ -77,44 +78,6 @@ QuizParagraph.propTypes = {
   paragraph: PropTypes.any,
   onParagraphEditorStateChange: PropTypes.func,
   onParagraphRemove: PropTypes.func,
-};
-
-const QuizQuestion = withStyles(styles)(class extends Component {
-  render() {
-    const { classes } = this.props;
-
-    return <Paper className={classes.quizPaper} elevation={1}>
-      <GridContainer>
-        <GridItem xs={12} sm={12} md={12}>
-          <Typography variant="h5" component="h3">
-            Question #{this.props.number}
-          </Typography>
-        </GridItem>
-
-        <GridItem xs={12} sm={12} md={12}>
-          <Editor
-            editorState={this.props.question.editorState}
-            wrapperClassName="demo-wrapper"/*remove these class*/
-            editorClassName="demo-editor"
-            onEditorStateChange={(editorState) => this.props.onQuestionEditorStateChange(this.props.number, editorState)}
-          />
-        </GridItem>
-
-        <GridItem xs={12} sm={12} md={8}>
-          <Button variant="contained" color="secondary" onClick={() => this.props.onQuestionRemove(this.props.number)}>
-            Remove question
-          </Button>
-        </GridItem>
-      </GridContainer>
-    </Paper>;
-  }
-});
-
-QuizQuestion.propTypes = {
-  classes: PropTypes.any,
-  paragraph: PropTypes.any,
-  onQuestionEditorStateChange: PropTypes.func,
-  onQuestionRemove: PropTypes.func,
 };
 
 class EditQuiz extends React.Component {
