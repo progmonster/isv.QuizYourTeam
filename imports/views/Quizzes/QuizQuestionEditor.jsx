@@ -7,6 +7,7 @@ import GridContainer from "/imports/components/Grid/GridContainer.jsx";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import * as PropTypes from "prop-types";
+import QuizAnswersEditor from "./QuizAnswersEditor";
 
 const styles = (theme) => ({
   quizQuestionEditor: {
@@ -16,7 +17,7 @@ const styles = (theme) => ({
   }
 });
 
-const QuizQuestionEditor = withStyles(styles)(class extends Component {
+class QuizQuestionEditor extends Component {
   render() {
     const { classes } = this.props;
 
@@ -31,9 +32,22 @@ const QuizQuestionEditor = withStyles(styles)(class extends Component {
         <GridItem xs={12} sm={12} md={12}>
           <Editor
             editorState={this.props.question.editorState}
-            wrapperClassName="demo-wrapper"/*remove these class*/
+            wrapperClassName="demo-wrapper"/*todo remove these class*/
             editorClassName="demo-editor"
             onEditorStateChange={(editorState) => this.props.onQuestionEditorStateChange(this.props.number, editorState)}
+          />
+        </GridItem>
+
+        <GridItem xs={12} sm={12} md={12}>
+          <Typography variant="h5" component="h3">
+            Answers
+          </Typography>
+        </GridItem>
+
+        <GridItem xs={12} sm={12} md={8}>
+          <QuizAnswersEditor
+            answers={this.props.question.answers}
+            onAnswerAdd={(title, checked) => this.props.onAnswerAdd(this.props.number, title, checked)}
           />
         </GridItem>
 
@@ -45,13 +59,14 @@ const QuizQuestionEditor = withStyles(styles)(class extends Component {
       </GridContainer>
     </Paper>;
   }
-});
+}
 
 QuizQuestionEditor.propTypes = {
   classes: PropTypes.any,
-  paragraph: PropTypes.any,
+  question: PropTypes.any,
   onQuestionEditorStateChange: PropTypes.func,
   onQuestionRemove: PropTypes.func,
+  onAnswerAdd: PropTypes.func,
 };
 
 export default withStyles(styles)(QuizQuestionEditor);

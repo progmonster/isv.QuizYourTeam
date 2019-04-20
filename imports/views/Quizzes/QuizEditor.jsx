@@ -12,6 +12,7 @@ import { EditorState } from 'draft-js';
 import Button from "@material-ui/core/Button";
 import QuizQuestionEditor from "./QuizQuestionEditor";
 import QuizParagraphEditor from "./QuizParagraphEditor";
+import { ANSWER_TYPES } from "./AnswerTypes";
 
 const styles = {
   cardCategoryWhite: {/*todo remove?*/
@@ -88,7 +89,21 @@ class QuizEditor extends React.Component {
       }
     );
 
-  newBlankQuestion = () => ({ editorState: EditorState.createEmpty() });
+  newBlankQuestion = () => ({
+    editorState: EditorState.createEmpty(),
+    answers: { type: ANSWER_TYPES.SINGLE_CHOICE, items: [] },
+  });
+
+  onAnswerAdd = (questionNumber, title, checked) =>
+    this.setState((state) => {
+        const questionIdx = (questionNumber - 1);
+
+        return update(
+          state,
+          { questions: { [questionIdx]: { answers: { items: { $push: [{ title, checked }] } } } } }
+        );
+      }
+    );
 
   render() {
     const { classes } = this.props;
@@ -158,6 +173,7 @@ class QuizEditor extends React.Component {
                 question={question}
                 onQuestionEditorStateChange={this.onQuestionEditorStateChange}
                 onQuestionRemove={this.onQuestionRemove}
+                onAnswerAdd={this.onAnswerAdd}
               />
             </GridItem>)
           )}
