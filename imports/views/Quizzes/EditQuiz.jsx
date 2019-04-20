@@ -42,12 +42,6 @@ const styles = (theme) => ({
 });
 
 const QuizParagraph = withStyles(styles)(class extends Component {
-  constructor(props, context) {
-    super(props, context);
-
-    console.log(props.number);
-  }
-
   render() {
     const { classes } = this.props;
 
@@ -85,12 +79,51 @@ QuizParagraph.propTypes = {
   onParagraphRemove: PropTypes.func,
 };
 
+const QuizQuestion = withStyles(styles)(class extends Component {
+  render() {
+    const { classes } = this.props;
+
+    return <Paper className={classes.quizPaper} elevation={1}>
+      <GridContainer>
+        <GridItem xs={12} sm={12} md={12}>
+          <Typography variant="h5" component="h3">
+            Question #{this.props.number}
+          </Typography>
+        </GridItem>
+
+        <GridItem xs={12} sm={12} md={12}>
+          <Editor
+            editorState={this.props.question.editorState}
+            wrapperClassName="demo-wrapper"/*remove these class*/
+            editorClassName="demo-editor"
+            onEditorStateChange={(editorState) => this.props.onQuestionEditorStateChange(this.props.number, editorState)}
+          />
+        </GridItem>
+
+        <GridItem xs={12} sm={12} md={8}>
+          <Button variant="contained" color="secondary" onClick={() => this.props.onQuestionRemove(this.props.number)}>
+            Remove question
+          </Button>
+        </GridItem>
+      </GridContainer>
+    </Paper>;
+  }
+});
+
+QuizQuestion.propTypes = {
+  classes: PropTypes.any,
+  paragraph: PropTypes.any,
+  onQuestionEditorStateChange: PropTypes.func,
+  onQuestionRemove: PropTypes.func,
+};
+
 class EditQuiz extends React.Component {
   constructor(props, context) {
     super(props, context);
 
     this.state = {
       paragraphs: [],
+      questions: [],
     };
   }
 
@@ -117,6 +150,30 @@ class EditQuiz extends React.Component {
     );
 
   newBlankParagraph = () => ({ editorState: EditorState.createEmpty() });
+
+  onQuestionCreate = () => this.setState(
+    (state) => update(state, { questions: { $push: [this.newBlankQuestion()] } })
+  );
+
+  onQuestionEditorStateChange = (questionNumber, editorState) =>
+    this.setState((state) => {
+        const questionIdx = (questionNumber - 1);
+
+        const updatedQuestion = { ...state.questions[questionIdx], editorState };
+
+        return update(state, { questions: { $splice: [[questionIdx, 1, updatedQuestion]] } });
+      }
+    );
+
+  onQuestionRemove = (questionNumber) =>
+    this.setState((state) => {
+        const questionIdx = (questionNumber - 1);
+
+        return update(state, { questions: { $splice: [[questionIdx, 1]] } });
+      }
+    );
+
+  newBlankQuestion = () => ({ editorState: EditorState.createEmpty() });
 
   render() {
     const { classes } = this.props;
@@ -176,6 +233,23 @@ class EditQuiz extends React.Component {
           <GridItem xs={12} sm={12} md={8}>
             <Button variant="contained" color="primary" onClick={this.onParagraphCreate}>
               Add new paragraph
+            </Button>
+          </GridItem>
+
+          {this.state.questions.map((question, questionIdx) =>
+            (<GridItem key={questionIdx} xs={12} sm={12} md={8}>
+              <QuizQuestion
+                number={questionIdx + 1}
+                question={question}
+                onQuestionEditorStateChange={this.onQuestionEditorStateChange}
+                onQuestionRemove={this.onQuestionRemove}
+              />
+            </GridItem>)
+          )}
+
+          <GridItem xs={12} sm={12} md={8}>
+            <Button variant="contained" color="primary" onClick={this.onQuestionCreate}>
+              Add new question
             </Button>
           </GridItem>
         </GridContainer>
