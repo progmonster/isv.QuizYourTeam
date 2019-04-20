@@ -10,8 +10,8 @@ import CardBody from "/imports/components/Card/CardBody.jsx";
 import CardFooter from "/imports/components/Card/CardFooter.jsx";
 import { EditorState } from 'draft-js';
 import Button from "@material-ui/core/Button";
-import QuizQuestion from "./QuizQuestion";
-import QuizParagraph from "./QuizParagraph";
+import QuizQuestionEditor from "./QuizQuestionEditor";
+import QuizParagraphEditor from "./QuizParagraphEditor";
 
 const styles = {
   cardCategoryWhite: {/*todo remove?*/
@@ -32,7 +32,7 @@ const styles = {
   }
 };
 
-class EditQuiz extends React.Component {
+class QuizEditor extends React.Component {
   constructor(props, context) {
     super(props, context);
 
@@ -136,7 +136,7 @@ class EditQuiz extends React.Component {
 
           {this.state.paragraphs.map((paragraph, paragraphIdx) =>
             (<GridItem key={paragraphIdx} xs={12} sm={12} md={8}>
-              <QuizParagraph
+              <QuizParagraphEditor
                 number={paragraphIdx + 1}
                 paragraph={paragraph}
                 onParagraphEditorStateChange={this.onParagraphEditorStateChange}
@@ -153,7 +153,7 @@ class EditQuiz extends React.Component {
 
           {this.state.questions.map((question, questionIdx) =>
             (<GridItem key={questionIdx} xs={12} sm={12} md={8}>
-              <QuizQuestion
+              <QuizQuestionEditor
                 number={questionIdx + 1}
                 question={question}
                 onQuestionEditorStateChange={this.onQuestionEditorStateChange}
@@ -173,4 +173,4 @@ class EditQuiz extends React.Component {
   }
 }
 
-export default withStyles(styles)(EditQuiz);
+export default withStyles(styles)(QuizEditor);

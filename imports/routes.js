@@ -14,7 +14,7 @@ import Language from "@material-ui/icons/Language";
 import DashboardPage from "/imports/views/Dashboard/dashboard.jsx";
 /*import UserProfile from "/imports/views/UserProfile/UserProfile.jsx";*/
 import Team from "/imports/views/Team/Team.jsx";
-import EditQuiz from "./views/Quizzes/EditQuiz";
+import QuizEditor from "./views/Quizzes/QuizEditor";
 /*
 import TableList from "/imports/views/TableList/TableList.jsx";
 import Typography from "/imports/views/Typography/Typography.jsx";
@@ -32,7 +32,7 @@ export const routes = [
     name: "Edit Quiz",
     rtlName: "Edit Quiz",
     icon: Dashboard,
-    component: EditQuiz,
+    component: QuizEditor,
     layout: "/admin",
     showInDrawer: false,
   },

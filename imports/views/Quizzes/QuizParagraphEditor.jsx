@@ -25,7 +25,7 @@ const styles = (theme) => ({
     marginBottom: "3px",
     textDecoration: "none"
   },
-  quizParagraph: {
+  quizParagraphEditor: {
     ...theme.mixins.gutters(), /*todo why?*/
     paddingTop: theme.spacing.unit * 2, /*todo why?*/
     paddingBottom: theme.spacing.unit * 2,/*todo why?*/
@@ -33,11 +33,11 @@ const styles = (theme) => ({
 });
 
 
-class QuizParagraph extends Component {
+class QuizParagraphEditor extends Component {
   render() {
     const { classes } = this.props;
 
-    return <Paper className={classes.quizParagraph} elevation={1}>
+    return <Paper className={classes.quizParagraphEditor} elevation={1}>
       <GridContainer>
         <GridItem xs={12} sm={12} md={12}>
           <Typography variant="h5" component="h3">
@@ -64,11 +64,11 @@ class QuizParagraph extends Component {
   }
 }
 
-QuizParagraph.propTypes = {
+QuizParagraphEditor.propTypes = {
   classes: PropTypes.any,
   paragraph: PropTypes.any,
   onParagraphEditorStateChange: PropTypes.func,
   onParagraphRemove: PropTypes.func,
 };
 
-export default withStyles(styles)(QuizParagraph);
+export default withStyles(styles)(QuizParagraphEditor);

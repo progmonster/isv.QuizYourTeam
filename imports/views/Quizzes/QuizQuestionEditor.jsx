@@ -9,18 +9,18 @@ import Button from "@material-ui/core/Button";
 import * as PropTypes from "prop-types";
 
 const styles = (theme) => ({
-  quizQuestion: {
+  quizQuestionEditor: {
     ...theme.mixins.gutters(),
     paddingTop: theme.spacing.unit * 2,/*todo why?*/
     paddingBottom: theme.spacing.unit * 2,/*todo why?*/
   }
 });
 
-const QuizQuestion = withStyles(styles)(class extends Component {
+const QuizQuestionEditor = withStyles(styles)(class extends Component {
   render() {
     const { classes } = this.props;
 
-    return <Paper className={classes.quizQuestion} elevation={1}>
+    return <Paper className={classes.quizQuestionEditor} elevation={1}>
       <GridContainer>
         <GridItem xs={12} sm={12} md={12}>
           <Typography variant="h5" component="h3">
@@ -47,11 +47,11 @@ const QuizQuestion = withStyles(styles)(class extends Component {
   }
 });
 
-QuizQuestion.propTypes = {
+QuizQuestionEditor.propTypes = {
   classes: PropTypes.any,
   paragraph: PropTypes.any,
   onQuestionEditorStateChange: PropTypes.func,
   onQuestionRemove: PropTypes.func,
 };
 
-export default withStyles(styles)(QuizQuestion);
+export default withStyles(styles)(QuizQuestionEditor);
