@@ -226,7 +226,7 @@ class QuizEditor extends React.PureComponent {
 
 const mapStateToProps = state => {
   return {
-    paragraphs: state.paragraphs,
+    paragraphs: state.editingQuiz.paragraphs,
   };
 };
 

@@ -76,7 +76,7 @@ QuizParagraphEditor.propTypes = {
 };
 
 const mapStateToProps = (state, { id }) => {
-  return { ...state.paragraphs.byId[id] };
+  return { ...state.editingQuiz.paragraphs.byId[id] };
 };
 
 const mapDispatchToProps = (dispatch, { id }) => {
