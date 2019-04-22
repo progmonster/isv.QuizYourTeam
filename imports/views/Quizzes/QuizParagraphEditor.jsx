@@ -7,6 +7,9 @@ import GridContainer from "/imports/components/Grid/GridContainer.jsx";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import * as PropTypes from "prop-types";
+import { changeParagraphEditorState } from "/imports/actions";
+import { connect } from "react-redux";
+import { removeParagraph } from "../../actions";
 
 const styles = (theme) => ({
   cardCategoryWhite: {/*todo remove?*/
@@ -32,32 +35,31 @@ const styles = (theme) => ({
   }
 });
 
-
 class QuizParagraphEditor extends React.PureComponent {
   render() {
     console.log("QuizParagraphEditor");
 
-    const { classes } = this.props;
+    const { id, number, editorState, onParagraphEditorStateChange, onParagraphRemove, classes } = this.props;
 
     return <Paper className={classes.quizParagraphEditor} elevation={1}>
       <GridContainer>
         <GridItem xs={12} sm={12} md={12}>
           <Typography variant="h5" component="h3">
-            Paragraph #{this.props.number}
+            Paragraph #{number}
           </Typography>
         </GridItem>
 
         <GridItem xs={12} sm={12} md={12}>
           <Editor
-            editorState={this.props.paragraph.editorState}
+            editorState={editorState}
             wrapperClassName="demo-wrapper"
             editorClassName="demo-editor"
-            onEditorStateChange={(editorState) => this.props.onParagraphEditorStateChange(this.props.number, editorState)}
+            onEditorStateChange={onParagraphEditorStateChange}
           />
         </GridItem>
 
         <GridItem xs={12} sm={12} md={8}>
-          <Button variant="contained" color="secondary" onClick={() => this.props.onParagraphRemove(this.props.number)}>
+          <Button variant="contained" color="secondary" onClick={onParagraphRemove}>
             Remove paragraph
           </Button>
         </GridItem>
@@ -73,4 +75,20 @@ QuizParagraphEditor.propTypes = {
   onParagraphRemove: PropTypes.func,
 };
 
-export default withStyles(styles)(QuizParagraphEditor);
+const mapStateToProps = (state, { id }) => {
+  return { ...state.paragraphs.byId[id] };
+};
+
+const mapDispatchToProps = (dispatch, { id }) => {
+  return {
+    onParagraphEditorStateChange: (state) => {
+      dispatch(changeParagraphEditorState(id, state));
+    },
+
+    onParagraphRemove: () => {
+      dispatch(removeParagraph(id));
+    },
+  };
+};
+
+export default withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(QuizParagraphEditor));

@@ -36,18 +36,6 @@ const styles = {
 };
 
 class QuizEditor extends React.PureComponent {
-  onParagraphCreate = () => this.setState(
-    (state) => update(state, { paragraphs: { $push: [this.newBlankParagraph()] } })
-  );
-
-  onParagraphEditorStateChange = (paragraphNumber, editorState) =>
-    this.setState((state) => {
-        const paragraphIdx = (paragraphNumber - 1);
-
-        return update(state, { paragraphs: { [paragraphIdx]: { editorState: { $set: editorState } } } });
-      }
-    );
-
   onParagraphRemove = (paragraphNumber) =>
     this.setState((state) => {
         const paragraphIdx = (paragraphNumber - 1);
@@ -198,14 +186,9 @@ class QuizEditor extends React.PureComponent {
             </Card>
           </GridItem>
 
-          {this.props.paragraphs.allIds.map(paragraphId =>
-            (<GridItem key={paragraphId} xs={12} sm={12} md={8}>
-              <QuizParagraphEditor
-                number={paragraphId + 1}
-                paragraph={this.props.paragraphs.byId[paragraphId]}
-                onParagraphEditorStateChange={this.props.onParagraphEditorStateChange}
-                onParagraphRemove={this.onParagraphRemove}
-              />
+          {this.props.paragraphs.allIds.map((id, idx) =>
+            (<GridItem key={id} xs={12} sm={12} md={8}>
+              <QuizParagraphEditor id={id} number={idx + 1}/>
             </GridItem>)
           )}
 
@@ -252,14 +235,7 @@ const mapDispatchToProps = dispatch => {
     onParagraphCreate: () => {
       dispatch(addParagraph());
     },
-
-    onParagraphEditorStateChange: (paragraphNumber, state) => {
-      dispatch(changeParagraphEditorState(paragraphNumber, state))
-    },
   }
 };
 
-export default withStyles(styles)(connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(QuizEditor));
+export default withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(QuizEditor));
