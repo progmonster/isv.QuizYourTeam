@@ -51,10 +51,7 @@ class QuizEditor extends React.Component {
     this.setState((state) => {
         const paragraphIdx = (paragraphNumber - 1);
 
-        const updatedParagraph = { ...state.paragraphs[paragraphIdx], editorState };
-
-        // todo progmonster improve via $set
-        return update(state, { paragraphs: { $splice: [[paragraphIdx, 1, updatedParagraph]] } });
+        return update(state, { paragraphs: { [paragraphIdx]: { editorState: { $set: editorState } } } });
       }
     );
 
@@ -76,10 +73,7 @@ class QuizEditor extends React.Component {
     this.setState((state) => {
         const questionIdx = (questionNumber - 1);
 
-        const updatedQuestion = { ...state.questions[questionIdx], editorState };
-
-        // todo progmonster improve via $set
-        return update(state, { questions: { $splice: [[questionIdx, 1, updatedQuestion]] } });
+        return update(state, { questions: { [questionIdx]: { editorState: { $set: editorState } } } });
       }
     );
 
