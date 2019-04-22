@@ -1,5 +1,5 @@
 import withStyles from "@material-ui/core/styles/withStyles";
-import React, { Component } from "react";
+import React from "react";
 import { Editor } from 'react-draft-wysiwyg';
 import Paper from "@material-ui/core/Paper";
 import GridItem from "/imports/components/Grid/GridItem.jsx";
@@ -17,7 +17,7 @@ const styles = (theme) => ({
   }
 });
 
-class QuizQuestionEditor extends Component {
+class QuizQuestionEditor extends React.PureComponent {
   render() {
     const { classes, number: questionNumber } = this.props;
 

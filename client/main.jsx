@@ -1,27 +1,30 @@
 import { Meteor } from 'meteor/meteor';
 import React from 'react';
-import { render } from 'react-dom';
-import Button from "@material-ui/core/Button";
-import ReactDOM from "react-dom";
+import ReactDOM from 'react-dom';
 import { createBrowserHistory } from "history";
-import { Router, Route, Switch, Redirect } from "react-router-dom";
-
-// core components
+import { Redirect, Route, Router, Switch } from "react-router-dom";
 import Admin from "/imports/layouts/Admin.jsx";
 import RTL from "/imports/layouts/RTL.jsx";
 import "/imports/assets/css/material-dashboard-react.css";
+import { createStore } from "redux";
+import reducers from "/imports/reducers";
+import { Provider } from "react-redux";
 
 Meteor.startup(() => {
   const hist = createBrowserHistory();
 
+  const store = createStore(reducers);
+
   ReactDOM.render(
-    <Router history={hist}>
-      <Switch>
-        <Route path="/admin" component={Admin} />
-        <Route path="/rtl" component={RTL} />
-        <Redirect from="/" to="/admin/dashboard" />
-      </Switch>
-    </Router>,
+    <Provider store={store}>
+      <Router history={hist}>
+        <Switch>
+          <Route path="/admin" component={Admin} />
+          <Route path="/rtl" component={RTL} />
+          <Redirect from="/" to="/admin/dashboard" />
+        </Switch>
+      </Router>
+    </Provider>,
     document.getElementById("root")
   );
 });

@@ -22,9 +22,9 @@ const styles = (theme) => ({
   }
 });
 
-class _SingleChoiceAnswerItem extends Component {
+class _SingleChoiceAnswerItem extends React.PureComponent {
   render() {
-    const { number} = this.props;
+    const { number } = this.props;
 
     return (<FormControlLabel value={number.toString()} control={this._renderLabelChildren()} label="" />)
   }
@@ -65,7 +65,7 @@ _SingleChoiceAnswerItem.propTypes = {
   onCheckStateChange: PropTypes.func,
 };
 
-class _SingleChoiceAnswerBlock extends Component {
+class _SingleChoiceAnswerBlock extends React.PureComponent {
   render() {
     const { answerItems } = this.props;
 
@@ -101,9 +101,9 @@ _SingleChoiceAnswerBlock.propTypes = {
 };
 
 /*todo implement*/
-class _MultipleChoiceAnswerBlock extends Component {
+class _MultipleChoiceAnswerBlock extends React.PureComponent {
   render() {
-    return <div/>
+    return <div />
   }
 }
 

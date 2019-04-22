@@ -13,6 +13,8 @@ import Button from "@material-ui/core/Button";
 import QuizQuestionEditor from "./QuizQuestionEditor";
 import QuizParagraphEditor from "./QuizParagraphEditor";
 import { ANSWER_TYPES } from "./AnswerTypes";
+import { connect } from "react-redux";
+import { addParagraph, changeParagraphEditorState } from "/imports/actions";
 
 const styles = {
   cardCategoryWhite: {/*todo remove?*/
@@ -33,16 +35,7 @@ const styles = {
   }
 };
 
-class QuizEditor extends React.Component {
-  constructor(props, context) {
-    super(props, context);
-
-    this.state = {
-      paragraphs: [],
-      questions: [],
-    };
-  }
-
+class QuizEditor extends React.PureComponent {
   onParagraphCreate = () => this.setState(
     (state) => update(state, { paragraphs: { $push: [this.newBlankParagraph()] } })
   );
@@ -205,24 +198,24 @@ class QuizEditor extends React.Component {
             </Card>
           </GridItem>
 
-          {this.state.paragraphs.map((paragraph, paragraphIdx) =>
-            (<GridItem key={paragraphIdx} xs={12} sm={12} md={8}>
+          {this.props.paragraphs.allIds.map(paragraphId =>
+            (<GridItem key={paragraphId} xs={12} sm={12} md={8}>
               <QuizParagraphEditor
-                number={paragraphIdx + 1}
-                paragraph={paragraph}
-                onParagraphEditorStateChange={this.onParagraphEditorStateChange}
+                number={paragraphId + 1}
+                paragraph={this.props.paragraphs.byId[paragraphId]}
+                onParagraphEditorStateChange={this.props.onParagraphEditorStateChange}
                 onParagraphRemove={this.onParagraphRemove}
               />
             </GridItem>)
           )}
 
           <GridItem xs={12} sm={12} md={8}>
-            <Button variant="contained" color="primary" onClick={this.onParagraphCreate}>
+            <Button variant="contained" color="primary" onClick={this.props.onParagraphCreate}>
               Add new paragraph
             </Button>
           </GridItem>
 
-          {this.state.questions.map((question, questionIdx) =>
+          {[/*this.state.questions*/].map((question, questionIdx) =>
             (<GridItem key={questionIdx} xs={12} sm={12} md={8}>
               <QuizQuestionEditor
                 number={questionIdx + 1}
@@ -248,4 +241,25 @@ class QuizEditor extends React.Component {
   }
 }
 
-export default withStyles(styles)(QuizEditor);
+const mapStateToProps = state => {
+  return {
+    paragraphs: state.paragraphs,
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    onParagraphCreate: () => {
+      dispatch(addParagraph());
+    },
+
+    onParagraphEditorStateChange: (paragraphNumber, state) => {
+      dispatch(changeParagraphEditorState(paragraphNumber, state))
+    },
+  }
+};
+
+export default withStyles(styles)(connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(QuizEditor));
