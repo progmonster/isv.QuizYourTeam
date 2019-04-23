@@ -84,7 +84,7 @@ _SingleChoiceAnswerItem.propTypes = {
 
 class _SingleChoiceAnswerBlock extends React.PureComponent {
   render() {
-    const { answerItems } = this.props;
+    const { answers } = this.props;
 
     return (<RadioGroup
       aria-label="Gender" /*todo*/
@@ -92,7 +92,7 @@ class _SingleChoiceAnswerBlock extends React.PureComponent {
       value={0}
       onChange={this.handleChange}
     >
-      {answerItems.map((answerItem, answerItemIdx) => {
+      {answers.map((answerItem, answerItemIdx) => {
         const answerItemNumber = answerItemIdx + 1;
 
         return (
@@ -111,7 +111,7 @@ class _SingleChoiceAnswerBlock extends React.PureComponent {
 }
 
 _SingleChoiceAnswerBlock.propTypes = {
-  answerItems: PropTypes.any,
+  answers: PropTypes.any,
   onAnswerItemRemove: PropTypes.func,
   onAnswerItemTitleChange: PropTypes.func,
   onAnswerItemCheckStateChange: PropTypes.func,
@@ -125,7 +125,7 @@ class _MultipleChoiceAnswerBlock extends React.PureComponent {
 }
 
 _MultipleChoiceAnswerBlock.propTypes = {
-  answerItems: PropTypes.any,
+  answers: PropTypes.any,
   onAnswerItemRemove: PropTypes.func,
   onAnswerItemTitleChange: PropTypes.func,
   onAnswerItemCheckStateChange: PropTypes.func,
@@ -133,24 +133,27 @@ _MultipleChoiceAnswerBlock.propTypes = {
 
 class QuizAnswersEditor extends Component {
   render() {
-    const { answers } = this.props;
+    const {
+      answerType,
+      onAnswerAdd,
+    } = this.props;
 
     return (
       <GridContainer>
         <GridItem xs={12} sm={12} md={8}>
-          <Tabs value={answers.type === ANSWER_TYPES.SINGLE_CHOICE ? 0 : 1} onChange={this.handleChange}>
+          <Tabs value={answerType === ANSWER_TYPES.SINGLE_CHOICE ? 0 : 1} onChange={this.handleChange}>
             <Tab label="Single choice" />
             <Tab label="Multiple choice" />
           </Tabs>
 
-          {answers.type === ANSWER_TYPES.SINGLE_CHOICE
+          {answerType === ANSWER_TYPES.SINGLE_CHOICE
             ? this._renderSingleChoiceAnswerBlock()
             : this._renderMultipleChoiceAnswerBlock()}
         </GridItem>
 
         <GridItem xs={12} sm={12} md={8}>
           <Button variant="contained" color="primary"
-                  onClick={() => this.props.onAnswerAdd("", false)}>
+                  onClick={() => onAnswerAdd("", false)}>
             Add an answer
           </Button>
         </GridItem>
@@ -159,27 +162,37 @@ class QuizAnswersEditor extends Component {
   }
 
   _renderSingleChoiceAnswerBlock() {
-    const { answers } = this.props;
+    const {
+      answers,
+      onAnswerRemove,
+      onAnswerTitleChange,
+      onAnswerCheckStateChange,
+    } = this.props;
 
     return (
       <_SingleChoiceAnswerBlock
-        answerItems={answers.items}
-        onAnswerItemCheckStateChange={this.props.onAnswerCheckStateChange}
-        onAnswerItemTitleChange={this.props.onAnswerTitleChange}
-        onAnswerItemRemove={this.props.onAnswerRemove}
+        answers={answers}
+        onAnswerItemCheckStateChange={onAnswerCheckStateChange}
+        onAnswerItemTitleChange={onAnswerTitleChange}
+        onAnswerItemRemove={onAnswerRemove}
       />
     );
   }
 
   _renderMultipleChoiceAnswerBlock() {
-    const { answers } = this.props;
+    const {
+      answers,
+      onAnswerRemove,
+      onAnswerTitleChange,
+      onAnswerCheckStateChange,
+    } = this.props;
 
     return (
       <_MultipleChoiceAnswerBlock
-        answerItems={answers.items}
-        onAnswerItemCheckStateChange={this.props.onAnswerCheckStateChange}
-        onAnswerItemTitleChange={this.props.onAnswerTitleChange}
-        onAnswerItemRemove={this.props.onAnswerRemove}
+        answers={answers}
+        onAnswerItemCheckStateChange={onAnswerCheckStateChange}
+        onAnswerItemTitleChange={onAnswerTitleChange}
+        onAnswerItemRemove={onAnswerRemove}
       />
     );
   }
@@ -187,6 +200,8 @@ class QuizAnswersEditor extends Component {
 
 QuizAnswersEditor.propTypes = {
   classes: PropTypes.any,
+  questionId: PropTypes.number,
+  answerType: PropTypes.any,
   answers: PropTypes.any,
   onAnswerAdd: PropTypes.func,
   onAnswerRemove: PropTypes.func,
@@ -194,26 +209,26 @@ QuizAnswersEditor.propTypes = {
   onAnswerCheckStateChange: PropTypes.func,
 };
 
-const mapStateToProps = (state, { id }) => {
-  return { ...state.editingQuiz.questions.byId[id] };
+const mapStateToProps = (state, { questionId }) => {
+  return { ...state.editingQuiz.questions.byId[questionId] };
 };
 
-const mapDispatchToProps = (dispatch, { id: questionId }) => {
+const mapDispatchToProps = (dispatch, { questionId }) => {
   return {
-    onAnswerAdd: () => {
-      dispatch(addAnswerToEditingQuiz(questionId));
+    onAnswerAdd: (title, checked) => {
+      dispatch(addAnswerToEditingQuiz(questionId, title, checked));
     },
 
-    onAnswerRemove: () => {
-      dispatch(removeAnswerFromEditingQuiz(questionId));
+    onAnswerRemove: (answerId) => {
+      dispatch(removeAnswerFromEditingQuiz(questionId, answerId));
     },
 
-    onAnswerTitleChange: () => {
-      dispatch(changeAnswerTitleInEditingQuiz(questionId));
+    onAnswerTitleChange: (answerId, title) => {
+      dispatch(changeAnswerTitleInEditingQuiz(questionId, answerId, title));
     },
 
-    onAnswerCheckStateChange: () => {
-      dispatch(changeAnswerCheckStateInEditingQuiz(questionId));
+    onAnswerCheckStateChange: (answerId, checked) => {
+      dispatch(changeAnswerCheckStateInEditingQuiz(questionId, answerId, checked));
     },
   };
 };

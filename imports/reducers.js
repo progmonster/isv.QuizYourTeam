@@ -139,8 +139,8 @@ export default reducers;
 
         const answerType = state.questions[questionIdx].answers.type;
 
-        const updateAnswerItems = (answerItems) => {
-          return answerItems.map((answerItem, idx) => {
+        const updateAnswers = (answers) => {
+          return answers.map((answerItem, idx) => {
             let newCheckedState;
 
             if (idx === answerIdx) {
@@ -159,7 +159,7 @@ export default reducers;
 
         return update(
           state,
-          { questions: { [questionIdx]: { answers: { items: { $apply: updateAnswerItems } } } } }
+          { questions: { [questionIdx]: { answers: { items: { $apply: updateAnswers } } } } }
         );
       }
     );
