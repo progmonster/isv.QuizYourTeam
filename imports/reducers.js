@@ -2,7 +2,7 @@ import { EditorState } from 'draft-js';
 import {
   ADD_ANSWER_TO_EDITING_QUIZ,
   ADD_PARAGRAPH_TO_EDITING_QUIZ,
-  ADD_QUESTION_TO_EDITING_QUIZ, CHANGE_ANSWER_TITLE_IN_EDITING_QUIZ,
+  ADD_QUESTION_TO_EDITING_QUIZ, CHANGE_ANSWER_CHECK_STATE_IN_EDITING_QUIZ, CHANGE_ANSWER_TITLE_IN_EDITING_QUIZ,
   CHANGE_PARAGRAPH_EDITOR_STATE_IN_EDITING_QUIZ,
   CHANGE_QUESTION_EDITOR_STATE_IN_EDITING_QUIZ, REMOVE_ANSWER_FROM_EDITING_QUIZ,
   REMOVE_PARAGRAPH_FROM_EDITING_QUIZ,
@@ -176,72 +176,8 @@ function editingQuizQuestionReducer(state = { byId: {}, allIds: [] }, action) {
         }
       };
 
-    default:
-      return state;
-  }
-}
-
-function editingQuizReducer(state = {}, action) {
-  return {
-    ...state,
-    paragraphs: editingQuizParagraphReducer(state.paragraphs, action),
-    questions: editingQuizQuestionReducer(state.questions, action),
-  }
-}
-
-const reducers = (state = {}, action) => {
-  return {
-    ...state,
-    editingQuiz: editingQuizReducer(state.editingQuiz, action)
-  }
-};
-
-export default reducers;
-
+    case CHANGE_ANSWER_CHECK_STATE_IN_EDITING_QUIZ:
 /*
-
-  newBlankQuestion = () => ({
-    editorState: EditorState.createEmpty(),
-    answers: { type: ANSWER_TYPES.SINGLE_CHOICE, items: [] },
-  });
-
-  onAnswerAdd = (questionNumber, title, checked) =>
-    this.setState((state) => {
-        const questionIdx = (questionNumber - 1);
-
-        return update(
-          state,
-          { questions: { [questionIdx]: { answers: { items: { $push: [{ title, checked }] } } } } }
-        );
-      }
-    );
-
-  onAnswerRemove = (questionNumber, answerNumber) =>
-    this.setState((state) => {
-        const questionIdx = (questionNumber - 1);
-
-        const answerIdx = (answerNumber - 1);
-
-        return update(
-          state,
-          { questions: { [questionIdx]: { answers: { items: { $splice: [[answerIdx, 1]] } } } } }
-        );
-      }
-    );
-
-  onAnswerTitleChange = (questionNumber, answerNumber, title) =>
-    this.setState((state) => {
-        const questionIdx = (questionNumber - 1);
-
-        const answerIdx = (answerNumber - 1);
-
-        return update(
-          state,
-          { questions: { [questionIdx]: { answers: { items: { [answerIdx]: { title: { $set: title } } } } } } }
-        );
-      }
-    );
-
   onAnswerCheckStateChange = (questionNumber, answerNumber, checked) => {
     this.setState((state) => {
         const questionIdx = (questionNumber - 1);
@@ -275,4 +211,29 @@ export default reducers;
       }
     );
   };
+
 */
+
+      return state;/*todo*/
+
+    default:
+      return state;
+  }
+}
+
+function editingQuizReducer(state = {}, action) {
+  return {
+    ...state,
+    paragraphs: editingQuizParagraphReducer(state.paragraphs, action),
+    questions: editingQuizQuestionReducer(state.questions, action),
+  }
+}
+
+const reducers = (state = {}, action) => {
+  return {
+    ...state,
+    editingQuiz: editingQuizReducer(state.editingQuiz, action)
+  }
+};
+
+export default reducers;
