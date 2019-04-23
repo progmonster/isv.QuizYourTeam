@@ -14,7 +14,7 @@ import QuizQuestionEditor from "./QuizQuestionEditor";
 import QuizParagraphEditor from "./QuizParagraphEditor";
 import { ANSWER_TYPES } from "./AnswerTypes";
 import { connect } from "react-redux";
-import { addParagraph, changeParagraphEditorState } from "/imports/actions";
+import { addParagraph } from "/imports/actions";
 
 const styles = {
   cardCategoryWhite: {/*todo remove?*/
@@ -36,16 +36,6 @@ const styles = {
 };
 
 class QuizEditor extends React.PureComponent {
-  onParagraphRemove = (paragraphNumber) =>
-    this.setState((state) => {
-        const paragraphIdx = (paragraphNumber - 1);
-
-        return update(state, { paragraphs: { $splice: [[paragraphIdx, 1]] } });
-      }
-    );
-
-  newBlankParagraph = () => ({ editorState: EditorState.createEmpty() });
-
   onQuestionCreate = () => this.setState(
     (state) => update(state, { questions: { $push: [this.newBlankQuestion()] } })
   );
@@ -143,6 +133,8 @@ class QuizEditor extends React.PureComponent {
   };
 
   render() {
+    console.log("QuizEditor", this.props);
+
     const { classes } = this.props;
 
     return (

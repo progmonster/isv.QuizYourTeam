@@ -37,8 +37,6 @@ const styles = (theme) => ({
 
 class QuizParagraphEditor extends React.PureComponent {
   render() {
-    console.log("QuizParagraphEditor");
-
     const { id, number, editorState, onParagraphEditorStateChange, onParagraphRemove, classes } = this.props;
 
     return <Paper className={classes.quizParagraphEditor} elevation={1}>
