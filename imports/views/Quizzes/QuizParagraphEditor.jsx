@@ -7,9 +7,9 @@ import GridContainer from "/imports/components/Grid/GridContainer.jsx";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import * as PropTypes from "prop-types";
-import { changeParagraphEditorState } from "/imports/actions";
+import { changeParagraphEditorStateInEditingQuiz } from "/imports/actions";
 import { connect } from "react-redux";
-import { removeParagraph } from "../../actions";
+import { removeParagraphFromEditingQuiz } from "../../actions";
 
 const styles = (theme) => ({
   cardCategoryWhite: {/*todo remove?*/
@@ -37,7 +37,7 @@ const styles = (theme) => ({
 
 class QuizParagraphEditor extends React.PureComponent {
   render() {
-    const { id, number, editorState, onParagraphEditorStateChange, onParagraphRemove, classes } = this.props;
+    const { number, editorState, onParagraphEditorStateChange, onParagraphRemove, classes } = this.props;
 
     return <Paper className={classes.quizParagraphEditor} elevation={1}>
       <GridContainer>
@@ -80,11 +80,11 @@ const mapStateToProps = (state, { id }) => {
 const mapDispatchToProps = (dispatch, { id }) => {
   return {
     onParagraphEditorStateChange: (state) => {
-      dispatch(changeParagraphEditorState(id, state));
+      dispatch(changeParagraphEditorStateInEditingQuiz(id, state));
     },
 
     onParagraphRemove: () => {
-      dispatch(removeParagraph(id));
+      dispatch(removeParagraphFromEditingQuiz(id));
     },
   };
 };

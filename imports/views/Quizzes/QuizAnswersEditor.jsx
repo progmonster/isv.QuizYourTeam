@@ -13,6 +13,12 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import TextField from "@material-ui/core/TextField";
 import IconButton from "@material-ui/core/IconButton";
 import DeleteIcon from "@material-ui/icons/Delete";
+import {
+  addAnswerToEditingQuiz, changeAnswerCheckStateInEditingQuiz, changeAnswerTitleInEditingQuiz,
+  changeQuestionEditorStateInEditingQuiz, removeAnswerFromEditingQuiz,
+  removeQuestionFromEditingQuiz
+} from "../../actions";
+import { connect } from "react-redux";
 
 const styles = (theme) => ({
   quizAnswersEditor: {
@@ -24,7 +30,18 @@ const styles = (theme) => ({
 
 class _SingleChoiceAnswerItem extends React.PureComponent {
   render() {
-    const { number } = this.props;
+    const {
+      classes,
+      id: questionId,
+      number: questionNumber,
+      editorState,
+      onQuestionEditorStateChange,
+      onQuestionRemove,
+      onAnswerAdd,
+      onAnswerRemove,
+      onAnswerTitleChange,
+      onAnswerCheckStateChange
+    } = this.props;
 
     return (<FormControlLabel value={number.toString()} control={this._renderLabelChildren()} label="" />)
   }
@@ -177,4 +194,28 @@ QuizAnswersEditor.propTypes = {
   onAnswerCheckStateChange: PropTypes.func,
 };
 
-export default withStyles(styles)(QuizAnswersEditor);
+const mapStateToProps = (state, { id }) => {
+  return { ...state.editingQuiz.questions.byId[id] };
+};
+
+const mapDispatchToProps = (dispatch, { id: questionId }) => {
+  return {
+    onAnswerAdd: () => {
+      dispatch(addAnswerToEditingQuiz(questionId));
+    },
+
+    onAnswerRemove: () => {
+      dispatch(removeAnswerFromEditingQuiz(questionId));
+    },
+
+    onAnswerTitleChange: () => {
+      dispatch(changeAnswerTitleInEditingQuiz(questionId));
+    },
+
+    onAnswerCheckStateChange: () => {
+      dispatch(changeAnswerCheckStateInEditingQuiz(questionId));
+    },
+  };
+};
+
+export default withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(QuizAnswersEditor));

@@ -67,3 +67,101 @@ const reducers = (state = {}, action) => {
 };
 
 export default reducers;
+
+/*
+  onQuestionCreate = () => this.setState(
+    (state) => update(state, { questions: { $push: [this.newBlankQuestion()] } })
+  );
+
+  onQuestionEditorStateChange = (questionNumber, editorState) =>
+    this.setState((state) => {
+        const questionIdx = (questionNumber - 1);
+
+        return update(state, { questions: { [questionIdx]: { editorState: { $set: editorState } } } });
+      }
+    );
+
+  onQuestionRemove = (questionNumber) =>
+    this.setState((state) => {
+        const questionIdx = (questionNumber - 1);
+
+        return update(state, { questions: { $splice: [[questionIdx, 1]] } });
+      }
+    );
+
+  newBlankQuestion = () => ({
+    editorState: EditorState.createEmpty(),
+    answers: { type: ANSWER_TYPES.SINGLE_CHOICE, items: [] },
+  });
+
+  onAnswerAdd = (questionNumber, title, checked) =>
+    this.setState((state) => {
+        const questionIdx = (questionNumber - 1);
+
+        return update(
+          state,
+          { questions: { [questionIdx]: { answers: { items: { $push: [{ title, checked }] } } } } }
+        );
+      }
+    );
+
+  onAnswerRemove = (questionNumber, answerNumber) =>
+    this.setState((state) => {
+        const questionIdx = (questionNumber - 1);
+
+        const answerIdx = (answerNumber - 1);
+
+        return update(
+          state,
+          { questions: { [questionIdx]: { answers: { items: { $splice: [[answerIdx, 1]] } } } } }
+        );
+      }
+    );
+
+  onAnswerTitleChange = (questionNumber, answerNumber, title) =>
+    this.setState((state) => {
+        const questionIdx = (questionNumber - 1);
+
+        const answerIdx = (answerNumber - 1);
+
+        return update(
+          state,
+          { questions: { [questionIdx]: { answers: { items: { [answerIdx]: { title: { $set: title } } } } } } }
+        );
+      }
+    );
+
+  onAnswerCheckStateChange = (questionNumber, answerNumber, checked) => {
+    this.setState((state) => {
+        const questionIdx = (questionNumber - 1);
+
+        const answerIdx = (answerNumber - 1);
+
+        const answerType = state.questions[questionIdx].answers.type;
+
+        const updateAnswerItems = (answerItems) => {
+          return answerItems.map((answerItem, idx) => {
+            let newCheckedState;
+
+            if (idx === answerIdx) {
+              newCheckedState = checked;
+            } else {
+              if (answerType === ANSWER_TYPES.SINGLE_CHOICE) {
+                newCheckedState = false;
+              } else {
+                newCheckedState = answerItem.checked;
+              }
+            }
+
+            return ({ ...answerItem, checked: newCheckedState });
+          });
+        };
+
+        return update(
+          state,
+          { questions: { [questionIdx]: { answers: { items: { $apply: updateAnswerItems } } } } }
+        );
+      }
+    );
+  };
+*/

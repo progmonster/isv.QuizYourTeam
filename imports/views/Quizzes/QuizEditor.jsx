@@ -1,5 +1,4 @@
 import React from "react";
-import update from 'react-addons-update';
 import withStyles from "@material-ui/core/styles/withStyles";
 import GridItem from "/imports/components/Grid/GridItem.jsx";
 import GridContainer from "/imports/components/Grid/GridContainer.jsx";
@@ -8,13 +7,12 @@ import Card from "/imports/components/Card/Card.jsx";
 import CardHeader from "/imports/components/Card/CardHeader.jsx";
 import CardBody from "/imports/components/Card/CardBody.jsx";
 import CardFooter from "/imports/components/Card/CardFooter.jsx";
-import { EditorState } from 'draft-js';
 import Button from "@material-ui/core/Button";
 import QuizQuestionEditor from "./QuizQuestionEditor";
 import QuizParagraphEditor from "./QuizParagraphEditor";
-import { ANSWER_TYPES } from "./AnswerTypes";
 import { connect } from "react-redux";
-import { addParagraph } from "/imports/actions";
+import { addParagraphToEditingQuiz, addQuestionToEditingQuiz } from "/imports/actions";
+import * as PropTypes from "prop-types";
 
 const styles = {
   cardCategoryWhite: {/*todo remove?*/
@@ -36,106 +34,14 @@ const styles = {
 };
 
 class QuizEditor extends React.PureComponent {
-  onQuestionCreate = () => this.setState(
-    (state) => update(state, { questions: { $push: [this.newBlankQuestion()] } })
-  );
-
-  onQuestionEditorStateChange = (questionNumber, editorState) =>
-    this.setState((state) => {
-        const questionIdx = (questionNumber - 1);
-
-        return update(state, { questions: { [questionIdx]: { editorState: { $set: editorState } } } });
-      }
-    );
-
-  onQuestionRemove = (questionNumber) =>
-    this.setState((state) => {
-        const questionIdx = (questionNumber - 1);
-
-        return update(state, { questions: { $splice: [[questionIdx, 1]] } });
-      }
-    );
-
-  newBlankQuestion = () => ({
-    editorState: EditorState.createEmpty(),
-    answers: { type: ANSWER_TYPES.SINGLE_CHOICE, items: [] },
-  });
-
-  onAnswerAdd = (questionNumber, title, checked) =>
-    this.setState((state) => {
-        const questionIdx = (questionNumber - 1);
-
-        return update(
-          state,
-          { questions: { [questionIdx]: { answers: { items: { $push: [{ title, checked }] } } } } }
-        );
-      }
-    );
-
-  onAnswerRemove = (questionNumber, answerNumber) =>
-    this.setState((state) => {
-        const questionIdx = (questionNumber - 1);
-
-        const answerIdx = (answerNumber - 1);
-
-        return update(
-          state,
-          { questions: { [questionIdx]: { answers: { items: { $splice: [[answerIdx, 1]] } } } } }
-        );
-      }
-    );
-
-  onAnswerTitleChange = (questionNumber, answerNumber, title) =>
-    this.setState((state) => {
-        const questionIdx = (questionNumber - 1);
-
-        const answerIdx = (answerNumber - 1);
-
-        return update(
-          state,
-          { questions: { [questionIdx]: { answers: { items: { [answerIdx]: { title: { $set: title } } } } } } }
-        );
-      }
-    );
-
-  onAnswerCheckStateChange = (questionNumber, answerNumber, checked) => {
-    this.setState((state) => {
-        const questionIdx = (questionNumber - 1);
-
-        const answerIdx = (answerNumber - 1);
-
-        const answerType = state.questions[questionIdx].answers.type;
-
-        const updateAnswerItems = (answerItems) => {
-          return answerItems.map((answerItem, idx) => {
-            let newCheckedState;
-
-            if (idx === answerIdx) {
-              newCheckedState = checked;
-            } else {
-              if (answerType === ANSWER_TYPES.SINGLE_CHOICE) {
-                newCheckedState = false;
-              } else {
-                newCheckedState = answerItem.checked;
-              }
-            }
-
-            return ({ ...answerItem, checked: newCheckedState });
-          });
-        };
-
-        return update(
-          state,
-          { questions: { [questionIdx]: { answers: { items: { $apply: updateAnswerItems } } } } }
-        );
-      }
-    );
-  };
-
   render() {
-    console.log("QuizEditor", this.props);
-
-    const { classes } = this.props;
+    const {
+      classes,
+      paragraphs,
+      onParagraphCreate,
+      questions,
+      onQuestionCreate
+    } = this.props;
 
     return (
       <div>
@@ -173,40 +79,30 @@ class QuizEditor extends React.PureComponent {
                 </GridContainer>
               </CardBody>
               <CardFooter>
-                {/*<Button color="primary">Update Profile</Button>*/}
               </CardFooter>
             </Card>
           </GridItem>
 
-          {this.props.paragraphs.allIds.map((id, idx) =>
+          {paragraphs.allIds.map((id, idx) =>
             (<GridItem key={id} xs={12} sm={12} md={8}>
-              <QuizParagraphEditor id={id} number={idx + 1}/>
+              <QuizParagraphEditor id={id} number={idx + 1} />
             </GridItem>)
           )}
 
           <GridItem xs={12} sm={12} md={8}>
-            <Button variant="contained" color="primary" onClick={this.props.onParagraphCreate}>
+            <Button variant="contained" color="primary" onClick={onParagraphCreate}>
               Add new paragraph
             </Button>
           </GridItem>
 
-          {[/*this.state.questions*/].map((question, questionIdx) =>
+          {questions.allIds.map((id, idx) =>
             (<GridItem key={questionIdx} xs={12} sm={12} md={8}>
-              <QuizQuestionEditor
-                number={questionIdx + 1}
-                question={question}
-                onQuestionEditorStateChange={this.onQuestionEditorStateChange}
-                onQuestionRemove={this.onQuestionRemove}
-                onAnswerAdd={this.onAnswerAdd}
-                onAnswerRemove={this.onAnswerRemove}
-                onAnswerTitleChange={this.onAnswerTitleChange}
-                onAnswerCheckStateChange={this.onAnswerCheckStateChange}
-              />
+              <QuizQuestionEditor id={id} number={idx + 1} />
             </GridItem>)
           )}
 
           <GridItem xs={12} sm={12} md={8}>
-            <Button variant="contained" color="primary" onClick={this.onQuestionCreate}>
+            <Button variant="contained" color="primary" onClick={onQuestionCreate}>
               Add new question
             </Button>
           </GridItem>
@@ -216,16 +112,30 @@ class QuizEditor extends React.PureComponent {
   }
 }
 
+QuizEditor.propTypes = {
+  classes: PropTypes.any,
+  paragraphs: PropTypes.any,
+  questions: PropTypes.func,
+  onParagraphCreate: PropTypes.func,
+  onQuestionCreate: PropTypes.func,
+};
+
+
 const mapStateToProps = state => {
   return {
     paragraphs: state.editingQuiz.paragraphs,
+    questions: state.editingQuiz.questions,
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
     onParagraphCreate: () => {
-      dispatch(addParagraph());
+      dispatch(addParagraphToEditingQuiz());
+    },
+
+    onQuestionCreate: () => {
+      dispatch(addQuestionToEditingQuiz());
     },
   }
 };
