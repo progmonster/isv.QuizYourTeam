@@ -140,7 +140,7 @@ export default reducers;
         const answerType = state.questions[questionIdx].answers.type;
 
         const updateAnswers = (answers) => {
-          return answers.map((answerItem, idx) => {
+          return answers.map((answer, idx) => {
             let newCheckedState;
 
             if (idx === answerIdx) {
@@ -149,11 +149,11 @@ export default reducers;
               if (answerType === ANSWER_TYPES.SINGLE_CHOICE) {
                 newCheckedState = false;
               } else {
-                newCheckedState = answerItem.checked;
+                newCheckedState = answer.checked;
               }
             }
 
-            return ({ ...answerItem, checked: newCheckedState });
+            return ({ ...answer, checked: newCheckedState });
           });
         };
 
