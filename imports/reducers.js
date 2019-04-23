@@ -1,12 +1,17 @@
 import { EditorState } from 'draft-js';
 import {
-  ADD_PARAGRAPH_TO_EDITING_QUIZ, ADD_QUESTION_TO_EDITING_QUIZ,
-  CHANGE_PARAGRAPH_EDITOR_STATE_IN_EDITING_QUIZ, CHANGE_QUESTION_EDITOR_STATE_IN_EDITING_QUIZ,
-  REMOVE_PARAGRAPH_FROM_EDITING_QUIZ, REMOVE_QUESTION_FROM_EDITING_QUIZ
+  ADD_ANSWER_TO_EDITING_QUIZ,
+  ADD_PARAGRAPH_TO_EDITING_QUIZ,
+  ADD_QUESTION_TO_EDITING_QUIZ, CHANGE_ANSWER_TITLE_IN_EDITING_QUIZ,
+  CHANGE_PARAGRAPH_EDITOR_STATE_IN_EDITING_QUIZ,
+  CHANGE_QUESTION_EDITOR_STATE_IN_EDITING_QUIZ, REMOVE_ANSWER_FROM_EDITING_QUIZ,
+  REMOVE_PARAGRAPH_FROM_EDITING_QUIZ,
+  REMOVE_QUESTION_FROM_EDITING_QUIZ
 } from './actions';
 import omit from 'lodash/omit';
 import pull from 'lodash/pull';
 import max from 'lodash/max';
+import { ANSWER_TYPES } from "./views/Quizzes/AnswerTypes";
 
 function editingQuizParagraphReducer(state = { byId: {}, allIds: [] }, action) {
   const newId = (max(state.allIds) || 0) + 1;
@@ -35,6 +40,7 @@ function editingQuizParagraphReducer(state = { byId: {}, allIds: [] }, action) {
           ...state.byId,
 
           [action.id]: {
+            ...state.byId[action.Id],
             editorState: action.state
           }
         }
@@ -53,22 +59,24 @@ function editingQuizParagraphReducer(state = { byId: {}, allIds: [] }, action) {
 }
 
 function editingQuizQuestionReducer(state = { byId: {}, allIds: [] }, action) {
-  const newId = (max(state.allIds) || 0) + 1;
-
   switch (action.type) {
     case ADD_QUESTION_TO_EDITING_QUIZ:
+      const newQuestionId = (max(state.allIds) || 0) + 1;
+
       return {
         ...state,
 
         byId: {
           ...state.byId,
 
-          [newId]: {
-            editorState: EditorState.createEmpty()
+          [newQuestionId]: {
+            editorState: EditorState.createEmpty(),
+            answerType: ANSWER_TYPES.SINGLE_CHOICE,
+            answers: { allIds: [], byId: {} },
           }
         },
 
-        allIds: [...state.allIds, newId]
+        allIds: [...state.allIds, newQuestionId]
       };
 
     case CHANGE_QUESTION_EDITOR_STATE_IN_EDITING_QUIZ:
@@ -79,6 +87,7 @@ function editingQuizQuestionReducer(state = { byId: {}, allIds: [] }, action) {
           ...state.byId,
 
           [action.id]: {
+            ...state.byId[action.Id],
             editorState: action.state
           }
         }
@@ -89,6 +98,82 @@ function editingQuizQuestionReducer(state = { byId: {}, allIds: [] }, action) {
         ...state,
         byId: omit(state.byId, action.id),
         allIds: pull(state.allIds, action.id)
+      };
+
+    case ADD_ANSWER_TO_EDITING_QUIZ:
+      const newAnswerId = (max(state.byId[action.questionId].answers.allIds) || 0) + 1;
+
+      return {
+        ...state,
+
+        byId: {
+          ...state.byId,
+
+          [action.questionId]: {
+            ...state.byId[action.questionId],
+
+            answers: {
+              ...state.byId[action.questionId].answers,
+
+              byId: {
+                ...state.byId[action.questionId].answers.byId,
+
+                [newAnswerId]: {
+                  title: action.title,
+                  checked: action.checked,
+                }
+              },
+
+              allIds: [...state.byId[action.questionId].answers.allIds, newAnswerId],
+            }
+          }
+        }
+      };
+
+    case CHANGE_ANSWER_TITLE_IN_EDITING_QUIZ:
+      return {
+        ...state,
+
+        byId: {
+          ...state.byId,
+
+          [action.questionId]: {
+            ...state.byId[action.questionId],
+
+            answers: {
+              ...state.byId[action.questionId].answers,
+
+              byId: {
+                ...state.byId[action.questionId].answers.byId,
+
+                [action.answerId]: {
+                  ...state.byId[action.questionId].answers.byId[action.answerId],
+                  title: action.title,
+                }
+              },
+            }
+          }
+        }
+      };
+
+    case REMOVE_ANSWER_FROM_EDITING_QUIZ:
+      return {
+        ...state,
+
+        byId: {
+          ...state.byId,
+
+          [action.questionId]: {
+            ...state.byId[action.questionId],
+
+            answers: {
+              ...state.byId[action.questionId].answers,
+
+              byId: omit(state.byId[action.questionId].answers.byId, action.answerId),
+              allIds: pull(state.byId[action.questionId].answers.allIds, action.answerId),
+            }
+          }
+        }
       };
 
     default:
@@ -114,25 +199,6 @@ const reducers = (state = {}, action) => {
 export default reducers;
 
 /*
-  onQuestionCreate = () => this.setState(
-    (state) => update(state, { questions: { $push: [this.newBlankQuestion()] } })
-  );
-
-  onQuestionEditorStateChange = (questionNumber, editorState) =>
-    this.setState((state) => {
-        const questionIdx = (questionNumber - 1);
-
-        return update(state, { questions: { [questionIdx]: { editorState: { $set: editorState } } } });
-      }
-    );
-
-  onQuestionRemove = (questionNumber) =>
-    this.setState((state) => {
-        const questionIdx = (questionNumber - 1);
-
-        return update(state, { questions: { $splice: [[questionIdx, 1]] } });
-      }
-    );
 
   newBlankQuestion = () => ({
     editorState: EditorState.createEmpty(),

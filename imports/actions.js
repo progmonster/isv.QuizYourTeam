@@ -42,8 +42,8 @@ export function removeQuestionFromEditingQuiz(id) {
   return { type: REMOVE_QUESTION_FROM_EDITING_QUIZ, id };
 }
 
-export function addAnswerToEditingQuiz(questionId) {
-  return { type: ADD_ANSWER_TO_EDITING_QUIZ, questionId };
+export function addAnswerToEditingQuiz(questionId, title, checked) {
+  return { type: ADD_ANSWER_TO_EDITING_QUIZ, questionId, title, checked };
 }
 
 export function changeAnswerTitleInEditingQuiz(questionId, answerId, title) {
