@@ -96,7 +96,7 @@ class QuizEditor extends React.PureComponent {
           </GridItem>
 
           {questions.allIds.map((id, idx) =>
-            (<GridItem key={questionIdx} xs={12} sm={12} md={8}>
+            (<GridItem key={idx} xs={12} sm={12} md={8}>
               <QuizQuestionEditor id={id} number={idx + 1} />
             </GridItem>)
           )}
@@ -115,7 +115,7 @@ class QuizEditor extends React.PureComponent {
 QuizEditor.propTypes = {
   classes: PropTypes.any,
   paragraphs: PropTypes.any,
-  questions: PropTypes.func,
+  questions: PropTypes.any,
   onParagraphCreate: PropTypes.func,
   onQuestionCreate: PropTypes.func,
 };
