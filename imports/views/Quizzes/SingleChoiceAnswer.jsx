@@ -36,6 +36,7 @@ class SingleChoiceAnswer extends React.PureComponent {
     return (
       <Fragment>
         <Radio
+          color="secondary"
           checked={checked}
           onChange={() => onCheckStateChange(true)}
         />

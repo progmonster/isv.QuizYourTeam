@@ -1,7 +1,6 @@
 import withStyles from "@material-ui/core/styles/withStyles";
 import React, { Fragment } from "react";
 import * as PropTypes from "prop-types";
-import Radio from "@material-ui/core/Radio";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import TextField from "@material-ui/core/TextField";
 import IconButton from "@material-ui/core/IconButton";
@@ -12,6 +11,7 @@ import {
   removeAnswerFromEditingQuiz
 } from "../../actions";
 import { connect } from "react-redux";
+import Checkbox from "@material-ui/core/Checkbox";
 
 const styles = (theme) => ({});
 
@@ -35,9 +35,10 @@ class MultipleChoiceAnswer extends React.PureComponent {
 
     return (
       <Fragment>
-        <Radio
+        <Checkbox
+          color="secondary"
           checked={checked}
-          onChange={() => onCheckStateChange(true)}
+          onChange={(event) => onCheckStateChange(event.target.checked)}
         />
 
         <TextField

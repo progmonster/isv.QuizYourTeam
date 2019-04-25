@@ -12,6 +12,7 @@ import { addAnswerToEditingQuiz, changeAnswerTypeInEditingQuiz } from "../../act
 import { connect } from "react-redux";
 import SingleChoiceAnswer from "./SingleChoiceAnswer";
 import MultipleChoiceAnswer from "./MultipleChoiceAnswer";
+import FormGroup from "@material-ui/core/FormGroup";
 
 const styles = (theme) => ({
   quizAnswersEditor: {
@@ -90,7 +91,7 @@ class QuizAnswersEditor extends React.PureComponent {
       answers
     } = this.props;
 
-    return (<RadioGroup
+    return (<FormGroup
       aria-label="Gender" /*todo*/
       name="gender1" /*todo*/
       /*
@@ -107,7 +108,7 @@ class QuizAnswersEditor extends React.PureComponent {
           />
         );
       })}
-    </RadioGroup>)
+    </FormGroup>)
   }
 }
 
