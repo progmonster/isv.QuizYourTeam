@@ -8,9 +8,10 @@ import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import { ANSWER_TYPES } from "./AnswerTypes";
 import RadioGroup from "@material-ui/core/RadioGroup";
-import { addAnswerToEditingQuiz } from "../../actions";
+import { addAnswerToEditingQuiz, changeAnswerTypeInEditingQuiz } from "../../actions";
 import { connect } from "react-redux";
 import SingleChoiceAnswer from "./SingleChoiceAnswer";
+import MultipleChoiceAnswer from "./MultipleChoiceAnswer";
 
 const styles = (theme) => ({
   quizAnswersEditor: {
@@ -20,36 +21,31 @@ const styles = (theme) => ({
   }
 });
 
-/*todo implement*/
-class _MultipleChoiceAnswerBlock extends React.PureComponent {
-  render() {
-    return <div />
-  }
-}
-
-_MultipleChoiceAnswerBlock.propTypes = {
-  /*todo*/
-};
-
 class QuizAnswersEditor extends React.PureComponent {
   render() {
     const {
-      questionId,
       answerType,
       onAnswerAdd,
+      onAnswerTypeChange
     } = this.props;
 
     return (
       <GridContainer>
         <GridItem xs={12} sm={12} md={8}>
-          <Tabs value={answerType === ANSWER_TYPES.SINGLE_CHOICE ? 0 : 1} onChange={this.handleChange}>
+          <Tabs
+            value={answerType === ANSWER_TYPES.SINGLE_CHOICE ? 0 : 1}
+
+            onChange={(event, value) =>
+              onAnswerTypeChange(value === 0 ? ANSWER_TYPES.SINGLE_CHOICE : ANSWER_TYPES.MULTIPLE_CHOICE)
+            }
+          >
             <Tab label="Single choice" />
             <Tab label="Multiple choice" />
           </Tabs>
 
           {answerType === ANSWER_TYPES.SINGLE_CHOICE
             ? this._renderSingleChoiceAnswerBlock()
-            : <_MultipleChoiceAnswerBlock questionId={questionId} />}
+            : this._renderMultipleChoiceAnswerBlock()}
         </GridItem>
 
         <GridItem xs={12} sm={12} md={8}>
@@ -87,6 +83,32 @@ class QuizAnswersEditor extends React.PureComponent {
       })}
     </RadioGroup>)
   }
+
+  _renderMultipleChoiceAnswerBlock() {
+    const {
+      questionId,
+      answers
+    } = this.props;
+
+    return (<RadioGroup
+      aria-label="Gender" /*todo*/
+      name="gender1" /*todo*/
+      /*
+            value={0}
+            onChange={this.handleChange}
+      */
+    >
+      {answers.allIds.map((answerId) => {
+        return (
+          <MultipleChoiceAnswer
+            key={answerId}
+            questionId={questionId}
+            answerId={answerId}
+          />
+        );
+      })}
+    </RadioGroup>)
+  }
 }
 
 QuizAnswersEditor.propTypes = {
@@ -104,6 +126,10 @@ const mapDispatchToProps = (dispatch, { questionId }) => {
   return {
     onAnswerAdd: (title, checked) => {
       dispatch(addAnswerToEditingQuiz(questionId, title, checked));
+    },
+
+    onAnswerTypeChange: (answerType) => {
+      dispatch(changeAnswerTypeInEditingQuiz(questionId, answerType));
     }
   };
 };

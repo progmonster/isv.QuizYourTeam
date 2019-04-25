@@ -4,7 +4,7 @@ import {
   ADD_PARAGRAPH_TO_EDITING_QUIZ,
   ADD_QUESTION_TO_EDITING_QUIZ,
   CHANGE_ANSWER_CHECK_STATE_IN_EDITING_QUIZ,
-  CHANGE_ANSWER_TITLE_IN_EDITING_QUIZ,
+  CHANGE_ANSWER_TITLE_IN_EDITING_QUIZ, CHANGE_ANSWER_TYPE_IN_EDITING_QUIZ,
   CHANGE_PARAGRAPH_EDITOR_STATE_IN_EDITING_QUIZ,
   CHANGE_QUESTION_EDITOR_STATE_IN_EDITING_QUIZ,
   REMOVE_ANSWER_FROM_EDITING_QUIZ,
@@ -44,7 +44,7 @@ function editingQuizParagraphReducer(state = { byId: {}, allIds: [] }, action) {
           ...state.byId,
 
           [action.id]: {
-            ...state.byId[action.Id],
+            ...state.byId[action.id],
             editorState: action.state
           }
         }
@@ -63,9 +63,6 @@ function editingQuizParagraphReducer(state = { byId: {}, allIds: [] }, action) {
 }
 
 function editingQuizAnswerReducer(state = { byId: {}, allIds: [] }, answerType, action) {
-  console.log(action);
-  console.log(state);
-
   switch (action.type) {
     case ADD_ANSWER_TO_EDITING_QUIZ:
       const newAnswerId = (max(state.allIds) || 0) + 1;
@@ -124,12 +121,25 @@ function editingQuizAnswerReducer(state = { byId: {}, allIds: [] }, answerType, 
         }, {}),
       };
 
+    case CHANGE_ANSWER_TYPE_IN_EDITING_QUIZ:
+      return {
+        ...state,
+
+        byId: reduce(state.byId, (acc, answer, answerId) => {
+          acc[answerId] = { ...answer, checked: false };
+
+          return acc;
+        }, {}),
+      };
+
     default:
       return state;
   }
 }
 
 function editingQuizQuestionReducer(state = { byId: {}, allIds: [] }, action) {
+  let question;
+
   switch (action.type) {
     case ADD_QUESTION_TO_EDITING_QUIZ:
       const newQuestionId = (max(state.allIds) || 0) + 1;
@@ -158,7 +168,7 @@ function editingQuizQuestionReducer(state = { byId: {}, allIds: [] }, action) {
           ...state.byId,
 
           [action.id]: {
-            ...state.byId[action.Id],
+            ...state.byId[action.id],
             editorState: action.state
           }
         }
@@ -175,7 +185,7 @@ function editingQuizQuestionReducer(state = { byId: {}, allIds: [] }, action) {
     case CHANGE_ANSWER_TITLE_IN_EDITING_QUIZ:
     case CHANGE_ANSWER_CHECK_STATE_IN_EDITING_QUIZ:
     case REMOVE_ANSWER_FROM_EDITING_QUIZ:
-      const question = state.byId[action.questionId];
+      question = state.byId[action.questionId];
 
       return {
         ...state,
@@ -185,6 +195,27 @@ function editingQuizQuestionReducer(state = { byId: {}, allIds: [] }, action) {
 
           [action.questionId]: {
             ...question,
+            answers: editingQuizAnswerReducer(question.answers, question.answerType, action)
+          }
+        }
+      };
+
+    case CHANGE_ANSWER_TYPE_IN_EDITING_QUIZ:
+      question = state.byId[action.questionId];
+
+      if (question.answerType === action.answerType) {
+        return state;
+      }
+
+      return {
+        ...state,
+
+        byId: {
+          ...state.byId,
+
+          [action.questionId]: {
+            ...question,
+            answerType: action.answerType,
             answers: editingQuizAnswerReducer(question.answers, question.answerType, action)
           }
         }

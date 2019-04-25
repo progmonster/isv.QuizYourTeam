@@ -18,6 +18,8 @@ export const REMOVE_ANSWER_FROM_EDITING_QUIZ = "REMOVE_ANSWER_FROM_EDITING_QUIZ"
 
 export const CHANGE_ANSWER_CHECK_STATE_IN_EDITING_QUIZ = "CHANGE_ANSWER_CHECK_STATE_IN_EDITING_QUIZ";
 
+export const CHANGE_ANSWER_TYPE_IN_EDITING_QUIZ = "CHANGE_ANSWER_TYPE_IN_EDITING_QUIZ";
+
 export function addParagraphToEditingQuiz() {
   return { type: ADD_PARAGRAPH_TO_EDITING_QUIZ };
 }
@@ -56,4 +58,8 @@ export function removeAnswerFromEditingQuiz(questionId, answerId) {
 
 export function changeAnswerCheckStateInEditingQuiz(questionId, answerId, checked ) {
   return { type: CHANGE_ANSWER_CHECK_STATE_IN_EDITING_QUIZ, questionId, answerId, checked };
+}
+
+export function changeAnswerTypeInEditingQuiz(questionId, answerType ) {
+  return { type: CHANGE_ANSWER_TYPE_IN_EDITING_QUIZ, questionId, answerType };
 }
