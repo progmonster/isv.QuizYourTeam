@@ -1,8 +1,8 @@
 import React from "react";
 import withStyles from "@material-ui/core/styles/withStyles";
+import { Editor } from 'react-draft-wysiwyg';
 import GridItem from "/imports/components/Grid/GridItem.jsx";
 import GridContainer from "/imports/components/Grid/GridContainer.jsx";
-import CustomInput from "/imports/components/CustomInput/CustomInput.jsx";
 import Card from "/imports/components/Card/Card.jsx";
 import CardHeader from "/imports/components/Card/CardHeader.jsx";
 import CardBody from "/imports/components/Card/CardBody.jsx";
@@ -13,6 +13,8 @@ import QuizParagraphEditor from "./QuizParagraphEditor";
 import { connect } from "react-redux";
 import { addParagraphToEditingQuiz, addQuestionToEditingQuiz } from "/imports/actions";
 import * as PropTypes from "prop-types";
+import { changeDescriptionEditorStateInEditingQuiz, changeTitleInEditingQuiz } from "../../actions";
+import TextField from "@material-ui/core/TextField";
 
 const styles = {
   cardCategoryWhite: {/*todo remove?*/
@@ -37,10 +39,14 @@ class QuizEditor extends React.PureComponent {
   render() {
     const {
       classes,
+      title,
+      descriptionEditorState,
       paragraphs,
       onParagraphCreate,
       questions,
-      onQuestionCreate
+      onQuestionCreate,
+      onTitleChange,
+      onDescriptionEditorStateChange
     } = this.props;
 
     return (
@@ -55,25 +61,18 @@ class QuizEditor extends React.PureComponent {
               <CardBody>
                 <GridContainer>
                   <GridItem xs={12} sm={12} md={12}>
-                    <CustomInput
-                      labelText="Title"
-                      id="title"
-                      formControlProps={{
-                        fullWidth: true
-                      }}
+                    <TextField
+                      value={title}
+                      onChange={(event) => onTitleChange(event.target.value)}
+                      margin="normal"
                     />
                   </GridItem>
                   <GridItem xs={12} sm={12} md={12}>
-                    <CustomInput
-                      labelText="Enter description here"
-                      id="about-me"
-                      formControlProps={{
-                        fullWidth: true
-                      }}
-                      inputProps={{
-                        multiline: true,
-                        rows: 5
-                      }}
+                    <Editor
+                      editorState={descriptionEditorState}
+                      wrapperClassName="demo-wrapper"
+                      editorClassName="demo-editor"
+                      onEditorStateChange={onDescriptionEditorStateChange}
                     />
                   </GridItem>
                 </GridContainer>
@@ -114,15 +113,19 @@ class QuizEditor extends React.PureComponent {
 
 QuizEditor.propTypes = {
   classes: PropTypes.any,
+  title: PropTypes.string,
   paragraphs: PropTypes.any,
   questions: PropTypes.any,
   onParagraphCreate: PropTypes.func,
   onQuestionCreate: PropTypes.func,
+  onTitleChange: PropTypes.func,
+  onDescriptionEditorStateChange: PropTypes.func,
 };
-
 
 const mapStateToProps = state => {
   return {
+    title: state.editingQuiz.title,
+    descriptionEditorState: state.editingQuiz.descriptionEditorState,
     paragraphs: state.editingQuiz.paragraphs,
     questions: state.editingQuiz.questions,
   };
@@ -136,6 +139,14 @@ const mapDispatchToProps = dispatch => {
 
     onQuestionCreate: () => {
       dispatch(addQuestionToEditingQuiz());
+    },
+
+    onTitleChange: (title) => {
+      dispatch(changeTitleInEditingQuiz(title));
+    },
+
+    onDescriptionEditorStateChange: (state) => {
+      dispatch(changeDescriptionEditorStateInEditingQuiz(state));
     },
   }
 };

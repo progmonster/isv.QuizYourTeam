@@ -12,6 +12,7 @@ import {
 } from "../../actions";
 import { connect } from "react-redux";
 import Checkbox from "@material-ui/core/Checkbox";
+import isUndefined from "lodash/isUndefined"
 
 const styles = (theme) => ({});
 

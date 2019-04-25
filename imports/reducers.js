@@ -4,9 +4,10 @@ import {
   ADD_PARAGRAPH_TO_EDITING_QUIZ,
   ADD_QUESTION_TO_EDITING_QUIZ,
   CHANGE_ANSWER_CHECK_STATE_IN_EDITING_QUIZ,
-  CHANGE_ANSWER_TITLE_IN_EDITING_QUIZ, CHANGE_ANSWER_TYPE_IN_EDITING_QUIZ,
+  CHANGE_ANSWER_TITLE_IN_EDITING_QUIZ,
+  CHANGE_ANSWER_TYPE_IN_EDITING_QUIZ, CHANGE_DESCRIPTION_EDITOR_STATE_IN_EDITING_QUIZ,
   CHANGE_PARAGRAPH_EDITOR_STATE_IN_EDITING_QUIZ,
-  CHANGE_QUESTION_EDITOR_STATE_IN_EDITING_QUIZ,
+  CHANGE_QUESTION_EDITOR_STATE_IN_EDITING_QUIZ, CHANGE_TITLE_IN_EDITING_QUIZ,
   REMOVE_ANSWER_FROM_EDITING_QUIZ,
   REMOVE_PARAGRAPH_FROM_EDITING_QUIZ,
   REMOVE_QUESTION_FROM_EDITING_QUIZ
@@ -226,11 +227,33 @@ function editingQuizQuestionReducer(state = { byId: {}, allIds: [] }, action) {
   }
 }
 
-function editingQuizReducer(state = {}, action) {
-  return {
-    ...state,
-    paragraphs: editingQuizParagraphReducer(state.paragraphs, action),
-    questions: editingQuizQuestionReducer(state.questions, action),
+const EDITING_QUIZ_INITIAL_STATE = {
+  title: "",
+  descriptionEditorState: EditorState.createEmpty(),
+  paragraphs: { byId: {}, allIds: [] },
+  questions: { byId: {}, allIds: [] },
+};
+
+function editingQuizReducer(state = EDITING_QUIZ_INITIAL_STATE, action) {
+  switch (action.type) {
+    case CHANGE_TITLE_IN_EDITING_QUIZ:
+      return {
+        ...state,
+        title: action.title,
+      };
+
+    case CHANGE_DESCRIPTION_EDITOR_STATE_IN_EDITING_QUIZ:
+      return {
+        ...state,
+        descriptionEditorState: action.state,
+      };
+
+    default:
+      return {
+        ...state,
+        paragraphs: editingQuizParagraphReducer(state.paragraphs, action),
+        questions: editingQuizQuestionReducer(state.questions, action),
+      }
   }
 }
 
