@@ -6,18 +6,17 @@ import { Redirect, Route, Router, Switch } from "react-router-dom";
 import Admin from "/imports/layouts/Admin.jsx";
 import RTL from "/imports/layouts/RTL.jsx";
 import "/imports/assets/css/material-dashboard-react.css";
-import { createStore } from "redux";
+import { applyMiddleware, createStore } from "redux";
 import reducers from "/imports/reducers";
 import { Provider } from "react-redux";
+import { createLogger } from "redux-logger";
 
 Meteor.startup(() => {
   const hist = createBrowserHistory();
 
-  const store = createStore(reducers);
+  const loggerMiddleware = createLogger();
 
-  store.subscribe(() => {
-    console.log(store.getState());
-  });
+  const store = createStore(reducers, applyMiddleware(loggerMiddleware));
 
   ReactDOM.render(
     <Provider store={store}>
