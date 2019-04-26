@@ -7,6 +7,7 @@ import Admin from "/imports/layouts/Admin.jsx";
 import RTL from "/imports/layouts/RTL.jsx";
 import "/imports/assets/css/material-dashboard-react.css";
 import { applyMiddleware, createStore } from "redux";
+import createSagaMiddleware from "redux-saga";
 import reducers from "/imports/reducers";
 import { Provider } from "react-redux";
 import { createLogger } from "redux-logger";
@@ -16,7 +17,12 @@ Meteor.startup(() => {
 
   const loggerMiddleware = createLogger();
 
-  const store = createStore(reducers, applyMiddleware(loggerMiddleware));
+  const sagaMiddleware = createSagaMiddleware();
+
+  const store = createStore(
+    reducers,
+    applyMiddleware(loggerMiddleware, sagaMiddleware)
+  );
 
   ReactDOM.render(
     <Provider store={store}>
