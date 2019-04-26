@@ -98,10 +98,36 @@ export function saveEditingQuizFail(error) {
   return { type: SAVE_EDITING_QUIZ_FAIL, error };
 }
 
-function getEditingQuizJson({editingQuiz}) {
+function getEditingQuizParagraphJson(paragraph) {
   return {
-    title: editingQuiz.title,
-    description: convertToRaw(editingQuiz.descriptionEditorState.getCurrentContent())
+    ...paragraph,
+    editorState: convertToRaw(paragraph.editorState.getCurrentContent())
+  }
+}
+
+function getEditingQuizQuestionJson(question) {
+  return {
+    ...question,
+    editorState: convertToRaw(question.editorState.getCurrentContent()),
+
+    answers: question.answers.allIds.map(
+      answerId => question.answers.byId[answerId]
+    )
+  }
+}
+
+function getEditingQuizJson({ editingQuiz }) {
+  return {
+    ...editingQuiz,
+    descriptionEditorState: convertToRaw(editingQuiz.descriptionEditorState.getCurrentContent()),
+
+    paragraphs: editingQuiz.paragraphs.allIds.map(
+      paragraphId => getEditingQuizParagraphJson(editingQuiz.paragraphs.byId[paragraphId])
+    ),
+
+    questions: editingQuiz.questions.allIds.map(
+      questionId => getEditingQuizQuestionJson(editingQuiz.questions.byId[questionId])
+    )
   }
 }
 
@@ -126,3 +152,5 @@ function* watchRequestSaveEditingQuiz() {
 export function* rootSaga() {
   yield watchRequestSaveEditingQuiz();
 }
+
+
