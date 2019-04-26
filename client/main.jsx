@@ -11,6 +11,7 @@ import createSagaMiddleware from "redux-saga";
 import reducers from "/imports/reducers";
 import { Provider } from "react-redux";
 import { createLogger } from "redux-logger";
+import { rootSaga } from "../imports/actions";
 
 Meteor.startup(() => {
   const hist = createBrowserHistory();
@@ -24,6 +25,8 @@ Meteor.startup(() => {
     applyMiddleware(loggerMiddleware, sagaMiddleware)
   );
 
+  sagaMiddleware.run(rootSaga);
+
   ReactDOM.render(
     <Provider store={store}>
       <Router history={hist}>
@@ -34,6 +37,7 @@ Meteor.startup(() => {
         </Switch>
       </Router>
     </Provider>,
+
     document.getElementById("root")
   );
 });

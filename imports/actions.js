@@ -1,3 +1,7 @@
+import { put, select, takeEvery } from "redux-saga/effects";
+import { Quizzes } from "./collections.js";
+import { convertToRaw } from "draft-js";
+
 export const CHANGE_TITLE_IN_EDITING_QUIZ = "CHANGE_TITLE_IN_EDITING_QUIZ";
 
 export const CHANGE_DESCRIPTION_EDITOR_STATE_IN_EDITING_QUIZ = "CHANGE_DESCRIPTION_EDITOR_STATE_IN_EDITING_QUIZ";
@@ -23,6 +27,12 @@ export const REMOVE_ANSWER_FROM_EDITING_QUIZ = "REMOVE_ANSWER_FROM_EDITING_QUIZ"
 export const CHANGE_ANSWER_CHECK_STATE_IN_EDITING_QUIZ = "CHANGE_ANSWER_CHECK_STATE_IN_EDITING_QUIZ";
 
 export const CHANGE_ANSWER_TYPE_IN_EDITING_QUIZ = "CHANGE_ANSWER_TYPE_IN_EDITING_QUIZ";
+
+export const REQUEST_SAVE_EDITING_QUIZ = "REQUEST_SAVE_EDITING_QUIZ";
+
+export const SAVE_EDITING_QUIZ_SUCCESS = "SAVE_EDITING_QUIZ_SUCCESS";
+
+export const SAVE_EDITING_QUIZ_FAIL = "SAVE_EDITING_QUIZ_FAIL";
 
 export function changeTitleInEditingQuiz(title) {
   return { type: CHANGE_TITLE_IN_EDITING_QUIZ, title };
@@ -68,10 +78,51 @@ export function removeAnswerFromEditingQuiz(questionId, answerId) {
   return { type: REMOVE_ANSWER_FROM_EDITING_QUIZ, questionId, answerId };
 }
 
-export function changeAnswerCheckStateInEditingQuiz(questionId, answerId, checked ) {
+export function changeAnswerCheckStateInEditingQuiz(questionId, answerId, checked) {
   return { type: CHANGE_ANSWER_CHECK_STATE_IN_EDITING_QUIZ, questionId, answerId, checked };
 }
 
-export function changeAnswerTypeInEditingQuiz(questionId, answerType ) {
+export function changeAnswerTypeInEditingQuiz(questionId, answerType) {
   return { type: CHANGE_ANSWER_TYPE_IN_EDITING_QUIZ, questionId, answerType };
+}
+
+export function requestSaveEditingQuiz() {
+  return { type: REQUEST_SAVE_EDITING_QUIZ };
+}
+
+export function saveEditingQuizSuccess() {
+  return { type: SAVE_EDITING_QUIZ_SUCCESS };
+}
+
+export function saveEditingQuizFail(error) {
+  return { type: SAVE_EDITING_QUIZ_FAIL, error };
+}
+
+function getEditingQuizJson({editingQuiz}) {
+  return {
+    title: editingQuiz.title,
+    description: convertToRaw(editingQuiz.descriptionEditorState.getCurrentContent())
+  }
+}
+
+function* saveEditingQuizAsync() {
+  const editingQuizJson = yield select(getEditingQuizJson);
+
+  try {
+    yield Quizzes.insertAsync(editingQuizJson);
+
+    yield put(saveEditingQuizSuccess());
+  } catch (error) {
+    console.error(error);
+
+    yield put(saveEditingQuizFail());
+  }
+}
+
+function* watchRequestSaveEditingQuiz() {
+  yield takeEvery(REQUEST_SAVE_EDITING_QUIZ, saveEditingQuizAsync);
+}
+
+export function* rootSaga() {
+  yield watchRequestSaveEditingQuiz();
 }

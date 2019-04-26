@@ -13,7 +13,7 @@ import QuizParagraphEditor from "./QuizParagraphEditor";
 import { connect } from "react-redux";
 import { addParagraphToEditingQuiz, addQuestionToEditingQuiz } from "/imports/actions";
 import * as PropTypes from "prop-types";
-import { changeDescriptionEditorStateInEditingQuiz, changeTitleInEditingQuiz } from "../../actions";
+import { changeDescriptionEditorStateInEditingQuiz, changeTitleInEditingQuiz, requestSaveEditingQuiz } from "../../actions";
 import TextField from "@material-ui/core/TextField";
 
 const styles = {
@@ -46,7 +46,8 @@ class QuizEditor extends React.PureComponent {
       questions,
       onQuestionCreate,
       onTitleChange,
-      onDescriptionEditorStateChange
+      onDescriptionEditorStateChange,
+      onQuizSave
     } = this.props;
 
     return (
@@ -105,6 +106,12 @@ class QuizEditor extends React.PureComponent {
               Add new question
             </Button>
           </GridItem>
+
+          <GridItem xs={12} sm={12} md={8}>
+            <Button variant="contained" color="primary" onClick={onQuizSave}>
+              Save quiz
+            </Button>
+          </GridItem>
         </GridContainer>
       </div>
     );
@@ -120,6 +127,7 @@ QuizEditor.propTypes = {
   onQuestionCreate: PropTypes.func,
   onTitleChange: PropTypes.func,
   onDescriptionEditorStateChange: PropTypes.func,
+  onQuizSave: PropTypes.func,
 };
 
 const mapStateToProps = state => {
@@ -147,6 +155,10 @@ const mapDispatchToProps = dispatch => {
 
     onDescriptionEditorStateChange: (state) => {
       dispatch(changeDescriptionEditorStateInEditingQuiz(state));
+    },
+
+    onQuizSave: () => {
+      dispatch(requestSaveEditingQuiz());
     },
   }
 };

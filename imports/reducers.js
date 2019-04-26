@@ -10,13 +10,14 @@ import {
   CHANGE_QUESTION_EDITOR_STATE_IN_EDITING_QUIZ, CHANGE_TITLE_IN_EDITING_QUIZ,
   REMOVE_ANSWER_FROM_EDITING_QUIZ,
   REMOVE_PARAGRAPH_FROM_EDITING_QUIZ,
-  REMOVE_QUESTION_FROM_EDITING_QUIZ
+  REMOVE_QUESTION_FROM_EDITING_QUIZ, REQUEST_SAVE_EDITING_QUIZ
 } from './actions';
 import omit from 'lodash/omit';
 import pull from 'lodash/pull';
 import max from 'lodash/max';
 import reduce from 'lodash/reduce';
 import { ANSWER_TYPES } from "./views/Quizzes/AnswerTypes";
+import {convertToRaw} from "draft-js";
 
 function editingQuizParagraphReducer(state = { byId: {}, allIds: [] }, action) {
   const newId = (max(state.allIds) || 0) + 1;
@@ -246,6 +247,16 @@ function editingQuizReducer(state = EDITING_QUIZ_INITIAL_STATE, action) {
       return {
         ...state,
         descriptionEditorState: action.state,
+      };
+
+    case REQUEST_SAVE_EDITING_QUIZ:
+      const content = state.descriptionEditorState.getCurrentContent();
+
+      //console.log(JSON.stringify(convertToRaw(content)));
+      console.log(convertToRaw(content));
+
+      return {
+        ...state,
       };
 
     default:
