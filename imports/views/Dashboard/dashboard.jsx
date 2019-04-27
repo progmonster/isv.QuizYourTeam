@@ -1,6 +1,5 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { EditorState } from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
@@ -22,12 +21,18 @@ import Danger from "/imports/components/Typography/Danger.jsx";
 import CardIcon from "/imports/components/Card/CardIcon.jsx";
 import AccessTime from "@material-ui/icons/AccessTime";
 */
-import Card from "/imports/components/Card/Card.jsx";
-import CardHeader from "/imports/components/Card/CardHeader.jsx";
-import CardBody from "/imports/components/Card/CardBody.jsx";
-import CardFooter from "/imports/components/Card/CardFooter.jsx";
 import dashboardStyle from "./dashboardStyle.jsx";
 import { Link } from "react-router-dom";
+/*
+import {
+  dailySalesChart,
+  emailsSubscriptionChart,
+  completedTasksChart
+} from "/imports/variables/charts.jsx";
+*/
+import QuizTileContainer from "./quizTile";
+import { withTracker } from "meteor/react-meteor-data";
+import { Quizzes } from "../../collections";
 /*
 import Icon from "@material-ui/core/Icon";
 */
@@ -49,66 +54,21 @@ import Cloud from "@material-ui/icons/Cloud";
 import { bugs, website, server } from "/imports/variables/general.jsx";
 */
 
-/*
-import {
-  dailySalesChart,
-  emailsSubscriptionChart,
-  completedTasksChart
-} from "/imports/variables/charts.jsx";
-*/
-
-class Dashboard extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      value: 0,
-      editorState: EditorState.createEmpty()
-    };
-  }
-
-  onEditorStateChange = (editorState) => {
-    this.setState({
-      editorState,
-    });
-  };
-
-  handleChange = (event, value) => {
-    this.setState({ value });
-  };
-
-  handleChangeIndex = index => {
-    this.setState({ value: index });
-  };
-
+class Dashboard extends React.PureComponent {
   render() {
-    const { classes } = this.props;
+    const { classes, quizzes } = this.props;
+
+    //console.log(JSON.stringify(quizzes.fetch()));
+    console.log(quizzes);
 
     return (
       <div>
         <GridContainer>
-          <GridItem xs={12} sm={6} md={3}>
-            <Card>
-              <CardHeader color="warning">
-                <h4 className={classes.cardTitleWhite}>Test Quiz</h4>
-              </CardHeader>
-
-              <CardBody>
-                <Editor
-                  editorState={this.state.editorState}
-                  wrapperClassName="demo-wrapper"
-                  editorClassName="demo-editor"
-                  onEditorStateChange={this.onEditorStateChange}
-                />
-              </CardBody>
-
-              <CardFooter chart>
-                <div className={classes.stats}>
-                  Editing...
-                </div>
-              </CardFooter>
-            </Card>
-          </GridItem>
+          {quizzes.map(({_id: quizId}) => {
+            return (<GridItem key={quizId} xs={12} sm={6} md={3}>
+              <QuizTileContainer quizId={quizId} />
+            </GridItem>);
+          })}
 
 
           {/*
@@ -344,4 +304,11 @@ Dashboard.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-export default withStyles(dashboardStyle)(Dashboard);
+const DashboardContainer = withTracker(() => {
+  return {
+    quizzes: Quizzes.find().fetch()
+  };
+})(withStyles(dashboardStyle)(Dashboard));
+
+
+export default DashboardContainer;

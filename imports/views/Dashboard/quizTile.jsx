@@ -3,20 +3,21 @@ import withStyles from "@material-ui/core/styles/withStyles";
 import AccessTime from "@material-ui/icons/AccessTime";
 import Card from "/imports/components/Card/Card.jsx";
 import CardHeader from "/imports/components/Card/CardHeader.jsx";
-import CardIcon from "/imports/components/Card/CardIcon.jsx";
 import CardBody from "/imports/components/Card/CardBody.jsx";
 import CardFooter from "/imports/components/Card/CardFooter.jsx";
 import PropTypes from "prop-types";
 import dashboardStyle from "/imports/views/Dashboard/dashboardStyle.jsx";
+import { withTracker } from "meteor/react-meteor-data";
+import { Quizzes } from "../../collections";
 
-class QuizCard extends React.Component {
+class QuizTile extends React.PureComponent {
   render() {
-    const { classes } = this.props;
+    const { classes, quiz } = this.props;
 
     return (
       <Card>
         <CardHeader color="warning">
-          <h4 className={classes.cardTitleWhite}>Test Quiz</h4>
+          <h4 className={classes.cardTitleWhite}>{quiz.title}</h4>
         </CardHeader>
         <CardBody>
           <p className={classes.cardCategory}>
@@ -33,9 +34,17 @@ class QuizCard extends React.Component {
   }
 }
 
-QuizCard.propTypes = {
+QuizTile.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-export default withStyles(dashboardStyle)(QuizCard);
+const QuizTileContainer = withTracker(({ quizId }) => {
+  return {
+    quiz: Quizzes.findOne(quizId)
+  };
+})(withStyles(dashboardStyle)(QuizTile));
+
+
+
+export default QuizTileContainer;
 

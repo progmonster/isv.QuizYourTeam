@@ -13,6 +13,8 @@ import { Provider } from "react-redux";
 import { createLogger } from "redux-logger";
 import { rootSaga } from "../imports/actions";
 
+Meteor.subscribe("quizzes");
+
 Meteor.startup(() => {
   const hist = createBrowserHistory();
 

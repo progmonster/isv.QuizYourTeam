@@ -12,7 +12,7 @@ import Poppers from "@material-ui/core/Popper";
 // @material-ui/icons
 import Person from "@material-ui/icons/Person";
 import Notifications from "@material-ui/icons/Notifications";
-import Dashboard from "@material-ui/icons/Dashboard";
+import DashboardContainer from "@material-ui/icons/Dashboard";
 import Search from "@material-ui/icons/Search";
 // core components
 import CustomInput from "/imports/components/CustomInput/CustomInput.jsx";
@@ -64,7 +64,7 @@ class HeaderLinks extends React.Component {
           aria-label="Dashboard"
           className={classes.buttonLink}
         >
-          <Dashboard className={classes.icons} />
+          <DashboardContainer className={classes.icons} />
           <Hidden mdUp implementation="css">
             <p className={classes.linkText}>آمارها</p>
           </Hidden>
