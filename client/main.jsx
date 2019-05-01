@@ -12,6 +12,7 @@ import reducers from "/imports/reducers";
 import { Provider } from "react-redux";
 import { createLogger } from "redux-logger";
 import { rootSaga } from "../imports/actions";
+import { SnackbarProvider } from "../imports/components/snackbar";
 
 Meteor.subscribe("quizzes");
 
@@ -31,13 +32,15 @@ Meteor.startup(() => {
 
   ReactDOM.render(
     <Provider store={store}>
-      <Router history={hist}>
-        <Switch>
-          <Route path="/admin" component={Admin} />
-          <Route path="/rtl" component={RTL} />
-          <Redirect from="/" to="/admin/dashboard" />
-        </Switch>
-      </Router>
+      <SnackbarProvider SnackbarProps={{ autoHideDuration: 3500 }}>
+        <Router history={hist}>
+          <Switch>
+            <Route path="/admin" component={Admin} />
+            <Route path="/rtl" component={RTL} />
+            <Redirect from="/" to="/admin/dashboard" />
+          </Switch>
+        </Router>
+      </SnackbarProvider>
     </Provider>,
 
     document.getElementById("root")

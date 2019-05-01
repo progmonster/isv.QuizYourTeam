@@ -19,6 +19,7 @@ import reduce from 'lodash/reduce';
 import { ANSWER_TYPES } from "./views/Quizzes/AnswerTypes";
 import {convertToRaw} from "draft-js";
 import {combineReducers} from "redux";
+import {snackbarReducer} from "./components/snackbar";
 
 function editingQuizParagraphReducer(state = { byId: {}, allIds: [] }, action) {
   const newId = (max(state.allIds) || 0) + 1;
@@ -270,5 +271,6 @@ function editingQuizReducer(state = EDITING_QUIZ_INITIAL_STATE, action) {
 }
 
 export default combineReducers({
-  editingQuiz: editingQuizReducer
+  editingQuiz: editingQuizReducer,
+  snackbar: snackbarReducer,
 });
