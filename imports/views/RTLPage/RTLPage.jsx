@@ -32,7 +32,6 @@ import CardAvatar from "/imports/components/Card/CardAvatar.jsx";
 import CardIcon from "/imports/components/Card/CardIcon.jsx";
 import CardBody from "/imports/components/Card/CardBody.jsx";
 import CardFooter from "/imports/components/Card/CardFooter.jsx";
-import SnackbarContent from "/imports/components/Snackbar/SnackbarContent.jsx";
 
 import {
   dailySalesChart,
@@ -316,28 +315,6 @@ class RTLPage extends React.Component {
                 </p>
               </CardHeader>
               <CardBody>
-                <SnackbarContent
-                  message={
-                    'این یک اعلان است که با کلاس color="warning" ایجاد شده است.'
-                  }
-                  close
-                  rtlActive
-                  color="warning"
-                />
-                <SnackbarContent
-                  message={
-                    'این یک اعلان است که با کلاس color="primary" ایجاد شده است.'
-                  }
-                  close
-                  rtlActive
-                  color="primary"
-                />
-                <SnackbarContent
-                  message={"این یک اعلان با دکمه بستن و آیکن است"}
-                  close
-                  rtlActive
-                  color="info"
-                />
               </CardBody>
             </Card>
           </GridItem>

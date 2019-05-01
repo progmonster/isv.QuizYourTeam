@@ -6,7 +6,6 @@ import People from "@material-ui/icons/People";
 import LibraryBooks from "@material-ui/icons/LibraryBooks";
 import BubbleChart from "@material-ui/icons/BubbleChart";
 import LocationOn from "@material-ui/icons/LocationOn";
-import Notifications from "@material-ui/icons/Notifications";
 import Unarchive from "@material-ui/icons/Unarchive";
 import Language from "@material-ui/icons/Language";
 */
@@ -20,7 +19,6 @@ import TableList from "/imports/views/TableList/TableList.jsx";
 import Typography from "/imports/views/Typography/Typography.jsx";
 import Icons from "/imports/views/Icons/Icons.jsx";
 import Maps from "/imports/views/Maps/Maps.jsx";
-import NotificationsPage from "/imports/views/Notifications/Notifications.jsx";
 import UpgradeToPro from "/imports/views/UpgradeToPro/UpgradeToPro.jsx";
 */
 // core components/views for RTL layout
@@ -96,14 +94,6 @@ export const routes = [
     rtlName: "خرائط",
     icon: LocationOn,
     component: Maps,
-    layout: "/admin"
-  },
-  {
-    path: "/notifications",
-    name: "Notifications",
-    rtlName: "إخطارات",
-    icon: Notifications,
-    component: NotificationsPage,
     layout: "/admin"
   },
   {
