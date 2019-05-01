@@ -8,14 +8,19 @@ import withStyles from "@material-ui/core/styles/withStyles";
 import GridItem from "/imports/components/Grid/GridItem.jsx";
 import GridContainer from "/imports/components/Grid/GridContainer.jsx";
 import dashboardStyle from "./dashboardStyle.jsx";
-import { Link } from "react-router-dom";
 import QuizTileContainer from "./quizTile";
 import { withTracker } from "meteor/react-meteor-data";
 import { Quizzes } from "../../collections";
+import { connect } from "react-redux";
+import { clearEditingQuiz } from "../../actions";
 
 class Dashboard extends React.PureComponent {
   render() {
-    const { classes, quizzes } = this.props;
+    const {
+      classes,
+      quizzes,
+      onNewQuizEdit
+    } = this.props;
 
     return (
       <div>
@@ -27,7 +32,7 @@ class Dashboard extends React.PureComponent {
           })}
         </GridContainer>
         {/*todo replace url with something like "/quizzes/new". Use /quizzes/:id/edit for edit exists */}
-        <Fab color="primary" className={classes.addCardFab} component={Link} to="/admin/edit-quiz">
+        <Fab color="primary" className={classes.addCardFab} onClick={onNewQuizEdit}>
           <AddIcon />
         </Fab>
       </div>
@@ -39,11 +44,25 @@ Dashboard.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
+const mapStateToProps = state => {
+  return {};
+};
+
+const mapDispatchToProps = (dispatch, { history }) => {
+  return {
+    onNewQuizEdit() {
+      dispatch(clearEditingQuiz());
+
+      history.push("/admin/edit-quiz")
+    },
+  }
+};
+
 const DashboardContainer = withTracker(() => {
   return {
     quizzes: Quizzes.find().fetch()
   };
-})(withStyles(dashboardStyle)(Dashboard));
+})(withStyles(dashboardStyle)(connect(mapStateToProps, mapDispatchToProps)(Dashboard)));
 
 
 export default DashboardContainer;
