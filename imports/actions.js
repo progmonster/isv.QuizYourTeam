@@ -1,6 +1,7 @@
 import { put, select, takeEvery } from "redux-saga/effects";
 import { Quizzes } from "./collections.js";
 import { convertToRaw } from "draft-js";
+import { snackbarActions as snackbar } from "./components/snackbar";
 
 export const CHANGE_TITLE_IN_EDITING_QUIZ = "CHANGE_TITLE_IN_EDITING_QUIZ";
 
@@ -131,19 +132,19 @@ function getEditingQuizJson({ editingQuiz }) {
   }
 }
 
-function* saveEditingQuizAsync({history}) {
+function* saveEditingQuizAsync({ history }) {
   const editingQuizJson = yield select(getEditingQuizJson);
 
   try {
     yield Quizzes.insertAsync(editingQuizJson);
 
+    yield put(snackbar.show({ message: "Your quiz has been successfully saved!" }));
+
     history.push("/admin/dashboard");
-
-
   } catch (error) {
     console.error(error);
 
-    yield put(saveEditingQuizFail());
+    yield put(snackbar.show({ message: `Error saving the quiz: ${error.message}` }));
   }
 }
 
