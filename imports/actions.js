@@ -3,6 +3,8 @@ import { Quizzes } from "./collections.js";
 import { convertToRaw } from "draft-js";
 import { snackbarActions as snackbar } from "./components/snackbar";
 
+export const CLEAR_EDITING_QUIZ = "CLEAR_EDITING_QUIZ";
+
 export const CHANGE_TITLE_IN_EDITING_QUIZ = "CHANGE_TITLE_IN_EDITING_QUIZ";
 
 export const CHANGE_DESCRIPTION_EDITOR_STATE_IN_EDITING_QUIZ = "CHANGE_DESCRIPTION_EDITOR_STATE_IN_EDITING_QUIZ";
@@ -36,6 +38,10 @@ export const SAVE_EDITING_QUIZ_SUCCESS = "SAVE_EDITING_QUIZ_SUCCESS";
 export const SAVE_EDITING_QUIZ_FAIL = "SAVE_EDITING_QUIZ_FAIL";
 
 export const REMOVE_QUIZ = "REMOVE_QUIZ";
+
+export function clearEditingQuiz() {
+  return { type: CLEAR_EDITING_QUIZ };
+}
 
 export function changeTitleInEditingQuiz(title) {
   return { type: CHANGE_TITLE_IN_EDITING_QUIZ, title };
@@ -143,6 +149,8 @@ function* saveEditingQuizAsync({ history }) {
 
   try {
     yield Quizzes.insertAsync(editingQuizJson);
+
+    yield put(clearEditingQuiz());
 
     yield put(snackbar.show({ message: "Your quiz has been successfully saved!" }));
 
