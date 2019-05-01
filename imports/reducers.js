@@ -252,11 +252,6 @@ function editingQuizReducer(state = EDITING_QUIZ_INITIAL_STATE, action) {
       };
 
     case SAVE_EDITING_QUIZ:
-      const content = state.descriptionEditorState.getCurrentContent();
-
-      //console.log(JSON.stringify(convertToRaw(content)));
-      console.log(convertToRaw(content));
-
       return {
         ...state,
       };

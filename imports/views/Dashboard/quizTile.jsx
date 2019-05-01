@@ -2,12 +2,14 @@ import React from "react";
 import withStyles from "@material-ui/core/styles/withStyles";
 import Card from "/imports/components/Card/Card.jsx";
 import PropTypes from "prop-types";
+import { Editor } from 'react-draft-wysiwyg';
+import { convertFromRaw } from "draft-js";
+import { stateToHTML } from "draft-js-export-html";
 import { withTracker } from "meteor/react-meteor-data";
 import { Quizzes } from "../../collections";
 import IconButton from "@material-ui/core/IconButton";
 import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
-import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import { Delete, Edit } from "@material-ui/icons";
 import CardHeader from "@material-ui/core/CardHeader";
@@ -47,6 +49,8 @@ class QuizTile extends React.Component {
   render() {
     const { classes, quiz } = this.props;
 
+    const quizDescriptionHtml = stateToHTML(convertFromRaw(quiz.descriptionEditorState));
+
     return (
       <Card>
         <CardHeader
@@ -54,12 +58,7 @@ class QuizTile extends React.Component {
           title={quiz.title}
         />
 
-        <CardContent>
-          <Typography component="p">
-            Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
-            across all continents except Antarctica
-          </Typography>
-        </CardContent>
+        <CardContent dangerouslySetInnerHTML={{ __html: quizDescriptionHtml }}/>
 
         <CardActions>
           <Button size="small" color="primary">
