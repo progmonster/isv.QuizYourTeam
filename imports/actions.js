@@ -86,8 +86,8 @@ export function changeAnswerTypeInEditingQuiz(questionId, answerType) {
   return { type: CHANGE_ANSWER_TYPE_IN_EDITING_QUIZ, questionId, answerType };
 }
 
-export function requestSaveEditingQuiz() {
-  return { type: SAVE_EDITING_QUIZ };
+export function saveEditingQuiz(history) {
+  return { type: SAVE_EDITING_QUIZ, history };
 }
 
 export function saveEditingQuizSuccess() {
@@ -131,13 +131,15 @@ function getEditingQuizJson({ editingQuiz }) {
   }
 }
 
-function* saveEditingQuizAsync() {
+function* saveEditingQuizAsync({history}) {
   const editingQuizJson = yield select(getEditingQuizJson);
 
   try {
     yield Quizzes.insertAsync(editingQuizJson);
 
-    yield put(saveEditingQuizSuccess());
+    history.push("/admin/dashboard");
+
+
   } catch (error) {
     console.error(error);
 
@@ -152,5 +154,3 @@ function* watchSaveEditingQuiz() {
 export function* rootSaga() {
   yield watchSaveEditingQuiz();
 }
-
-

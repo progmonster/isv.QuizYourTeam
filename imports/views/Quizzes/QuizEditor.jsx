@@ -13,7 +13,7 @@ import QuizParagraphEditor from "./QuizParagraphEditor";
 import { connect } from "react-redux";
 import { addParagraphToEditingQuiz, addQuestionToEditingQuiz } from "/imports/actions";
 import * as PropTypes from "prop-types";
-import { changeDescriptionEditorStateInEditingQuiz, changeTitleInEditingQuiz, requestSaveEditingQuiz } from "../../actions";
+import { changeDescriptionEditorStateInEditingQuiz, changeTitleInEditingQuiz, saveEditingQuiz } from "../../actions";
 import TextField from "@material-ui/core/TextField";
 
 const styles = {
@@ -139,7 +139,7 @@ const mapStateToProps = state => {
   };
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch, {history}) => {
   return {
     onParagraphCreate: () => {
       dispatch(addParagraphToEditingQuiz());
@@ -158,7 +158,7 @@ const mapDispatchToProps = dispatch => {
     },
 
     onQuizSave: () => {
-      dispatch(requestSaveEditingQuiz());
+      dispatch(saveEditingQuiz(history));
     },
   }
 };
