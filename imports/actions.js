@@ -33,10 +33,6 @@ export const CHANGE_ANSWER_TYPE_IN_EDITING_QUIZ = "CHANGE_ANSWER_TYPE_IN_EDITING
 
 export const SAVE_EDITING_QUIZ = "SAVE_EDITING_QUIZ";
 
-export const SAVE_EDITING_QUIZ_SUCCESS = "SAVE_EDITING_QUIZ_SUCCESS";
-
-export const SAVE_EDITING_QUIZ_FAIL = "SAVE_EDITING_QUIZ_FAIL";
-
 export const REMOVE_QUIZ = "REMOVE_QUIZ";
 
 export function clearEditingQuiz() {
@@ -97,14 +93,6 @@ export function changeAnswerTypeInEditingQuiz(questionId, answerType) {
 
 export function saveEditingQuiz(history) {
   return { type: SAVE_EDITING_QUIZ, history };
-}
-
-export function saveEditingQuizSuccess() {
-  return { type: SAVE_EDITING_QUIZ_SUCCESS };
-}
-
-export function saveEditingQuizFail(error) {
-  return { type: SAVE_EDITING_QUIZ_FAIL, error };
 }
 
 export function removeQuiz(quizId) {
