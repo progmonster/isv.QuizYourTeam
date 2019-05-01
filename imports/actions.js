@@ -1,4 +1,4 @@
-import { put, select, takeEvery } from "redux-saga/effects";
+import { put, select, takeEvery, all } from "redux-saga/effects";
 import { Quizzes } from "./collections.js";
 import { convertToRaw } from "draft-js";
 import { snackbarActions as snackbar } from "./components/snackbar";
@@ -34,6 +34,8 @@ export const SAVE_EDITING_QUIZ = "SAVE_EDITING_QUIZ";
 export const SAVE_EDITING_QUIZ_SUCCESS = "SAVE_EDITING_QUIZ_SUCCESS";
 
 export const SAVE_EDITING_QUIZ_FAIL = "SAVE_EDITING_QUIZ_FAIL";
+
+export const REMOVE_QUIZ = "REMOVE_QUIZ";
 
 export function changeTitleInEditingQuiz(title) {
   return { type: CHANGE_TITLE_IN_EDITING_QUIZ, title };
@@ -99,6 +101,10 @@ export function saveEditingQuizFail(error) {
   return { type: SAVE_EDITING_QUIZ_FAIL, error };
 }
 
+export function removeQuiz(quizId) {
+  return { type: REMOVE_QUIZ, quizId };
+}
+
 function getEditingQuizParagraphJson(paragraph) {
   return {
     ...paragraph,
@@ -148,10 +154,29 @@ function* saveEditingQuizAsync({ history }) {
   }
 }
 
+function* removeQuizAsync({ quizId }) {
+  try {
+    yield Quizzes.removeAsync(quizId);
+
+    yield put(snackbar.show({ message: "The quiz has been successfully removed" }));
+  } catch (error) {
+    console.error(error);
+
+    yield put(snackbar.show({ message: `Error removing the quiz: ${error.message}` }));
+  }
+}
+
 function* watchSaveEditingQuiz() {
   yield takeEvery(SAVE_EDITING_QUIZ, saveEditingQuizAsync);
 }
 
+function* watchRemoveQuiz() {
+  yield takeEvery(REMOVE_QUIZ, removeQuizAsync);
+}
+
 export function* rootSaga() {
-  yield watchSaveEditingQuiz();
+  yield all([
+    watchSaveEditingQuiz(),
+    watchRemoveQuiz(),
+  ]);
 }

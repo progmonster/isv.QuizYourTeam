@@ -12,6 +12,9 @@ import Button from "@material-ui/core/Button";
 import { Delete, Edit } from "@material-ui/icons";
 import CardHeader from "@material-ui/core/CardHeader";
 import { orange } from "@material-ui/core/colors";
+import AlertDialog from "../../components/alertDialog";
+import { removeQuiz } from "../../actions";
+import { connect } from "react-redux";
 
 const styles = theme => ({
   headerRoot: {
@@ -24,7 +27,23 @@ const styles = theme => ({
   }
 });
 
-class QuizTile extends React.PureComponent {
+class QuizTile extends React.Component {
+  constructor(props, context) {
+    super(props, context);
+
+    this.state = {
+      removeConfirmationOpened: false
+    };
+  }
+
+  handleRemoveConfirmationClosed = (confirmed) => {
+    this.setState({ removeConfirmationOpened: false });
+
+    if (confirmed) {
+      this.props.onQuizRemove();
+    }
+  };
+
   render() {
     const { classes, quiz } = this.props;
 
@@ -55,10 +74,22 @@ class QuizTile extends React.PureComponent {
             <Edit />
           </IconButton>
 
-          <IconButton color="secondary">
+          <IconButton color="secondary" onClick={() => this.setState({ removeConfirmationOpened: true })}>
             <Delete />
           </IconButton>
         </CardActions>
+
+        {/*
+        todo optimize. Probably via single AlertDialog that controlled via redux actions.
+        */}
+        <AlertDialog
+          open={this.state.removeConfirmationOpened}
+          title={"Remove the quiz?"}
+          contentText={""}
+          okText={"Remove"}
+          cancelText={"Cancel"}
+          handleClose={this.handleRemoveConfirmationClosed}
+        />
       </Card>
     );
   }
@@ -68,11 +99,23 @@ QuizTile.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
+const mapStateToProps = state => {
+  return {};
+};
+
+const mapDispatchToProps = (dispatch, { quizId }) => {
+  return {
+    onQuizRemove: () => {
+      dispatch(removeQuiz(quizId));
+    },
+  }
+};
+
 const QuizTileContainer = withTracker(({ quizId }) => {
   return {
     quiz: Quizzes.findOne(quizId)
   };
-})(withStyles(styles)(QuizTile));
+})(withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(QuizTile)));
 
 
 export default QuizTileContainer;
