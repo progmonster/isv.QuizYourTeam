@@ -18,6 +18,7 @@ import max from 'lodash/max';
 import reduce from 'lodash/reduce';
 import { ANSWER_TYPES } from "./views/Quizzes/AnswerTypes";
 import {convertToRaw} from "draft-js";
+import {combineReducers} from "redux";
 
 function editingQuizParagraphReducer(state = { byId: {}, allIds: [] }, action) {
   const newId = (max(state.allIds) || 0) + 1;
@@ -268,11 +269,6 @@ function editingQuizReducer(state = EDITING_QUIZ_INITIAL_STATE, action) {
   }
 }
 
-const reducers = (state = {}, action) => {
-  return {
-    ...state,
-    editingQuiz: editingQuizReducer(state.editingQuiz, action)
-  }
-};
-
-export default reducers;
+export default combineReducers({
+  editingQuiz: editingQuizReducer
+});
