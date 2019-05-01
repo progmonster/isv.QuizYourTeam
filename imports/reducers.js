@@ -10,7 +10,7 @@ import {
   CHANGE_QUESTION_EDITOR_STATE_IN_EDITING_QUIZ, CHANGE_TITLE_IN_EDITING_QUIZ,
   REMOVE_ANSWER_FROM_EDITING_QUIZ,
   REMOVE_PARAGRAPH_FROM_EDITING_QUIZ,
-  REMOVE_QUESTION_FROM_EDITING_QUIZ, REQUEST_SAVE_EDITING_QUIZ
+  REMOVE_QUESTION_FROM_EDITING_QUIZ, SAVE_EDITING_QUIZ
 } from './actions';
 import omit from 'lodash/omit';
 import pull from 'lodash/pull';
@@ -249,7 +249,7 @@ function editingQuizReducer(state = EDITING_QUIZ_INITIAL_STATE, action) {
         descriptionEditorState: action.state,
       };
 
-    case REQUEST_SAVE_EDITING_QUIZ:
+    case SAVE_EDITING_QUIZ:
       const content = state.descriptionEditorState.getCurrentContent();
 
       //console.log(JSON.stringify(convertToRaw(content)));

@@ -28,7 +28,7 @@ export const CHANGE_ANSWER_CHECK_STATE_IN_EDITING_QUIZ = "CHANGE_ANSWER_CHECK_ST
 
 export const CHANGE_ANSWER_TYPE_IN_EDITING_QUIZ = "CHANGE_ANSWER_TYPE_IN_EDITING_QUIZ";
 
-export const REQUEST_SAVE_EDITING_QUIZ = "REQUEST_SAVE_EDITING_QUIZ";
+export const SAVE_EDITING_QUIZ = "SAVE_EDITING_QUIZ";
 
 export const SAVE_EDITING_QUIZ_SUCCESS = "SAVE_EDITING_QUIZ_SUCCESS";
 
@@ -87,7 +87,7 @@ export function changeAnswerTypeInEditingQuiz(questionId, answerType) {
 }
 
 export function requestSaveEditingQuiz() {
-  return { type: REQUEST_SAVE_EDITING_QUIZ };
+  return { type: SAVE_EDITING_QUIZ };
 }
 
 export function saveEditingQuizSuccess() {
@@ -145,12 +145,12 @@ function* saveEditingQuizAsync() {
   }
 }
 
-function* watchRequestSaveEditingQuiz() {
-  yield takeEvery(REQUEST_SAVE_EDITING_QUIZ, saveEditingQuizAsync);
+function* watchSaveEditingQuiz() {
+  yield takeEvery(SAVE_EDITING_QUIZ, saveEditingQuizAsync);
 }
 
 export function* rootSaga() {
-  yield watchRequestSaveEditingQuiz();
+  yield watchSaveEditingQuiz();
 }
 
 
