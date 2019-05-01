@@ -40,6 +40,7 @@ class HeaderLinks extends React.Component {
     const { open } = this.state;
     return (
       <div>
+{/*
         <div className={classes.searchWrapper}>
           <CustomInput
             formControlProps={{
@@ -56,6 +57,7 @@ class HeaderLinks extends React.Component {
             <Search />
           </Button>
         </div>
+*/}
 {/*
         <Button
           color={window.innerWidth > 959 ? "transparent" : "white"}
