@@ -29,11 +29,9 @@ class CustomTabs extends React.Component {
       plainTabs,
       tabs,
       title,
-      rtlActive
     } = this.props;
     const cardTitle = classNames({
       [classes.cardTitle]: true,
-      [classes.cardTitleRTL]: rtlActive
     });
     return (
       <Card plain={plainTabs}>
@@ -106,7 +104,6 @@ CustomTabs.propTypes = {
       tabContent: PropTypes.node.isRequired
     })
   ),
-  rtlActive: PropTypes.bool,
   plainTabs: PropTypes.bool
 };
 
