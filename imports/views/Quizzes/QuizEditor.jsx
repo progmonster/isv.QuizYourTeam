@@ -3,10 +3,6 @@ import withStyles from "@material-ui/core/styles/withStyles";
 import { Editor } from 'react-draft-wysiwyg';
 import GridItem from "/imports/components/Grid/GridItem.jsx";
 import GridContainer from "/imports/components/Grid/GridContainer.jsx";
-import Card from "/imports/components/Card/Card.jsx";
-import CardHeader from "/imports/components/Card/CardHeader.jsx";
-import CardBody from "/imports/components/Card/CardBody.jsx";
-import CardFooter from "/imports/components/Card/CardFooter.jsx";
 import Button from "@material-ui/core/Button";
 import QuizQuestionEditor from "./QuizQuestionEditor";
 import QuizParagraphEditor from "./QuizParagraphEditor";
@@ -22,58 +18,61 @@ import {
 import TextField from "@material-ui/core/TextField";
 import { compose } from "redux";
 import { Quizzes } from "../../collections";
+import Card from "@material-ui/core/Card";
+import CardHeader from "@material-ui/core/CardHeader";
+import CardContent from "@material-ui/core/CardContent";
+import { orange } from "@material-ui/core/colors";
 
 const styles = {
-  cardCategoryWhite: {/*todo remove?*/
-    color: "rgba(255,255,255,.62)",
-    margin: "0",
-    fontSize: "14px",
-    marginTop: "0",
-    marginBottom: "0"
+  quizEditorCardHeaderRoot: {
+    backgroundColor: orange[500],
   },
-  cardTitleWhite: {/*todo remove?*/
-    color: "#FFFFFF",
-    marginTop: "0px",
-    minHeight: "auto",
-    fontWeight: "300",
-    fontFamily: "'Roboto', 'Helvetica', 'Arial', sans-serif",
-    marginBottom: "3px",
-    textDecoration: "none"
-  }
-};
 
+  quizEditorCardHeaderTitle: {
+    color: "white",
+  },
+
+  quizEditorCardSubheaderTitle: {
+    color: "white",
+  },
+};
 
 class QuizEditor extends React.Component {
   constructor(props, context) {
     super(props, context);
 
+    this.isNewQuiz = !QuizEditor.getQuizId(props);
+
     this.quizSubscription = null;
 
     this.state = {
-      quizLoaded: QuizEditor.isNewQuiz(props)
+      originalTitle: null,
+      quizLoaded: this.isNewQuiz
     }
   }
 
   static getQuizId = (props) => props.match.params.quizId;
-
-  static isNewQuiz = (props) => !QuizEditor.getQuizId(props);
 
   componentDidMount() {
     const quizId = QuizEditor.getQuizId(this.props);
 
     this.props.dispatch(clearEditingQuiz());
 
-    if (!QuizEditor.isNewQuiz(this.props)) {
+    if (!this.isNewQuiz) {
       this.quizSubscription = Meteor.subscribe("quiz", quizId);
 
       Tracker.autorun((computation) => {
         if (this.quizSubscription) {
           const quizLoaded = this.quizSubscription.ready();
 
-          if (quizLoaded) {
+          if (!quizLoaded) {
+            this.setState({ originalTitle: null })
+          } else {
             const quiz = Quizzes.findOne(quizId);
 
             this.props.dispatch(setEditingQuiz(quiz));
+
+            this.setState({ originalTitle: quiz.title })
           }
 
           this.setState({ quizLoaded });
@@ -107,69 +106,77 @@ class QuizEditor extends React.Component {
     } = this.props;
 
     return (
-      <div>
-        <GridContainer justify="space-around">
-          <GridItem xs={12} sm={12} md={8}>
-            <Card>
-              <CardHeader color="primary">
-                <h4 className={classes.cardTitleWhite}>Edit Quiz</h4>
-                <p className={classes.cardCategoryWhite}>Complete your quiz</p>
-              </CardHeader>
-              <CardBody>
-                <GridContainer>
-                  <GridItem xs={12} sm={12} md={12}>
-                    <TextField
-                      value={title}
-                      onChange={(event) => onTitleChange(event.target.value)}
-                      margin="normal"
-                    />
-                  </GridItem>
-                  <GridItem xs={12} sm={12} md={12}>
-                    <Editor
-                      editorState={descriptionEditorState}
-                      wrapperClassName="demo-wrapper"
-                      editorClassName="demo-editor"
-                      onEditorStateChange={onDescriptionEditorStateChange}
-                    />
-                  </GridItem>
-                </GridContainer>
-              </CardBody>
-              <CardFooter>
-              </CardFooter>
-            </Card>
-          </GridItem>
+      <GridContainer justify="space-around">
+        <GridItem xs={12} sm={12} md={8}>
+          <Card>
+            <CardHeader
+              classes={{
+                root: classes.quizEditorCardHeaderRoot,
+                title: classes.quizEditorCardHeaderTitle,
+                subheader: classes.quizEditorCardSubheaderTitle
+              }}
 
-          {paragraphs.allIds.map((id, idx) =>
-            (<GridItem key={id} xs={12} sm={12} md={8}>
-              <QuizParagraphEditor id={id} number={idx + 1} />
-            </GridItem>)
-          )}
+              title={this.isNewQuiz ? "New Quiz" : "Edit Quiz"}
 
-          <GridItem xs={12} sm={12} md={8}>
-            <Button variant="contained" color="primary" onClick={onParagraphCreate}>
-              Add new paragraph
-            </Button>
-          </GridItem>
+              subheader={
+                !this.isNewQuiz && this.state.originalTitle
+                  ? `You are editing '${this.state.originalTitle}' quiz`
+                  : null
+              }
+            />
 
-          {questions.allIds.map((id, idx) =>
-            (<GridItem key={idx} xs={12} sm={12} md={8}>
-              <QuizQuestionEditor id={id} number={idx + 1} />
-            </GridItem>)
-          )}
+            <CardContent>
+              <GridContainer>
+                <GridItem xs={12} sm={12} md={12}>
+                  <TextField
+                    value={title}
+                    onChange={(event) => onTitleChange(event.target.value)}
+                    margin="normal"
+                  />
+                </GridItem>
+                <GridItem xs={12} sm={12} md={12}>
+                  <Editor
+                    editorState={descriptionEditorState}
+                    wrapperClassName="demo-wrapper"
+                    editorClassName="demo-editor"
+                    onEditorStateChange={onDescriptionEditorStateChange}
+                  />
+                </GridItem>
+              </GridContainer>
+            </CardContent>
+          </Card>
+        </GridItem>
 
-          <GridItem xs={12} sm={12} md={8}>
-            <Button variant="contained" color="primary" onClick={onQuestionCreate}>
-              Add new question
-            </Button>
-          </GridItem>
+        {paragraphs.allIds.map((id, idx) =>
+          (<GridItem key={id} xs={12} sm={12} md={8}>
+            <QuizParagraphEditor id={id} number={idx + 1} />
+          </GridItem>)
+        )}
 
-          <GridItem xs={12} sm={12} md={8}>
-            <Button variant="contained" color="primary" onClick={onQuizSave}>
-              Save quiz
-            </Button>
-          </GridItem>
-        </GridContainer>
-      </div>
+        <GridItem xs={12} sm={12} md={8}>
+          <Button variant="contained" color="primary" onClick={onParagraphCreate}>
+            Add new paragraph
+          </Button>
+        </GridItem>
+
+        {questions.allIds.map((id, idx) =>
+          (<GridItem key={idx} xs={12} sm={12} md={8}>
+            <QuizQuestionEditor id={id} number={idx + 1} />
+          </GridItem>)
+        )}
+
+        <GridItem xs={12} sm={12} md={8}>
+          <Button variant="contained" color="primary" onClick={onQuestionCreate}>
+            Add new question
+          </Button>
+        </GridItem>
+
+        <GridItem xs={12} sm={12} md={8}>
+          <Button variant="contained" color="primary" onClick={onQuizSave}>
+            Save Quiz
+          </Button>
+        </GridItem>
+      </GridContainer>
     );
   }
 }
