@@ -1,19 +1,13 @@
 import React from "react";
-// @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
 import InputLabel from "@material-ui/core/InputLabel";
-// core components
-import GridItem from "/imports/components/Grid/GridItem.jsx";
-import GridContainer from "/imports/components/Grid/GridContainer.jsx";
-import CustomInput from "/imports/components/CustomInput/CustomInput.jsx";
-import Button from "/imports/components/CustomButtons/Button.jsx";
-import Card from "/imports/components/Card/Card.jsx";
-import CardHeader from "/imports/components/Card/CardHeader.jsx";
-import CardAvatar from "/imports/components/Card/CardAvatar.jsx";
-import CardBody from "/imports/components/Card/CardBody.jsx";
-import CardFooter from "/imports/components/Card/CardFooter.jsx";
+import Grid from "@material-ui/core/Grid";
+import Card from "@material-ui/core/Card";
+import CardHeader from "@material-ui/core/CardHeader";
+import CardContent from "@material-ui/core/CardContent";
+import Button from "@material-ui/core/Button";
 
-const avatar = "/assets/img/faces/marc.jpg";
+const avatar = "";
 
 const styles = {
   cardCategoryWhite: {
@@ -38,16 +32,17 @@ function Team(props) {
   const { classes } = props;
   return (
     <div>
-      <GridContainer>
-        <GridItem xs={12} sm={12} md={8}>
+      <Grid container>
+        <Grid item xs={12} sm={12} md={8}>
           <Card>
             <CardHeader color="primary">
               <h4 className={classes.cardTitleWhite}>Edit Profile</h4>
               <p className={classes.cardCategoryWhite}>Complete your profile</p>
             </CardHeader>
-            <CardBody>
-              <GridContainer>
-                <GridItem xs={12} sm={12} md={5}>
+            <CardContent>
+              <Grid container>
+                <Grid item xs={12} sm={12} md={5}>
+{/*
                   <CustomInput
                     labelText="Company (disabled)"
                     id="company-disabled"
@@ -58,8 +53,10 @@ function Team(props) {
                       disabled: true
                     }}
                   />
-                </GridItem>
-                <GridItem xs={12} sm={12} md={3}>
+*/}
+                </Grid>
+                <Grid item xs={12} sm={12} md={3}>
+{/*
                   <CustomInput
                     labelText="Username"
                     id="username"
@@ -67,8 +64,10 @@ function Team(props) {
                       fullWidth: true
                     }}
                   />
-                </GridItem>
-                <GridItem xs={12} sm={12} md={4}>
+*/}
+                </Grid>
+                <Grid item xs={12} sm={12} md={4}>
+{/*
                   <CustomInput
                     labelText="Email address"
                     id="email-address"
@@ -76,10 +75,12 @@ function Team(props) {
                       fullWidth: true
                     }}
                   />
-                </GridItem>
-              </GridContainer>
-              <GridContainer>
-                <GridItem xs={12} sm={12} md={6}>
+*/}
+                </Grid>
+              </Grid>
+              <Grid container>
+                <Grid item xs={12} sm={12} md={6}>
+{/*
                   <CustomInput
                     labelText="First Name"
                     id="first-name"
@@ -87,8 +88,10 @@ function Team(props) {
                       fullWidth: true
                     }}
                   />
-                </GridItem>
-                <GridItem xs={12} sm={12} md={6}>
+*/}
+                </Grid>
+                <Grid item xs={12} sm={12} md={6}>
+{/*
                   <CustomInput
                     labelText="Last Name"
                     id="last-name"
@@ -96,10 +99,12 @@ function Team(props) {
                       fullWidth: true
                     }}
                   />
-                </GridItem>
-              </GridContainer>
-              <GridContainer>
-                <GridItem xs={12} sm={12} md={4}>
+*/}
+                </Grid>
+              </Grid>
+              <Grid container>
+                <Grid item xs={12} sm={12} md={4}>
+{/*
                   <CustomInput
                     labelText="City"
                     id="city"
@@ -107,8 +112,10 @@ function Team(props) {
                       fullWidth: true
                     }}
                   />
-                </GridItem>
-                <GridItem xs={12} sm={12} md={4}>
+*/}
+                </Grid>
+                <Grid item xs={12} sm={12} md={4}>
+{/*
                   <CustomInput
                     labelText="Country"
                     id="country"
@@ -116,8 +123,10 @@ function Team(props) {
                       fullWidth: true
                     }}
                   />
-                </GridItem>
-                <GridItem xs={12} sm={12} md={4}>
+*/}
+                </Grid>
+                <Grid item xs={12} sm={12} md={4}>
+{/*
                   <CustomInput
                     labelText="Postal Code"
                     id="postal-code"
@@ -125,11 +134,13 @@ function Team(props) {
                       fullWidth: true
                     }}
                   />
-                </GridItem>
-              </GridContainer>
-              <GridContainer>
-                <GridItem xs={12} sm={12} md={12}>
+*/}
+                </Grid>
+              </Grid>
+              <Grid container>
+                <Grid item xs={12} sm={12} md={12}>
                   <InputLabel style={{ color: "#AAAAAA" }}>About me</InputLabel>
+{/*
                   <CustomInput
                     labelText="Lamborghini Mercy, Your chick she so thirsty, I'm in that two seat Lambo."
                     id="about-me"
@@ -141,22 +152,27 @@ function Team(props) {
                       rows: 5
                     }}
                   />
-                </GridItem>
-              </GridContainer>
-            </CardBody>
+*/}
+                </Grid>
+              </Grid>
+            </CardContent>
+{/*
             <CardFooter>
               <Button color="primary">Update Profile</Button>
             </CardFooter>
+*/}
           </Card>
-        </GridItem>
-        <GridItem xs={12} sm={12} md={4}>
-          <Card profile>
+        </Grid>
+        <Grid item xs={12} sm={12} md={4}>
+          <Card>
+{/*
             <CardAvatar profile>
               <a href="#pablo" onClick={e => e.preventDefault()}>
                 <img src={avatar} alt="..." />
               </a>
             </CardAvatar>
-            <CardBody profile>
+*/}
+            <CardContent>
               <h6 className={classes.cardCategory}>CEO / CO-FOUNDER</h6>
               <h4 className={classes.cardTitle}>Alec Thompson</h4>
               <p className={classes.description}>
@@ -164,13 +180,13 @@ function Team(props) {
                 human foundation in truth And I love you like Kanye loves Kanye
                 I love Rick Owens’ bed design but the back is...
               </p>
-              <Button color="primary" round>
+              <Button color="primary">
                 Follow
               </Button>
-            </CardBody>
+            </CardContent>
           </Card>
-        </GridItem>
-      </GridContainer>
+        </Grid>
+      </Grid>
     </div>
   );
 }

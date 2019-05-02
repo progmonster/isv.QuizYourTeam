@@ -1,7 +1,5 @@
 import withStyles from "@material-ui/core/styles/withStyles";
 import React from "react";
-import GridItem from "/imports/components/Grid/GridItem.jsx";
-import GridContainer from "/imports/components/Grid/GridContainer.jsx";
 import Button from "@material-ui/core/Button";
 import * as PropTypes from "prop-types";
 import Tabs from "@material-ui/core/Tabs";
@@ -13,6 +11,7 @@ import { connect } from "react-redux";
 import SingleChoiceAnswer from "./SingleChoiceAnswer";
 import MultipleChoiceAnswer from "./MultipleChoiceAnswer";
 import FormGroup from "@material-ui/core/FormGroup";
+import Grid from "@material-ui/core/Grid";
 
 const styles = (theme) => ({
   quizAnswersEditor: {
@@ -31,8 +30,8 @@ class QuizAnswersEditor extends React.PureComponent {
     } = this.props;
 
     return (
-      <GridContainer>
-        <GridItem xs={12} sm={12} md={8}>
+      <Grid container>
+        <Grid item xs={12} sm={12} md={8}>
           <Tabs
             value={answerType === ANSWER_TYPES.SINGLE_CHOICE ? 0 : 1}
 
@@ -47,15 +46,15 @@ class QuizAnswersEditor extends React.PureComponent {
           {answerType === ANSWER_TYPES.SINGLE_CHOICE
             ? this._renderSingleChoiceAnswerBlock()
             : this._renderMultipleChoiceAnswerBlock()}
-        </GridItem>
+        </Grid>
 
-        <GridItem xs={12} sm={12} md={8}>
+        <Grid item xs={12} sm={12} md={8}>
           <Button variant="contained" color="primary"
                   onClick={() => onAnswerAdd("", false)}>
             Add an answer
           </Button>
-        </GridItem>
-      </GridContainer>
+        </Grid>
+      </Grid>
     );
   }
 

@@ -1,19 +1,15 @@
 import React from "react";
 import classNames from "classnames";
 import PropTypes from "prop-types";
-// @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import IconButton from "@material-ui/core/IconButton";
 import Hidden from "@material-ui/core/Hidden";
-// @material-ui/icons
 import Menu from "@material-ui/icons/Menu";
-// core components
 import AdminNavbarLinks from "./AdminNavbarLinks.jsx";
-import Button from "/imports/components/CustomButtons/Button.jsx";
-
 import headerStyle from "/imports/assets/jss/material-dashboard-react/components/headerStyle.jsx";
+import Button from "@material-ui/core/Button";
 
 function Header({ ...props }) {
   function makeBrand() {
@@ -38,7 +34,7 @@ function Header({ ...props }) {
       <Toolbar className={classes.container}>
         <div className={classes.flex}>
           {/* Here we create navbar brand, based on route name */}
-          { !!brand && (<Button color="transparent" href="#" className={classes.title}>
+          { !!brand && (<Button href="#" className={classes.title}>
             {makeBrand()}
           </Button>)}
         </div>

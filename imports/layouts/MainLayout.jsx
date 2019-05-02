@@ -1,24 +1,18 @@
-/* eslint-disable */
 import React from "react";
 import PropTypes from "prop-types";
-import { Switch, Route, Redirect } from "react-router-dom";
-// creates a beautiful scrollbar
+import { Route, Switch } from "react-router-dom";
 import PerfectScrollbar from "perfect-scrollbar";
 import "perfect-scrollbar/css/perfect-scrollbar.css";
-// @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
-// core components
 import Navbar from "/imports/components/Navbars/Navbar.jsx";
-/*import Footer from "/imports/components/Footer/Footer.jsx";*/
 import Sidebar from "/imports/components/Sidebar/Sidebar.jsx";
-/*import FixedPlugin from "/imports/components/FixedPlugin/FixedPlugin.jsx";*/
-
-import { routes, drawerRoutes } from "/imports/routes.js";
+import { drawerRoutes, routes } from "/imports/routes.js";
 
 import dashboardStyle from "/imports/assets/jss/material-dashboard-react/layouts/dashboardStyle.jsx";
 
 const image = ""/*"/assets/img/sidebar-2.jpg"*/;
-const logo = "/assets/img/reactlogo.png";
+
+const logo = "/img/reactlogo.png";
 
 const switchRoutes = (
   <Switch>
@@ -108,7 +102,6 @@ class Dashboard extends React.Component {
             handleDrawerToggle={this.handleDrawerToggle}
             {...rest}
           />
-          {/* On the /maps route we want the map to be on full screen - this is not possible if the content and conatiner classes are present because they have some paddings which would make the map smaller */}
           {this.getRoute() ? (
             <div className={classes.content}>
               <div className={classes.container}>{switchRoutes}</div>
@@ -117,16 +110,6 @@ class Dashboard extends React.Component {
             <div className={classes.map}>{switchRoutes}</div>
           )}
           {/*{this.getRoute() ? <Footer /> : null}*/}
-{/*
-          <FixedPlugin
-            handleImageClick={this.handleImageClick}
-            handleColorClick={this.handleColorClick}
-            bgColor={this.state["color"]}
-            bgImage={this.state["image"]}
-            handleFixedClick={this.handleFixedClick}
-            fixedClasses={this.state.fixedClasses}
-          />
-*/}
         </div>
       </div>
     );

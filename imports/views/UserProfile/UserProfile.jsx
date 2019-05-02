@@ -1,17 +1,6 @@
 import React from "react";
-// @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
 import InputLabel from "@material-ui/core/InputLabel";
-// core components
-import GridItem from "/imports/components/Grid/GridItem.jsx";
-import GridContainer from "/imports/components/Grid/GridContainer.jsx";
-import CustomInput from "/imports/components/CustomInput/CustomInput.jsx";
-import Button from "/imports/components/CustomButtons/Button.jsx";
-import Card from "/imports/components/Card/Card.jsx";
-import CardHeader from "/imports/components/Card/CardHeader.jsx";
-import CardAvatar from "/imports/components/Card/CardAvatar.jsx";
-import CardBody from "/imports/components/Card/CardBody.jsx";
-import CardFooter from "/imports/components/Card/CardFooter.jsx";
 
 const avatar = "/assets/img/faces/marc.jpg";
 
@@ -38,16 +27,16 @@ function UserProfile(props) {
   const { classes } = props;
   return (
     <div>
-      <GridContainer>
-        <GridItem xs={12} sm={12} md={8}>
+      <Grid container>
+        <Grid item xs={12} sm={12} md={8}>
           <Card>
             <CardHeader color="primary">
               <h4 className={classes.cardTitleWhite}>Edit Profile</h4>
               <p className={classes.cardCategoryWhite}>Complete your profile</p>
             </CardHeader>
             <CardBody>
-              <GridContainer>
-                <GridItem xs={12} sm={12} md={5}>
+              <Grid container>
+                <Grid item xs={12} sm={12} md={5}>
                   <CustomInput
                     labelText="Company (disabled)"
                     id="company-disabled"
@@ -58,8 +47,8 @@ function UserProfile(props) {
                       disabled: true
                     }}
                   />
-                </GridItem>
-                <GridItem xs={12} sm={12} md={3}>
+                </Grid>
+                <Grid item xs={12} sm={12} md={3}>
                   <CustomInput
                     labelText="Username"
                     id="username"
@@ -67,8 +56,8 @@ function UserProfile(props) {
                       fullWidth: true
                     }}
                   />
-                </GridItem>
-                <GridItem xs={12} sm={12} md={4}>
+                </Grid>
+                <Grid item xs={12} sm={12} md={4}>
                   <CustomInput
                     labelText="Email address"
                     id="email-address"
@@ -76,10 +65,10 @@ function UserProfile(props) {
                       fullWidth: true
                     }}
                   />
-                </GridItem>
-              </GridContainer>
-              <GridContainer>
-                <GridItem xs={12} sm={12} md={6}>
+                </Grid>
+              </Grid>
+              <Grid container>
+                <Grid item xs={12} sm={12} md={6}>
                   <CustomInput
                     labelText="First Name"
                     id="first-name"
@@ -87,8 +76,8 @@ function UserProfile(props) {
                       fullWidth: true
                     }}
                   />
-                </GridItem>
-                <GridItem xs={12} sm={12} md={6}>
+                </Grid>
+                <Grid item xs={12} sm={12} md={6}>
                   <CustomInput
                     labelText="Last Name"
                     id="last-name"
@@ -96,10 +85,10 @@ function UserProfile(props) {
                       fullWidth: true
                     }}
                   />
-                </GridItem>
-              </GridContainer>
-              <GridContainer>
-                <GridItem xs={12} sm={12} md={4}>
+                </Grid>
+              </Grid>
+              <Grid container>
+                <Grid item xs={12} sm={12} md={4}>
                   <CustomInput
                     labelText="City"
                     id="city"
@@ -107,8 +96,8 @@ function UserProfile(props) {
                       fullWidth: true
                     }}
                   />
-                </GridItem>
-                <GridItem xs={12} sm={12} md={4}>
+                </Grid>
+                <Grid item xs={12} sm={12} md={4}>
                   <CustomInput
                     labelText="Country"
                     id="country"
@@ -116,8 +105,8 @@ function UserProfile(props) {
                       fullWidth: true
                     }}
                   />
-                </GridItem>
-                <GridItem xs={12} sm={12} md={4}>
+                </Grid>
+                <Grid item xs={12} sm={12} md={4}>
                   <CustomInput
                     labelText="Postal Code"
                     id="postal-code"
@@ -125,10 +114,10 @@ function UserProfile(props) {
                       fullWidth: true
                     }}
                   />
-                </GridItem>
-              </GridContainer>
-              <GridContainer>
-                <GridItem xs={12} sm={12} md={12}>
+                </Grid>
+              </Grid>
+              <Grid container>
+                <Grid item xs={12} sm={12} md={12}>
                   <InputLabel style={{ color: "#AAAAAA" }}>About me</InputLabel>
                   <CustomInput
                     labelText="Lamborghini Mercy, Your chick she so thirsty, I'm in that two seat Lambo."
@@ -141,15 +130,15 @@ function UserProfile(props) {
                       rows: 5
                     }}
                   />
-                </GridItem>
-              </GridContainer>
+                </Grid>
+              </Grid>
             </CardBody>
             <CardFooter>
               <Button color="primary">Update Profile</Button>
             </CardFooter>
           </Card>
-        </GridItem>
-        <GridItem xs={12} sm={12} md={4}>
+        </Grid>
+        <Grid item xs={12} sm={12} md={4}>
           <Card profile>
             <CardAvatar profile>
               <a href="#pablo" onClick={e => e.preventDefault()}>
@@ -169,8 +158,8 @@ function UserProfile(props) {
               </Button>
             </CardBody>
           </Card>
-        </GridItem>
-      </GridContainer>
+        </Grid>
+      </Grid>
     </div>
   );
 }

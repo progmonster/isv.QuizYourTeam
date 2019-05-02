@@ -3,7 +3,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { createBrowserHistory } from "history";
 import { Redirect, Route, Router, Switch } from "react-router-dom";
-import Admin from "/imports/layouts/Admin.jsx";
+import MainLayout from "/imports/layouts/MainLayout.jsx";
 import "/imports/assets/css/material-dashboard-react.css";
 import { applyMiddleware, createStore } from "redux";
 import createSagaMiddleware from "redux-saga";
@@ -34,7 +34,7 @@ Meteor.startup(() => {
       <SnackbarProvider SnackbarProps={{ autoHideDuration: 3500 }}>
         <Router history={hist}>
           <Switch>
-            <Route path="/admin" component={Admin} />
+            <Route path="/admin" component={MainLayout} />
             <Redirect from="/" to="/admin/dashboard" />
           </Switch>
         </Router>

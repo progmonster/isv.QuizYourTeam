@@ -3,15 +3,14 @@ import PropTypes from "prop-types";
 import { Editor } from 'react-draft-wysiwyg';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
-import '/node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
+import '/node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css';//todo check it (all occurrences)
 import withStyles from "@material-ui/core/styles/withStyles";
-import GridItem from "/imports/components/Grid/GridItem.jsx";
-import GridContainer from "/imports/components/Grid/GridContainer.jsx";
 import dashboardStyle from "./dashboardStyle.jsx";
 import { Link } from "react-router-dom";
 import QuizTileContainer from "./quizTile";
 import { withTracker } from "meteor/react-meteor-data";
 import { Quizzes } from "../../collections";
+import Grid from "@material-ui/core/Grid";
 
 class Dashboard extends React.PureComponent {
   render() {
@@ -19,13 +18,13 @@ class Dashboard extends React.PureComponent {
 
     return (
       <div>
-        <GridContainer>
+        <Grid container>
           {quizzes.map(({ _id: quizId }) => {
-            return (<GridItem key={quizId} xs={12} sm={6} md={3}>
+            return (<Grid item key={quizId} xs={12} sm={6} md={3}>
               <QuizTileContainer quizId={quizId} />
-            </GridItem>);
+            </Grid>);
           })}
-        </GridContainer>
+        </Grid>
         {/*todo replace url with something like "/quizzes/new". Use /quizzes/:id/edit for edit exists */}
         <Fab color="primary" className={classes.addCardFab} component={Link} to="/admin/quiz-edit">
           <AddIcon />

@@ -1,8 +1,6 @@
 import React from "react";
 import withStyles from "@material-ui/core/styles/withStyles";
 import { Editor } from 'react-draft-wysiwyg';
-import GridItem from "/imports/components/Grid/GridItem.jsx";
-import GridContainer from "/imports/components/Grid/GridContainer.jsx";
 import Button from "@material-ui/core/Button";
 import QuizQuestionEditor from "./QuizQuestionEditor";
 import QuizParagraphEditor from "./QuizParagraphEditor";
@@ -22,6 +20,7 @@ import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
 import CardContent from "@material-ui/core/CardContent";
 import { orange } from "@material-ui/core/colors";
+import Grid from "@material-ui/core/Grid";
 
 const styles = {
   quizEditorCardHeaderRoot: {
@@ -106,8 +105,8 @@ class QuizEditor extends React.Component {
     } = this.props;
 
     return (
-      <GridContainer justify="space-around">
-        <GridItem xs={12} sm={12} md={8}>
+      <Grid container justify="space-around">
+        <Grid item xs={12} sm={12} md={8}>
           <Card>
             <CardHeader
               classes={{
@@ -126,57 +125,57 @@ class QuizEditor extends React.Component {
             />
 
             <CardContent>
-              <GridContainer>
-                <GridItem xs={12} sm={12} md={12}>
+              <Grid container>
+                <Grid item xs={12} sm={12} md={12}>
                   <TextField
                     value={title}
                     onChange={(event) => onTitleChange(event.target.value)}
                     margin="normal"
                   />
-                </GridItem>
-                <GridItem xs={12} sm={12} md={12}>
+                </Grid>
+                <Grid item xs={12} sm={12} md={12}>
                   <Editor
                     editorState={descriptionEditorState}
                     wrapperClassName="demo-wrapper"
                     editorClassName="demo-editor"
                     onEditorStateChange={onDescriptionEditorStateChange}
                   />
-                </GridItem>
-              </GridContainer>
+                </Grid>
+              </Grid>
             </CardContent>
           </Card>
-        </GridItem>
+        </Grid>
 
         {paragraphs.allIds.map((id, idx) =>
-          (<GridItem key={id} xs={12} sm={12} md={8}>
+          (<Grid item key={id} xs={12} sm={12} md={8}>
             <QuizParagraphEditor id={id} number={idx + 1} />
-          </GridItem>)
+          </Grid>)
         )}
 
-        <GridItem xs={12} sm={12} md={8}>
+        <Grid item xs={12} sm={12} md={8}>
           <Button variant="contained" color="primary" onClick={onParagraphCreate}>
             Add new paragraph
           </Button>
-        </GridItem>
+        </Grid>
 
         {questions.allIds.map((id, idx) =>
-          (<GridItem key={idx} xs={12} sm={12} md={8}>
+          (<Grid item key={idx} xs={12} sm={12} md={8}>
             <QuizQuestionEditor id={id} number={idx + 1} />
-          </GridItem>)
+          </Grid>)
         )}
 
-        <GridItem xs={12} sm={12} md={8}>
+        <Grid item xs={12} sm={12} md={8}>
           <Button variant="contained" color="primary" onClick={onQuestionCreate}>
             Add new question
           </Button>
-        </GridItem>
+        </Grid>
 
-        <GridItem xs={12} sm={12} md={8}>
+        <Grid item xs={12} sm={12} md={8}>
           <Button variant="contained" color="primary" onClick={onQuizSave}>
             Save Quiz
           </Button>
-        </GridItem>
-      </GridContainer>
+        </Grid>
+      </Grid>
     );
   }
 }

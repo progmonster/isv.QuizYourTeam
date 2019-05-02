@@ -4,10 +4,8 @@ import {
   whiteColor
 } from "/imports/assets/jss/material-dashboard-react.jsx";
 
-import dropdownStyle from "/imports/assets/jss/material-dashboard-react/dropdownStyle.jsx";
 
 const headerLinksStyle = theme => ({
-  ...dropdownStyle(theme),
   search: {
     "& > div": {
       marginTop: "0"
