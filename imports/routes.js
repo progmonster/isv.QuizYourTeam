@@ -6,7 +6,7 @@ import QuizEditor from "./views/Quizzes/QuizEditor";
 
 export const routes = [
   {
-    path: "/edit-quiz",
+    path: "/quiz-edit/:quizId?",
     name: "Edit Quiz",
     icon: Dashboard,
     component: QuizEditor,

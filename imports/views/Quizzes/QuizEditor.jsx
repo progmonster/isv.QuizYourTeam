@@ -11,10 +11,17 @@ import Button from "@material-ui/core/Button";
 import QuizQuestionEditor from "./QuizQuestionEditor";
 import QuizParagraphEditor from "./QuizParagraphEditor";
 import { connect } from "react-redux";
-import { addParagraphToEditingQuiz, addQuestionToEditingQuiz } from "/imports/actions";
+import { addParagraphToEditingQuiz, addQuestionToEditingQuiz, setEditingQuiz } from "/imports/actions";
 import * as PropTypes from "prop-types";
-import { changeDescriptionEditorStateInEditingQuiz, changeTitleInEditingQuiz, saveEditingQuiz } from "../../actions";
+import {
+  changeDescriptionEditorStateInEditingQuiz,
+  changeTitleInEditingQuiz,
+  clearEditingQuiz,
+  saveEditingQuiz
+} from "../../actions";
 import TextField from "@material-ui/core/TextField";
+import { compose } from "redux";
+import { Quizzes } from "../../collections";
 
 const styles = {
   cardCategoryWhite: {/*todo remove?*/
@@ -35,7 +42,56 @@ const styles = {
   }
 };
 
-class QuizEditor extends React.PureComponent {
+
+class QuizEditor extends React.Component {
+  constructor(props, context) {
+    super(props, context);
+
+    this.quizSubscription = null;
+
+    this.state = {
+      quizLoaded: QuizEditor.isNewQuiz(props)
+    }
+  }
+
+  static getQuizId = (props) => props.match.params.quizId;
+
+  static isNewQuiz = (props) => !QuizEditor.getQuizId(props);
+
+  componentDidMount() {
+    const quizId = QuizEditor.getQuizId(this.props);
+
+    this.props.dispatch(clearEditingQuiz());
+
+    if (!QuizEditor.isNewQuiz(this.props)) {
+      this.quizSubscription = Meteor.subscribe("quiz", quizId);
+
+      Tracker.autorun((computation) => {
+        if (this.quizSubscription) {
+          const quizLoaded = this.quizSubscription.ready();
+
+          if (quizLoaded) {
+            const quiz = Quizzes.findOne(quizId);
+
+            this.props.dispatch(setEditingQuiz(quiz));
+          }
+
+          this.setState({ quizLoaded });
+        } else {
+          computation.stop();
+        }
+      });
+    }
+  }
+
+  componentWillUnmount() {
+    if (this.quizSubscription) {
+      this.quizSubscription.stop();
+
+      this.quizSubscription = null;
+    }
+  }
+
   render() {
     const {
       classes,
@@ -139,7 +195,7 @@ const mapStateToProps = state => {
   };
 };
 
-const mapDispatchToProps = (dispatch, {history}) => {
+const mapDispatchToProps = (dispatch, { history }) => {
   return {
     onParagraphCreate: () => {
       dispatch(addParagraphToEditingQuiz());
@@ -160,7 +216,12 @@ const mapDispatchToProps = (dispatch, {history}) => {
     onQuizSave: () => {
       dispatch(saveEditingQuiz(history));
     },
+
+    dispatch
   }
 };
 
-export default withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(QuizEditor));
+export default compose(
+  withStyles(styles),
+  connect(mapStateToProps, mapDispatchToProps),
+)(QuizEditor);

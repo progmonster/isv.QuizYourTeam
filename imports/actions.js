@@ -1,7 +1,8 @@
-import { put, select, takeEvery, all } from "redux-saga/effects";
+import { all, put, select, takeEvery } from "redux-saga/effects";
 import { Quizzes } from "./collections.js";
-import { convertToRaw } from "draft-js";
+import { convertFromRaw, convertToRaw, EditorState } from "draft-js";
 import { snackbarActions as snackbar } from "./components/snackbar";
+import range from "lodash/range";
 
 export const CLEAR_EDITING_QUIZ = "CLEAR_EDITING_QUIZ";
 
@@ -34,6 +35,8 @@ export const CHANGE_ANSWER_TYPE_IN_EDITING_QUIZ = "CHANGE_ANSWER_TYPE_IN_EDITING
 export const SAVE_EDITING_QUIZ = "SAVE_EDITING_QUIZ";
 
 export const REMOVE_QUIZ = "REMOVE_QUIZ";
+
+export const SET_EDITING_QUIZ = "SET_EDITING_QUIZ";
 
 export function clearEditingQuiz() {
   return { type: CLEAR_EDITING_QUIZ };
@@ -99,14 +102,18 @@ export function removeQuiz(quizId) {
   return { type: REMOVE_QUIZ, quizId };
 }
 
-function getEditingQuizParagraphJson(paragraph) {
+export function setEditingQuiz(quiz) {
+  return { type: SET_EDITING_QUIZ, quiz };
+}
+
+function getEditingQuizParagraphFromStore(paragraph) {
   return {
     ...paragraph,
     editorState: convertToRaw(paragraph.editorState.getCurrentContent())
   }
 }
 
-function getEditingQuizQuestionJson(question) {
+function getEditingQuizQuestionFromStore(question) {
   return {
     ...question,
     editorState: convertToRaw(question.editorState.getCurrentContent()),
@@ -117,26 +124,78 @@ function getEditingQuizQuestionJson(question) {
   }
 }
 
-function getEditingQuizJson({ editingQuiz }) {
+function getEditingQuizFromStore({ editingQuiz }) {
   return {
     ...editingQuiz,
     descriptionEditorState: convertToRaw(editingQuiz.descriptionEditorState.getCurrentContent()),
 
     paragraphs: editingQuiz.paragraphs.allIds.map(
-      paragraphId => getEditingQuizParagraphJson(editingQuiz.paragraphs.byId[paragraphId])
+      paragraphId => getEditingQuizParagraphFromStore(editingQuiz.paragraphs.byId[paragraphId])
     ),
 
     questions: editingQuiz.questions.allIds.map(
-      questionId => getEditingQuizQuestionJson(editingQuiz.questions.byId[questionId])
+      questionId => getEditingQuizQuestionFromStore(editingQuiz.questions.byId[questionId])
     )
   }
 }
 
+export function convertQuizForStore(quiz) {
+  return {
+    ...quiz,
+    descriptionEditorState: EditorState.createWithContent(convertFromRaw(quiz.descriptionEditorState)),
+    paragraphs: convertQuizParagraphsForStore(quiz.paragraphs),
+    questions: convertQuizQuestionsForStore(quiz.questions)
+  }
+}
+
+function convertQuizParagraphsForStore(paragraphs = []) {
+  const byId = paragraphs.reduce((acc, paragraph, paragraphIdx) => {
+    acc[paragraphIdx + 1] = {
+      ...paragraph,
+      editorState: EditorState.createWithContent(convertFromRaw(paragraph.editorState)),
+    };
+
+    return acc;
+  }, {});
+
+  return { byId, allIds: range(1, paragraphs.length + 1) };
+}
+
+function convertQuizQuestionsForStore(questions = []) {
+  const byId = questions.reduce((acc, question, questionIdx) => {
+    acc[questionIdx + 1] = {
+      ...question,
+      editorState: EditorState.createWithContent(convertFromRaw(question.editorState)),
+      answers: convertQuizAnswersForStore(question.answers),
+    };
+
+    return acc;
+  }, {});
+
+  return { byId, allIds: range(1, questions.length + 1) };
+}
+
+function convertQuizAnswersForStore(answers = []) {
+  const byId = answers.reduce((acc, answer, answerIdx) => {
+    acc[answerIdx + 1] = {
+      ...answer,
+    };
+
+    return acc;
+  }, {});
+
+  return { byId, allIds: range(1, answers.length + 1) };
+}
+
 function* saveEditingQuizAsync({ history }) {
-  const editingQuizJson = yield select(getEditingQuizJson);
+  const editingQuiz = yield select(getEditingQuizFromStore);
 
   try {
-    yield Quizzes.insertAsync(editingQuizJson);
+    if (editingQuiz._id) {
+      yield Quizzes.updateAsync(editingQuiz._id, editingQuiz);
+    } else {
+      yield Quizzes.insertAsync(editingQuiz);
+    }
 
     yield put(clearEditingQuiz());
 

@@ -1,8 +1,6 @@
 import React from "react";
 import withStyles from "@material-ui/core/styles/withStyles";
-import Card from "/imports/components/Card/Card.jsx";
 import PropTypes from "prop-types";
-import { Editor } from 'react-draft-wysiwyg';
 import { convertFromRaw } from "draft-js";
 import { stateToHTML } from "draft-js-export-html";
 import { withTracker } from "meteor/react-meteor-data";
@@ -17,6 +15,8 @@ import { orange } from "@material-ui/core/colors";
 import AlertDialog from "../../components/alertDialog";
 import { removeQuiz } from "../../actions";
 import { connect } from "react-redux";
+import { Link } from "react-router-dom";
+import Card from "@material-ui/core/Card";
 
 const styles = theme => ({
   headerRoot: {
@@ -58,7 +58,7 @@ class QuizTile extends React.Component {
           title={quiz.title}
         />
 
-        <CardContent dangerouslySetInnerHTML={{ __html: quizDescriptionHtml }}/>
+        <CardContent dangerouslySetInnerHTML={{ __html: quizDescriptionHtml }} />
 
         <CardActions>
           <Button size="small" color="primary">
@@ -69,7 +69,7 @@ class QuizTile extends React.Component {
             Quiz
           </Button>
 
-          <IconButton>
+          <IconButton component={Link} to={`/admin/quiz-edit/${quiz._id}`}>
             <Edit />
           </IconButton>
 
@@ -104,7 +104,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = (dispatch, { quizId }) => {
   return {
-    onQuizRemove: () => {
+    onQuizRemove() {
       dispatch(removeQuiz(quizId));
     },
   }

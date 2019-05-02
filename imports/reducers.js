@@ -5,21 +5,26 @@ import {
   ADD_QUESTION_TO_EDITING_QUIZ,
   CHANGE_ANSWER_CHECK_STATE_IN_EDITING_QUIZ,
   CHANGE_ANSWER_TITLE_IN_EDITING_QUIZ,
-  CHANGE_ANSWER_TYPE_IN_EDITING_QUIZ, CHANGE_DESCRIPTION_EDITOR_STATE_IN_EDITING_QUIZ,
+  CHANGE_ANSWER_TYPE_IN_EDITING_QUIZ,
+  CHANGE_DESCRIPTION_EDITOR_STATE_IN_EDITING_QUIZ,
   CHANGE_PARAGRAPH_EDITOR_STATE_IN_EDITING_QUIZ,
-  CHANGE_QUESTION_EDITOR_STATE_IN_EDITING_QUIZ, CHANGE_TITLE_IN_EDITING_QUIZ, CLEAR_EDITING_QUIZ,
+  CHANGE_QUESTION_EDITOR_STATE_IN_EDITING_QUIZ,
+  CHANGE_TITLE_IN_EDITING_QUIZ,
+  CLEAR_EDITING_QUIZ,
+  convertQuizForStore,
   REMOVE_ANSWER_FROM_EDITING_QUIZ,
   REMOVE_PARAGRAPH_FROM_EDITING_QUIZ,
-  REMOVE_QUESTION_FROM_EDITING_QUIZ, SAVE_EDITING_QUIZ
+  REMOVE_QUESTION_FROM_EDITING_QUIZ,
+  SAVE_EDITING_QUIZ,
+  SET_EDITING_QUIZ
 } from './actions';
 import omit from 'lodash/omit';
 import pull from 'lodash/pull';
 import max from 'lodash/max';
 import reduce from 'lodash/reduce';
 import { ANSWER_TYPES } from "./views/Quizzes/AnswerTypes";
-import {convertToRaw} from "draft-js";
-import {combineReducers} from "redux";
-import {snackbarReducer} from "./components/snackbar";
+import { combineReducers } from "redux";
+import { snackbarReducer } from "./components/snackbar";
 
 function editingQuizParagraphReducer(state = { byId: {}, allIds: [] }, action) {
   const newId = (max(state.allIds) || 0) + 1;
@@ -255,9 +260,15 @@ function editingQuizReducer(state = EDITING_QUIZ_INITIAL_STATE, action) {
       return {
         ...state,
       };
+
     case CLEAR_EDITING_QUIZ:
       return {
         ...EDITING_QUIZ_INITIAL_STATE
+      };
+
+    case SET_EDITING_QUIZ:
+      return {
+        ...convertQuizForStore(action.quiz)
       };
 
     default:
