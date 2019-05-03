@@ -1,14 +1,16 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Route, Switch } from "react-router-dom";
 import PerfectScrollbar from "perfect-scrollbar";
 import "perfect-scrollbar/css/perfect-scrollbar.css";
 import withStyles from "@material-ui/core/styles/withStyles";
 import Navbar from "/imports/components/Navbars/Navbar.jsx";
 import Sidebar from "/imports/components/Sidebar/Sidebar.jsx";
-import { drawerRoutes, routes } from "/imports/routes.js";
+import { drawerRoutes } from "/imports/routes.js";
 
 import dashboardStyle from "/imports/assets/jss/material-dashboard-react/layouts/dashboardStyle.jsx";
+import { compose } from "redux";
+import { Switch, Route } from "react-router-dom";
+import { routes } from "../routes";
 
 const image = ""/*"/assets/img/sidebar-2.jpg"*/;
 
@@ -17,15 +19,13 @@ const logo = "/img/reactlogo.png";
 const switchRoutes = (
   <Switch>
     {routes.map((prop, key) => {
-      if (prop.layout === "/admin") {
-        return (
-          <Route
-            path={prop.layout + prop.path}
-            component={prop.component}
-            key={key}
-          />
-        );
-      }
+      return (
+        <Route
+          path={prop.path}
+          component={prop.component}
+          key={key}
+        />
+      );
     })}
   </Switch>
 );
@@ -41,6 +41,7 @@ class Dashboard extends React.Component {
       mobileOpen: false
     };
   }
+
   handleImageClick = image => {
     this.setState({ image: image });
   };
@@ -57,20 +58,24 @@ class Dashboard extends React.Component {
   handleDrawerToggle = () => {
     this.setState({ mobileOpen: !this.state.mobileOpen });
   };
+
   getRoute() {
-    return this.props.location.pathname !== "/admin/maps";
+    return this.props.location.pathname !== "/maps";
   }
+
   resizeFunction = () => {
     if (window.innerWidth >= 960) {
       this.setState({ mobileOpen: false });
     }
   };
+
   componentDidMount() {
     if (navigator.platform.indexOf("Win") > -1) {
       const ps = new PerfectScrollbar(this.refs.mainPanel);
     }
     window.addEventListener("resize", this.resizeFunction);
   }
+
   componentDidUpdate(e) {
     if (e.history.location.pathname !== e.location.pathname) {
       this.refs.mainPanel.scrollTop = 0;
@@ -79,9 +84,11 @@ class Dashboard extends React.Component {
       }
     }
   }
+
   componentWillUnmount() {
     window.removeEventListener("resize", this.resizeFunction);
   }
+
   render() {
     const { classes, ...rest } = this.props;
     return (
@@ -102,14 +109,10 @@ class Dashboard extends React.Component {
             handleDrawerToggle={this.handleDrawerToggle}
             {...rest}
           />
-          {this.getRoute() ? (
-            <div className={classes.content}>
-              <div className={classes.container}>{switchRoutes}</div>
-            </div>
-          ) : (
-            <div className={classes.map}>{switchRoutes}</div>
-          )}
-          {/*{this.getRoute() ? <Footer /> : null}*/}
+
+          <div className={classes.content}>
+            <div className={classes.container}>{switchRoutes}</div>
+          </div>
         </div>
       </div>
     );
@@ -120,4 +123,6 @@ Dashboard.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-export default withStyles(dashboardStyle)(Dashboard);
+export default compose(
+  withStyles(dashboardStyle)
+)(Dashboard);

@@ -26,7 +26,7 @@ class Dashboard extends React.PureComponent {
           })}
         </Grid>
         {/*todo replace url with something like "/quizzes/new". Use /quizzes/:id/edit for edit exists */}
-        <Fab color="primary" className={classes.addCardFab} component={Link} to="/admin/quiz-edit">
+        <Fab color="primary" className={classes.addCardFab} component={Link} to="/quiz-edit">
           <AddIcon />
         </Fab>
       </div>

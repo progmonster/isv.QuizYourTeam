@@ -201,7 +201,7 @@ function* saveEditingQuizAsync({ history }) {
 
     yield put(snackbar.show({ message: "Your quiz has been successfully saved!" }));
 
-    history.push("/admin/dashboard");
+    history.push("/dashboard");
   } catch (error) {
     console.error(error);
 

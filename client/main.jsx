@@ -12,6 +12,9 @@ import { Provider } from "react-redux";
 import { createLogger } from "redux-logger";
 import { rootSaga } from "../imports/actions";
 import { SnackbarProvider } from "../imports/components/snackbar";
+import LoginPage from "../imports/views/auth/LoginPage";
+import SignUpPage from "../imports/views/auth/SignUpPage";
+import { routes } from "../imports/routes";
 
 Meteor.subscribe("quizzes");
 
@@ -34,8 +37,18 @@ Meteor.startup(() => {
       <SnackbarProvider SnackbarProps={{ autoHideDuration: 3500 }}>
         <Router history={hist}>
           <Switch>
-            <Route path="/admin" component={MainLayout} />
-            <Redirect from="/" to="/admin/dashboard" />
+            <Route path="/" component={MainLayout} />
+            <Redirect from="/" to="/dashboard" />
+            <Route path="/login" component={LoginPage} />
+            <Route path="/signup" component={SignUpPage} />
+
+            {routes.map((prop, key) => {
+              return <Route
+                path={prop.path}
+                component={prop.component}
+                key={key}
+              />
+            })}
           </Switch>
         </Router>
       </SnackbarProvider>

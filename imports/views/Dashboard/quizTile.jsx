@@ -69,7 +69,7 @@ class QuizTile extends React.Component {
             Quiz
           </Button>
 
-          <IconButton component={Link} to={`/admin/quiz-edit/${quiz._id}`}>
+          <IconButton component={Link} to={`/quiz-edit/${quiz._id}`}>
             <Edit />
           </IconButton>
 
