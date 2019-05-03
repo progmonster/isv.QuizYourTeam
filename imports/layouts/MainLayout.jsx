@@ -11,6 +11,7 @@ import dashboardStyle from "/imports/assets/jss/material-dashboard-react/layouts
 import { compose } from "redux";
 import { Switch, Route } from "react-router-dom";
 import { routes } from "../routes";
+import authForwarder from "../views/auth/authForwarder";
 
 const image = ""/*"/assets/img/sidebar-2.jpg"*/;
 
@@ -124,5 +125,6 @@ Dashboard.propTypes = {
 };
 
 export default compose(
-  withStyles(dashboardStyle)
+  withStyles(dashboardStyle),
+  authForwarder,
 )(Dashboard);

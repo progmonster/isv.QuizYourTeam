@@ -37,10 +37,10 @@ Meteor.startup(() => {
       <SnackbarProvider SnackbarProps={{ autoHideDuration: 3500 }}>
         <Router history={hist}>
           <Switch>
-            <Route path="/" component={MainLayout} />
-            <Redirect from="/" to="/dashboard" />
             <Route path="/login" component={LoginPage} />
             <Route path="/signup" component={SignUpPage} />
+            <Route path="/" component={MainLayout} />
+            <Redirect from="/" to="/dashboard" />
 
             {routes.map((prop, key) => {
               return <Route
