@@ -24,12 +24,7 @@ class EmailVerificationPage extends React.Component {
   componentDidMount() {
     const token = parseQueryString(this.props.location.search).token;
 
-    console.log(token);
-
-    this.setState({ confirmed: true });
-
-/*
-    Accounts.verifyEmail(this.props.location.query.token, (error) => {
+    Accounts.verifyEmail(token, (error) => {
       if (error) {
         console.log(error);
 
@@ -38,7 +33,6 @@ class EmailVerificationPage extends React.Component {
         this.setState({ confirmed: true });
       }
     });
-*/
   }
 
   render() {
