@@ -4,6 +4,8 @@ import TextField from "@material-ui/core/TextField";
 import { withStyles } from '@material-ui/core/styles';
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
+import { Link as RouterLink } from "react-router-dom";
+import Link from "@material-ui/core/Link";
 
 const styles = theme => ({
   container: {
@@ -83,6 +85,8 @@ class SignInPage extends React.Component {
                 <Button color="primary" onClick={this.onSignIn}>
                   Sign In
                 </Button>
+
+                <Link component={RouterLink} to="/signup">Sign Up</Link>
               </Grid>
             </Grid>
           </form>
