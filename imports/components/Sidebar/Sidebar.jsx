@@ -1,7 +1,8 @@
+import { Meteor } from "meteor/meteor";
 import React from "react";
 import classNames from "classnames";
 import PropTypes from "prop-types";
-import { NavLink, withRouter } from "react-router-dom";
+import { NavLink, withHistory, withRouter } from "react-router-dom";
 import withStyles from "@material-ui/core/styles/withStyles";
 import Drawer from "@material-ui/core/Drawer";
 import Hidden from "@material-ui/core/Hidden";
@@ -12,13 +13,33 @@ import Icon from "@material-ui/core/Icon";
 import AdminNavbarLinks from "/imports/components/Navbars/AdminNavbarLinks.jsx";
 import sidebarStyle from "/imports/assets/jss/material-dashboard-react/components/sidebarStyle.jsx";
 import { compose } from "redux";
-import { withHistory } from 'react-router-dom';
+import { ExitToApp } from "@material-ui/icons";
+import { withTracker } from "meteor/react-meteor-data";
+import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
+import IconButton from "@material-ui/core/IconButton";
 
 const Sidebar = ({ ...props }) => {
+  const userEmail = props.user && props.user.emails[0].address;
+
   // verifies if routeName is the one active (in browser input)
   function activeRoute(routeName) {
     return props.location.pathname.indexOf(routeName) > -1 ? true : false;
   }
+
+  const onSignOut = () => {
+    props.history.replace("/login");
+
+    /*
+        Meteor.logout((error) => {
+          if (error) {
+            console.log(error);
+          } else {
+            this.props.history.replace("/signup-confirmation-note");
+          }
+        });
+    */
+  };
+
   const { classes, color, logo, image, logoText, routes } = props;
   var links = (
     <List className={classes.list}>
@@ -65,9 +86,25 @@ const Sidebar = ({ ...props }) => {
                 disableTypography={true}
               />
             </ListItem>
+
           </NavLink>
         );
       })}
+
+      <ListItem button className={classes.itemLink}>
+        <ListItemText
+          primary={userEmail}
+          className={classNames(classes.itemText)}
+          disableTypography={true}
+
+        />
+
+        <ListItemSecondaryAction>
+          <IconButton aria-label="Sign Out" onClick={onSignOut}>
+            <ExitToApp className={classNames(classes.itemIcon)} />
+          </IconButton>
+        </ListItemSecondaryAction>
+      </ListItem>
     </List>
   );
   var brand = (
@@ -121,7 +158,10 @@ const Sidebar = ({ ...props }) => {
           }}
         >
           {brand}
+
           <div className={classes.sidebarWrapper}>{links}</div>
+
+
           {image !== undefined ? (
             <div
               className={classes.background}
@@ -140,6 +180,11 @@ Sidebar.propTypes = {
 
 export default compose(
   withStyles(sidebarStyle),
-  withRouter
+
+  withTracker(() => {
+    return {
+      user: Meteor.user(),
+    }
+  }),
 )(Sidebar);
 

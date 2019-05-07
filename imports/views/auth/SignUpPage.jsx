@@ -17,7 +17,7 @@ const styles = theme => ({
   },
 });
 
-
+// todo progmonster replace path with /dashboard is already signed in
 class SignUpPage extends React.Component {
   state = { email: "", password: "" };
 

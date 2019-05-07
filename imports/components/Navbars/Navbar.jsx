@@ -7,7 +7,7 @@ import Toolbar from "@material-ui/core/Toolbar";
 import IconButton from "@material-ui/core/IconButton";
 import Hidden from "@material-ui/core/Hidden";
 import Menu from "@material-ui/icons/Menu";
-import AdminNavbarLinks from "./AdminNavbarLinks.jsx";
+import AdminNavbarLinks from "./AdminNavbarLinks.jsx"; // todo progmonster remove Admin from all names
 import headerStyle from "/imports/assets/jss/material-dashboard-react/components/headerStyle.jsx";
 import Button from "@material-ui/core/Button";
 import { compose } from "redux";
