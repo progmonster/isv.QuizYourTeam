@@ -5,7 +5,7 @@ import { createBrowserHistory } from "history";
 import { Redirect, Route, Router, Switch } from "react-router-dom";
 import "/imports/assets/css/material-dashboard-react.css"; // todo check if it works
 import createSagaMiddleware from "redux-saga";
-import LoginPage from "../imports/views/auth/LoginPage";
+import SignInPage from "../imports/views/auth/SignInPage";
 import SignUpPage from "../imports/views/auth/SignUpPage";
 import SignUpConfirmationNotePage from "../imports/views/auth/SignUpConfirmationNotePage";
 import EmailVerificationPage from "../imports/views/auth/EmailVerificationPage";
@@ -54,7 +54,7 @@ Meteor.startup(() => {
               <Redirect from="/" to="/dashboard" />
             </Route>
 
-            <LoginLayoutRoute path="/login" component={LoginPage} />
+            <LoginLayoutRoute path="/login" component={SignInPage} />
             <LoginLayoutRoute path="/signup" component={SignUpPage} />
             <LoginLayoutRoute path="/signup-confirmation-note" component={SignUpConfirmationNotePage} />
             <LoginLayoutRoute path="/verify-email" component={EmailVerificationPage} />
