@@ -1,7 +1,7 @@
 import React from 'react';
-import { withHistory } from 'react-router-dom';
 import { compose } from "redux";
 import { withTracker } from "meteor/react-meteor-data";
+import { withRouter } from "react-router-dom";
 
 function authForwarder(WrappedComponent) {
   return class extends React.Component {
@@ -34,5 +34,6 @@ export default compose(
     }
   }),
 
+  withRouter,
   authForwarder
 );

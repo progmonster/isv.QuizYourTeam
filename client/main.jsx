@@ -3,18 +3,21 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { createBrowserHistory } from "history";
 import { Redirect, Route, Router, Switch } from "react-router-dom";
-import MainLayout from "/imports/layouts/MainLayout.jsx";
-import "/imports/assets/css/material-dashboard-react.css";
-import { applyMiddleware, createStore } from "redux";
+import "/imports/assets/css/material-dashboard-react.css"; // todo check if it works
 import createSagaMiddleware from "redux-saga";
-import reducers from "/imports/reducers";
-import { Provider } from "react-redux";
-import { createLogger } from "redux-logger";
-import { rootSaga } from "../imports/actions";
-import { SnackbarProvider } from "../imports/components/snackbar";
 import LoginPage from "../imports/views/auth/LoginPage";
 import SignUpPage from "../imports/views/auth/SignUpPage";
+import SignUpConfirmationNotePage from "../imports/views/auth/SignUpConfirmationNotePage";
+import EmailVerificationPage from "../imports/views/auth/EmailVerificationPage";
 import { routes } from "../imports/routes";
+import MainLayoutRoute from "../imports/layouts/MainLayoutRoute";
+import LoginLayoutRoute from "../imports/layouts/LoginLayoutRoute";
+import { createLogger } from "redux-logger";
+import { applyMiddleware, createStore } from "redux";
+import reducers from "../imports/reducers";
+import { rootSaga } from "../imports/actions";
+import { Provider } from "react-redux";
+import SnackbarProvider from "../imports/components/snackbar/SnackbarProvider";
 
 Meteor.subscribe("quizzes");
 
@@ -32,23 +35,31 @@ Meteor.startup(() => {
 
   sagaMiddleware.run(rootSaga);
 
+  const mainLayoutRoutes = routes.map((prop, key) => {
+    return (
+      <MainLayoutRoute
+        path={prop.path}
+        component={prop.component}
+        key={key}
+      />
+    );
+  });
+
   ReactDOM.render(
     <Provider store={store}>
       <SnackbarProvider SnackbarProps={{ autoHideDuration: 3500 }}>
         <Router history={hist}>
           <Switch>
-            <Route path="/login" component={LoginPage} />
-            <Route path="/signup" component={SignUpPage} />
-            <Route path="/" component={MainLayout} />
-            <Redirect from="/" to="/dashboard" />
+            <Route exact path="/">
+              <Redirect from="/" to="/dashboard" />
+            </Route>
 
-            {routes.map((prop, key) => {
-              return <Route
-                path={prop.path}
-                component={prop.component}
-                key={key}
-              />
-            })}
+            <LoginLayoutRoute path="/login" component={LoginPage} />
+            <LoginLayoutRoute path="/signup" component={SignUpPage} />
+            <LoginLayoutRoute path="/signup-confirmation-note" component={SignUpConfirmationNotePage} />
+            <LoginLayoutRoute path="/verify-email" component={EmailVerificationPage} />
+
+            {mainLayoutRoutes}
           </Switch>
         </Router>
       </SnackbarProvider>
@@ -57,5 +68,4 @@ Meteor.startup(() => {
     document.getElementById("root")
   );
 });
-
 

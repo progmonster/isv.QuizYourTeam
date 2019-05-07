@@ -17,20 +17,6 @@ const image = ""/*"/assets/img/sidebar-2.jpg"*/;
 
 const logo = "/img/reactlogo.png";
 
-const switchRoutes = (
-  <Switch>
-    {routes.map((prop, key) => {
-      return (
-        <Route
-          path={prop.path}
-          component={prop.component}
-          key={key}
-        />
-      );
-    })}
-  </Switch>
-);
-
 class Dashboard extends React.Component {
   constructor(props) {
     super(props);
@@ -112,7 +98,7 @@ class Dashboard extends React.Component {
           />
 
           <div className={classes.content}>
-            <div className={classes.container}>{switchRoutes}</div>
+            <div className={classes.container}>{this.props.children}</div>
           </div>
         </div>
       </div>

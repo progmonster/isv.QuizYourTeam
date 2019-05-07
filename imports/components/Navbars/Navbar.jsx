@@ -10,6 +10,8 @@ import Menu from "@material-ui/icons/Menu";
 import AdminNavbarLinks from "./AdminNavbarLinks.jsx";
 import headerStyle from "/imports/assets/jss/material-dashboard-react/components/headerStyle.jsx";
 import Button from "@material-ui/core/Button";
+import { compose } from "redux";
+import { withRouter } from "react-router-dom";
 
 function Header({ ...props }) {
   function makeBrand() {
@@ -22,6 +24,7 @@ function Header({ ...props }) {
     });
     return name;
   }
+
   const { classes, color } = props;
   const appBarClasses = classNames({
     [" " + classes[color]]: color
@@ -34,7 +37,7 @@ function Header({ ...props }) {
       <Toolbar className={classes.container}>
         <div className={classes.flex}>
           {/* Here we create navbar brand, based on route name */}
-          { !!brand && (<Button href="#" className={classes.title}>
+          {!!brand && (<Button href="#" className={classes.title}>
             {makeBrand()}
           </Button>)}
         </div>
@@ -60,4 +63,7 @@ Header.propTypes = {
   color: PropTypes.oneOf(["primary", "info", "success", "warning", "danger"])
 };
 
-export default withStyles(headerStyle)(Header);
+export default compose(
+  withStyles(headerStyle),
+  withRouter
+)(Header);
