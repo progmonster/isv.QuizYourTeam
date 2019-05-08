@@ -5,11 +5,24 @@ import { Roles } from "meteor/alanning:roles";
 
 import { Quizzes } from "../imports/collections"
 
-Meteor.publish("quizzes", () => {
-  return Quizzes.find();
+Meteor.publish("quizzes", function () {
+  if (!this.userId) {
+    return [];
+  }
+
+  this.autorun(() => {
+    const grantedQuizzes = Roles.getGroupsForUser(this.userId, "viewQuiz")
+      .map(grantedGroup => grantedGroup.replace(/^quizzes\//, ""));
+
+    return Quizzes.find({ _id: { $in: grantedQuizzes } });
+  });
 });
 
-Meteor.publish("quiz", (quizId) => {
+Meteor.publish("quiz", function (quizId) {
+  if (!this.userId) {
+    return [];
+  }
+
   return Quizzes.find(quizId);
 });
 
@@ -38,8 +51,10 @@ Meteor.methods({
 
     const quizId = Quizzes.insert(quiz);
 
+    Roles.addUsersToRoles(this.userId, ["viewQuiz"], "quizzes/" + quizId);
     Roles.addUsersToRoles(this.userId, ["editQuiz"], "quizzes/" + quizId);
     Roles.addUsersToRoles(this.userId, ["removeQuiz"], "quizzes/" + quizId);
+    Roles.addUsersToRoles(this.userId, ["passQuiz"], "quizzes/" + quizId);
 
     return quizId;
   },
@@ -50,6 +65,8 @@ Meteor.methods({
     check(Roles.userIsInRole(this.userId, "removeQuiz", "quizzes/" + quizId), true);
 
     Quizzes.remove(quizId);
+
+    Meteor.users.update({}, { $unset: { [`roles.quizzes/${quizId}`]: "" } }, { multi: true })
   }
 });
 
