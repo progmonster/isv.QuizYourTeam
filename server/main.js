@@ -23,6 +23,8 @@ Meteor.publish("quiz", function (quizId) {
     return [];
   }
 
+  // todo progmonster  check permissions
+
   return Quizzes.find(quizId);
 });
 
@@ -55,6 +57,7 @@ Meteor.methods({
     Roles.addUsersToRoles(this.userId, ["editQuiz"], "quizzes/" + quizId);
     Roles.addUsersToRoles(this.userId, ["removeQuiz"], "quizzes/" + quizId);
     Roles.addUsersToRoles(this.userId, ["passQuiz"], "quizzes/" + quizId);
+
 
     return quizId;
   },

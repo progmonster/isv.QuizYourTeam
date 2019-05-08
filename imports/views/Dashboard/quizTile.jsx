@@ -1,3 +1,4 @@
+import { Meteor } from 'meteor/meteor';
 import React from "react";
 import withStyles from "@material-ui/core/styles/withStyles";
 import PropTypes from "prop-types";
@@ -17,6 +18,7 @@ import { removeQuiz } from "../../actions";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import Card from "@material-ui/core/Card";
+import { Roles } from "meteor/alanning:roles";
 
 const styles = theme => ({
   headerRoot: {
@@ -47,7 +49,7 @@ class QuizTile extends React.Component {
   };
 
   render() {
-    const { classes, quiz } = this.props;
+    const { classes, quiz, roles } = this.props;
 
     const quizDescriptionHtml = stateToHTML(convertFromRaw(quiz.descriptionEditorState));
 
@@ -65,17 +67,23 @@ class QuizTile extends React.Component {
             Learn
           </Button>
 
-          <Button size="small" color="primary">
-            Quiz
-          </Button>
+          {roles.passQuiz && (
+            <Button size="small" color="primary">
+              Quiz
+            </Button>
+          )}
 
-          <IconButton component={Link} to={`/quiz-edit/${quiz._id}`}>
-            <Edit />
-          </IconButton>
+          {roles.editQuiz && (
+            <IconButton component={Link} to={`/quiz-edit/${quiz._id}`}>
+              <Edit />
+            </IconButton>
+          )}
 
-          <IconButton color="secondary" onClick={() => this.setState({ removeConfirmationOpened: true })}>
-            <Delete />
-          </IconButton>
+          {roles.removeQuiz && (
+            <IconButton color="secondary" onClick={() => this.setState({ removeConfirmationOpened: true })}>
+              <Delete />
+            </IconButton>
+          )}
         </CardActions>
 
         {/*
@@ -112,7 +120,13 @@ const mapDispatchToProps = (dispatch, { quizId }) => {
 
 const QuizTileContainer = withTracker(({ quizId }) => {
   return {
-    quiz: Quizzes.findOne(quizId)
+    quiz: Quizzes.findOne(quizId),
+
+    roles: {
+      editQuiz: Roles.userIsInRole(Meteor.userId(), "editQuiz", `quizzes/${quizId}`),
+      removeQuiz: Roles.userIsInRole(Meteor.userId(), "removeQuiz", `quizzes/${quizId}`),
+      passQuiz: Roles.userIsInRole(Meteor.userId(), "passQuiz", `quizzes/${quizId}`),
+    }
   };
 })(withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(QuizTile)));
 
