@@ -1,0 +1,1 @@
+process.env.MAIL_URL="MAIL_URL=smtps://akatorgin:<password>@smtp.yandex.ru:465";

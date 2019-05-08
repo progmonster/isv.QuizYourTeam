@@ -3,6 +3,7 @@ import { Quizzes } from "./collections.js";
 import { convertFromRaw, convertToRaw, EditorState } from "draft-js";
 import { snackbarActions as snackbar } from "./components/snackbar";
 import range from "lodash/range";
+import Methods from "../client/methods";
 
 export const CLEAR_EDITING_QUIZ = "CLEAR_EDITING_QUIZ";
 
@@ -192,9 +193,9 @@ function* saveEditingQuizAsync({ history }) {
 
   try {
     if (editingQuiz._id) {
-      yield Quizzes.updateAsync(editingQuiz._id, editingQuiz);
+      yield Methods.quizzes.updateAsync(editingQuiz);
     } else {
-      yield Quizzes.insertAsync(editingQuiz);
+      yield Methods.quizzes.insertAsync(editingQuiz);
     }
 
     yield put(clearEditingQuiz());
@@ -211,7 +212,7 @@ function* saveEditingQuizAsync({ history }) {
 
 function* removeQuizAsync({ quizId }) {
   try {
-    yield Quizzes.removeAsync(quizId);
+    yield Methods.quizzes.removeAsync(quizId);
 
     yield put(snackbar.show({ message: "The quiz has been successfully removed" }));
   } catch (error) {
