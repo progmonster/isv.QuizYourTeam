@@ -11,7 +11,7 @@ import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import { withTracker } from 'meteor/react-meteor-data';
 import { connect } from 'react-redux';
-import { Teams } from '../../collections';
+import { Team, Teams } from '../../collections';
 import Methods from '../../../client/methods';
 import AlertDialog from '../../components/alertDialog';
 import { snackbarActions as snackbar } from '../../components/snackbar';
@@ -42,23 +42,31 @@ class TeamSettings extends React.Component {
     };
   }
 
-  updateStateFromProps() {
-    this.setState({
-      originalTitle: this.props.team ? this.props.team.title : '',
-      title: this.props.team ? this.props.team.title : '',
-      description: this.props.team ? this.props.team.description : '',
-    });
-  }
-
   componentDidMount() {
     this.updateStateFromProps();
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    if (!prevProps.teamLoaded && this.props.teamLoaded) {
+  componentDidUpdate(prevProps) {
+    const {
+      teamLoaded,
+    } = this.props;
+
+    if (!prevProps.teamLoaded && teamLoaded) {
       this.updateStateFromProps();
     }
   }
+
+  handleRemoveConfirmationClosed = (confirmed) => {
+    const {
+      onTeamRemove,
+    } = this.props;
+
+    this.setState({ removeConfirmationOpened: false });
+
+    if (confirmed) {
+      onTeamRemove();
+    }
+  };
 
   onTitleChange = (title) => {
     this.setState({ title });
@@ -69,28 +77,46 @@ class TeamSettings extends React.Component {
   };
 
   onTeamSave = () => {
-    this.props.onTeamSave({
-      title: this.state.title.trim(),
-      description: this.state.description.trim(),
+    const {
+      onTeamSave,
+    } = this.props;
+
+    const {
+      title,
+      description,
+    } = this.state;
+
+    onTeamSave({
+      title: title.trim(),
+      description: description.trim(),
     });
   };
 
-  handleRemoveConfirmationClosed = (confirmed) => {
-    this.setState({ removeConfirmationOpened: false });
+  updateStateFromProps() {
+    const {
+      team,
+    } = this.props;
 
-    if (confirmed) {
-      this.props.onTeamRemove();
-    }
-  };
+    this.setState({
+      originalTitle: team ? team.title : '',
+      title: team ? team.title : '',
+      description: team ? team.description : '',
+    });
+  }
 
   render() {
     const {
       classes,
       isNewTeam,
-      team,
       teamLoaded,
-      onTeamRemove,
     } = this.props;
+
+    const {
+      originalTitle,
+      title,
+      description,
+      removeConfirmationOpened,
+    } = this.state;
 
     if (!teamLoaded) {
       return <div />;
@@ -102,16 +128,16 @@ class TeamSettings extends React.Component {
           <Card>
             <CardHeader
               classes={{
-                root: classes.quizEditorCardHeaderRoot,
-                title: classes.quizEditorCardHeaderTitle,
-                subheader: classes.quizEditorCardSubheaderTitle,
+                root: classes.teamSettingsCardHeaderRoot,
+                title: classes.teamSettingsCardHeaderTitle,
+                subheader: classes.teamSettingsCardSubheaderTitle,
               }}
 
               title={isNewTeam ? 'New Team' : 'Edit Team Settings'}
 
               subheader={
-                !isNewTeam && this.state.originalTitle
-                  ? `You are editing '${this.state.originalTitle}' team settings`
+                !isNewTeam && originalTitle
+                  ? `You are editing '${originalTitle}' team settings`
                   : null
               }
             />
@@ -121,7 +147,7 @@ class TeamSettings extends React.Component {
                 <Grid item xs={12} sm={12} md={12}>
                   <TextField
                     label="Title"
-                    value={this.state.title}
+                    value={title}
                     onChange={event => this.onTitleChange(event.target.value)}
                     margin="normal"
                   />
@@ -131,7 +157,7 @@ class TeamSettings extends React.Component {
                     label="Description"
                     multiline
                     rowsMax="10"
-                    value={this.state.description}
+                    value={description}
                     onChange={event => this.onDescriptionChange(event.target.value)}
                     margin="normal"
                   />
@@ -160,7 +186,7 @@ class TeamSettings extends React.Component {
         )}
 
         <AlertDialog
-          open={this.state.removeConfirmationOpened}
+          open={removeConfirmationOpened}
           title="Remove the team?"
           contentText=""
           okText="Remove"
@@ -173,7 +199,21 @@ class TeamSettings extends React.Component {
 }
 
 TeamSettings.propTypes = {
-  classes: PropTypes.any,
+  classes: PropTypes.shape({
+    teamSettingsCardSubheaderTitle: PropTypes.string.isRequired,
+    teamSettingsCardHeaderTitle: PropTypes.string.isRequired,
+    teamSettingsCardHeaderRoot: PropTypes.string.isRequired,
+  }).isRequired,
+
+  teamLoaded: PropTypes.bool.isRequired,
+  isNewTeam: PropTypes.bool.isRequired,
+  team: PropTypes.instanceOf(Team),
+  onTeamSave: PropTypes.func.isRequired,
+  onTeamRemove: PropTypes.func.isRequired,
+};
+
+TeamSettings.defaultProps = {
+  team: null,
 };
 
 const mapDispatchToProps = (dispatch, { history, isNewTeam, teamId }) => ({
@@ -240,11 +280,8 @@ export default compose(
 
     return {
       isNewTeam,
-
       teamId,
-
       team: teamId && Teams.findOne(teamId),
-
       teamLoaded: isNewTeam || teamSubscription.ready(),
     };
   }),
