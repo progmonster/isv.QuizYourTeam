@@ -18,5 +18,7 @@ export default {
     updateTeamSettingsAsync: (teamSettings) => Meteor.callAsync("teams.updateTeamSettings", teamSettings),
 
     removeTeamAsync: (teamId) => Meteor.callAsync("teams.removeTeam", teamId)
+
   },
 }
+
