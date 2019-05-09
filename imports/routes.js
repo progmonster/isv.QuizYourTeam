@@ -1,6 +1,6 @@
 import Dashboard from "@material-ui/icons/Dashboard";
 import People from "@material-ui/icons/People";
-import DashboardPage from "/imports/views/Dashboard/dashboard.jsx";
+import DashboardPage from "/imports/views/dashboard/dashboard.jsx";
 import Team from "/imports/views/Team/Team.jsx";
 import QuizEditor from "./views/Quizzes/QuizEditor";
 
