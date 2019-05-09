@@ -1,20 +1,20 @@
-import React from "react";
-import PropTypes from "prop-types";
-import { withTracker } from "meteor/react-meteor-data";
-import IconButton from "@material-ui/core/IconButton";
-import CardActions from "@material-ui/core/CardActions";
-import CardContent from "@material-ui/core/CardContent";
-import CardHeader from "@material-ui/core/CardHeader";
-import Card from "@material-ui/core/Card";
-import { Roles } from "meteor/alanning:roles";
-import { compose } from "redux";
+import React from 'react';
+import PropTypes from 'prop-types';
+import { withTracker } from 'meteor/react-meteor-data';
+import IconButton from '@material-ui/core/IconButton';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import CardHeader from '@material-ui/core/CardHeader';
+import Card from '@material-ui/core/Card';
+import { Roles } from 'meteor/alanning:roles';
+import { compose } from 'redux';
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import red from '@material-ui/core/colors/red';
 import SettingsIcon from '@material-ui/icons/Settings';
+import size from 'lodash/size';
+import { Link } from 'react-router-dom';
 import { Teams } from '../../collections';
-import size from "lodash/size";
-import { Link } from "react-router-dom";
 
 const styles = theme => ({
   card: {
@@ -47,7 +47,7 @@ class TeamTile extends React.Component {
     super(props, context);
 
     this.state = {
-      expanded: false
+      expanded: false,
     };
   }
 
@@ -56,7 +56,9 @@ class TeamTile extends React.Component {
   };
 
   render() {
-    const { classes, team, teamId, roles } = this.props;
+    const {
+      classes, team, teamId, roles,
+    } = this.props;
 
     return (
       <Card className={classes.card}>
@@ -82,24 +84,21 @@ class TeamTile extends React.Component {
 }
 
 TeamTile.propTypes = {
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired,
 };
 
 export default compose(
-  withTracker(({ teamId }) => {
-    return {
-      team: Teams.findOne(teamId),
+  withTracker(({ teamId }) => ({
+    team: Teams.findOne(teamId),
 
-      roles: {
-        /*
+    roles: {
+      /*
                 editQuiz: Roles.userIsInRole(Meteor.userId(), "editQuiz", `quizzes/${quizId}`),
                 removeQuiz: Roles.userIsInRole(Meteor.userId(), "removeQuiz", `quizzes/${quizId}`),
                 passQuiz: Roles.userIsInRole(Meteor.userId(), "passQuiz", `quizzes/${quizId}`),
         */
-      }
-    };
-  }),
+    },
+  })),
 
   withStyles(styles),
 )(TeamTile);
-

@@ -1,21 +1,21 @@
-import React from 'react'
-import PropTypes from 'prop-types'
+import React from 'react';
+import PropTypes from 'prop-types';
 
-function withSnackbar () {
+function withSnackbar() {
   return (Component) => {
     const ComponentWithSnackbar = (props, { snackbar }) => (
       <Component
         snackbar={snackbar}
         {...props}
       />
-    )
+    );
 
     ComponentWithSnackbar.contextTypes = {
-      snackbar: PropTypes.object.isRequired
-    }
+      snackbar: PropTypes.object.isRequired,
+    };
 
-    return ComponentWithSnackbar
-  }
+    return ComponentWithSnackbar;
+  };
 }
 
-export default withSnackbar
+export default withSnackbar;

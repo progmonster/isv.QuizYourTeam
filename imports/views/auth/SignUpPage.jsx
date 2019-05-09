@@ -1,9 +1,9 @@
-import { Accounts } from "meteor/accounts-base"
-import React from "react";
-import TextField from "@material-ui/core/TextField";
+import { Accounts } from 'meteor/accounts-base';
+import React from 'react';
+import TextField from '@material-ui/core/TextField';
 import { withStyles } from '@material-ui/core/styles';
-import Grid from "@material-ui/core/Grid";
-import Button from "@material-ui/core/Button";
+import Grid from '@material-ui/core/Grid';
+import Button from '@material-ui/core/Button';
 
 const styles = theme => ({
   container: {
@@ -19,23 +19,29 @@ const styles = theme => ({
 
 // todo progmonster replace path with /dashboard is already signed in
 class SignUpPage extends React.Component {
-  state = { email: "", password: "" };
+  state = {
+    email: '',
+    password: '',
+  };
 
-  onTextFieldChange = name => event => {
+  onTextFieldChange = name => (event) => {
     this.setState({ [name]: event.target.value });
   };
 
   onSignUp = () => {
     Accounts.createUser(
-      { email: this.state.email, password: this.state.password },
+      {
+        email: this.state.email,
+        password: this.state.password,
+      },
       (error) => {
         if (error) {
           console.log(error);
         } else {
-          this.props.history.replace("/signup-confirmation-note");
+          this.props.history.replace('/signup-confirmation-note');
         }
-      }
-    )
+      },
+    );
   };
 
   render() {

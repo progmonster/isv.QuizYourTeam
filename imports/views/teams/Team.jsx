@@ -1,31 +1,31 @@
-import React from "react";
-import withStyles from "@material-ui/core/styles/withStyles";
-import InputLabel from "@material-ui/core/InputLabel";
-import Grid from "@material-ui/core/Grid";
-import Card from "@material-ui/core/Card";
-import CardHeader from "@material-ui/core/CardHeader";
-import CardContent from "@material-ui/core/CardContent";
-import Button from "@material-ui/core/Button";
+import React from 'react';
+import withStyles from '@material-ui/core/styles/withStyles';
+import InputLabel from '@material-ui/core/InputLabel';
+import Grid from '@material-ui/core/Grid';
+import Card from '@material-ui/core/Card';
+import CardHeader from '@material-ui/core/CardHeader';
+import CardContent from '@material-ui/core/CardContent';
+import Button from '@material-ui/core/Button';
 
-const avatar = "";
+const avatar = '';
 
 const styles = {
   cardCategoryWhite: {
-    color: "rgba(255,255,255,.62)",
-    margin: "0",
-    fontSize: "14px",
-    marginTop: "0",
-    marginBottom: "0"
+    color: 'rgba(255,255,255,.62)',
+    margin: '0',
+    fontSize: '14px',
+    marginTop: '0',
+    marginBottom: '0',
   },
   cardTitleWhite: {
-    color: "#FFFFFF",
-    marginTop: "0px",
-    minHeight: "auto",
-    fontWeight: "300",
-    fontFamily: "'Roboto', 'Helvetica', 'Arial', sans-serif",
-    marginBottom: "3px",
-    textDecoration: "none"
-  }
+    color: '#FFFFFF',
+    marginTop: '0px',
+    minHeight: 'auto',
+    fontWeight: '300',
+    fontFamily: '\'Roboto\', \'Helvetica\', \'Arial\', sans-serif',
+    marginBottom: '3px',
+    textDecoration: 'none',
+  },
 };
 
 function Team(props) {
@@ -42,7 +42,7 @@ function Team(props) {
             <CardContent>
               <Grid container>
                 <Grid item xs={12} sm={12} md={5}>
-{/*
+                  {/*
                   <CustomInput
                     labelText="Company (disabled)"
                     id="company-disabled"
@@ -56,7 +56,7 @@ function Team(props) {
 */}
                 </Grid>
                 <Grid item xs={12} sm={12} md={3}>
-{/*
+                  {/*
                   <CustomInput
                     labelText="Username"
                     id="username"
@@ -67,7 +67,7 @@ function Team(props) {
 */}
                 </Grid>
                 <Grid item xs={12} sm={12} md={4}>
-{/*
+                  {/*
                   <CustomInput
                     labelText="Email address"
                     id="email-address"
@@ -80,7 +80,7 @@ function Team(props) {
               </Grid>
               <Grid container>
                 <Grid item xs={12} sm={12} md={6}>
-{/*
+                  {/*
                   <CustomInput
                     labelText="First Name"
                     id="first-name"
@@ -91,7 +91,7 @@ function Team(props) {
 */}
                 </Grid>
                 <Grid item xs={12} sm={12} md={6}>
-{/*
+                  {/*
                   <CustomInput
                     labelText="Last Name"
                     id="last-name"
@@ -104,7 +104,7 @@ function Team(props) {
               </Grid>
               <Grid container>
                 <Grid item xs={12} sm={12} md={4}>
-{/*
+                  {/*
                   <CustomInput
                     labelText="City"
                     id="city"
@@ -115,7 +115,7 @@ function Team(props) {
 */}
                 </Grid>
                 <Grid item xs={12} sm={12} md={4}>
-{/*
+                  {/*
                   <CustomInput
                     labelText="Country"
                     id="country"
@@ -126,7 +126,7 @@ function Team(props) {
 */}
                 </Grid>
                 <Grid item xs={12} sm={12} md={4}>
-{/*
+                  {/*
                   <CustomInput
                     labelText="Postal Code"
                     id="postal-code"
@@ -139,8 +139,8 @@ function Team(props) {
               </Grid>
               <Grid container>
                 <Grid item xs={12} sm={12} md={12}>
-                  <InputLabel style={{ color: "#AAAAAA" }}>About me</InputLabel>
-{/*
+                  <InputLabel style={{ color: '#AAAAAA' }}>About me</InputLabel>
+                  {/*
                   <CustomInput
                     labelText="Lamborghini Mercy, Your chick she so thirsty, I'm in that two seat Lambo."
                     id="about-me"
@@ -156,7 +156,7 @@ function Team(props) {
                 </Grid>
               </Grid>
             </CardContent>
-{/*
+            {/*
             <CardFooter>
               <Button color="primary">Update Profile</Button>
             </CardFooter>
@@ -165,7 +165,7 @@ function Team(props) {
         </Grid>
         <Grid item xs={12} sm={12} md={4}>
           <Card>
-{/*
+            {/*
             <CardAvatar profile>
               <a href="#pablo" onClick={e => e.preventDefault()}>
                 <img src={avatar} alt="..." />

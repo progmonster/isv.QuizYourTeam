@@ -1,20 +1,20 @@
-import React from "react";
-import withStyles from "@material-ui/core/styles/withStyles";
-import * as PropTypes from "prop-types";
-import { compose } from "redux";
-import { orange } from "@material-ui/core/colors";
-import Grid from "@material-ui/core/Grid";
-import Card from "@material-ui/core/Card";
-import CardHeader from "@material-ui/core/CardHeader";
-import TextField from "@material-ui/core/TextField";
-import CardContent from "@material-ui/core/CardContent";
-import Button from "@material-ui/core/Button";
-import { withTracker } from "meteor/react-meteor-data";
-import { Teams } from "../../collections";
-import Methods from "../../../client/methods";
-import { connect } from "react-redux";
-import AlertDialog from "../../components/alertDialog";
-import { snackbarActions as snackbar } from "../../components/snackbar";
+import React from 'react';
+import withStyles from '@material-ui/core/styles/withStyles';
+import * as PropTypes from 'prop-types';
+import { compose } from 'redux';
+import { orange } from '@material-ui/core/colors';
+import Grid from '@material-ui/core/Grid';
+import Card from '@material-ui/core/Card';
+import CardHeader from '@material-ui/core/CardHeader';
+import TextField from '@material-ui/core/TextField';
+import CardContent from '@material-ui/core/CardContent';
+import Button from '@material-ui/core/Button';
+import { withTracker } from 'meteor/react-meteor-data';
+import { connect } from 'react-redux';
+import { Teams } from '../../collections';
+import Methods from '../../../client/methods';
+import AlertDialog from '../../components/alertDialog';
+import { snackbarActions as snackbar } from '../../components/snackbar';
 
 const styles = {
   teamSettingsCardHeaderRoot: {
@@ -22,11 +22,11 @@ const styles = {
   },
 
   teamSettingsCardHeaderTitle: {
-    color: "white",
+    color: 'white',
   },
 
   teamSettingsCardSubheaderTitle: {
-    color: "white",
+    color: 'white',
   },
 };
 
@@ -35,20 +35,19 @@ class TeamSettings extends React.Component {
     super(props, context);
 
     this.state = {
-      originalTitle: "",
-      title: "",
-      description: "",
+      originalTitle: '',
+      title: '',
+      description: '',
       removeConfirmationOpened: false,
     };
   }
 
   updateStateFromProps() {
     this.setState({
-        originalTitle: !!this.props.team ? this.props.team.title : "",
-        title: !!this.props.team ? this.props.team.title : "",
-        description: !!this.props.team ? this.props.team.description : "",
-      }
-    );
+      originalTitle: this.props.team ? this.props.team.title : '',
+      title: this.props.team ? this.props.team.title : '',
+      description: this.props.team ? this.props.team.description : '',
+    });
   }
 
   componentDidMount() {
@@ -73,7 +72,7 @@ class TeamSettings extends React.Component {
     this.props.onTeamSave({
       title: this.state.title.trim(),
       description: this.state.description.trim(),
-    })
+    });
   };
 
   handleRemoveConfirmationClosed = (confirmed) => {
@@ -105,10 +104,10 @@ class TeamSettings extends React.Component {
               classes={{
                 root: classes.quizEditorCardHeaderRoot,
                 title: classes.quizEditorCardHeaderTitle,
-                subheader: classes.quizEditorCardSubheaderTitle
+                subheader: classes.quizEditorCardSubheaderTitle,
               }}
 
-              title={isNewTeam ? "New Team" : "Edit Team Settings"}
+              title={isNewTeam ? 'New Team' : 'Edit Team Settings'}
 
               subheader={
                 !isNewTeam && this.state.originalTitle
@@ -144,7 +143,7 @@ class TeamSettings extends React.Component {
 
         <Grid item xs={12} sm={12} md={8}>
           <Button variant="contained" color="primary" onClick={this.onTeamSave}>
-            {isNewTeam ? "Create Team" : "Save Team Settings"}
+            {isNewTeam ? 'Create Team' : 'Save Team Settings'}
           </Button>
         </Grid>
 
@@ -162,10 +161,10 @@ class TeamSettings extends React.Component {
 
         <AlertDialog
           open={this.state.removeConfirmationOpened}
-          title={"Remove the team?"}
-          contentText={""}
-          okText={"Remove"}
-          cancelText={"Cancel"}
+          title="Remove the team?"
+          contentText=""
+          okText="Remove"
+          cancelText="Cancel"
           handleClose={this.handleRemoveConfirmationClosed}
         />
       </Grid>
@@ -177,68 +176,66 @@ TeamSettings.propTypes = {
   classes: PropTypes.any,
 };
 
-const mapDispatchToProps = (dispatch, { history, isNewTeam, teamId }) => {
-  return {
-    /*
+const mapDispatchToProps = (dispatch, { history, isNewTeam, teamId }) => ({
+  /*
         onTeamSave: () => {
           dispatch(saveEditingQuiz(history));
         },
     */
 
-    async onTeamSave(teamSettings) {
-      if (isNewTeam) {
-        try {
-          await Methods.teams.createTeamAsync(teamSettings);
-
-          dispatch(snackbar.show({ message: "The team has been successfully created" }));
-
-          history.push("/teams");
-        } catch (error) {
-          console.log(error);
-
-          dispatch(snackbar.show({ message: `Error creating the team: ${error.message}` }));
-        }
-      } else {
-        try {
-          await Methods.teams.updateTeamSettingsAsync({ _id: teamId, ...teamSettings });
-
-          dispatch(snackbar.show({ message: "The team settings have been successfully updated" }));
-
-          history.push("/teams");
-        } catch (error) {
-          console.log(error);
-
-          dispatch(snackbar.show({ message: `Error updating the team settings: ${error.message}` }));
-        }
-      }
-    },
-
-    async onTeamRemove() {
+  async onTeamSave(teamSettings) {
+    if (isNewTeam) {
       try {
-        await Methods.teams.removeTeamAsync(teamId);
+        await Methods.teams.createTeamAsync(teamSettings);
 
-        dispatch(snackbar.show({ message: "The team has been successfully removed" }));
+        dispatch(snackbar.show({ message: 'The team has been successfully created' }));
 
-        history.replace("/teams");
+        history.push('/teams');
       } catch (error) {
         console.log(error);
 
-        dispatch(snackbar.show({ message: `Error removing the team: ${error.message}` }));
+        dispatch(snackbar.show({ message: `Error creating the team: ${error.message}` }));
+      }
+    } else {
+      try {
+        await Methods.teams.updateTeamSettingsAsync({ _id: teamId, ...teamSettings });
+
+        dispatch(snackbar.show({ message: 'The team settings have been successfully updated' }));
+
+        history.push('/teams');
+      } catch (error) {
+        console.log(error);
+
+        dispatch(snackbar.show({ message: `Error updating the team settings: ${error.message}` }));
       }
     }
-  }
-};
+  },
+
+  async onTeamRemove() {
+    try {
+      await Methods.teams.removeTeamAsync(teamId);
+
+      dispatch(snackbar.show({ message: 'The team has been successfully removed' }));
+
+      history.replace('/teams');
+    } catch (error) {
+      console.log(error);
+
+      dispatch(snackbar.show({ message: `Error removing the team: ${error.message}` }));
+    }
+  },
+});
 
 export default compose(
   withTracker((props) => {
-    const teamId = props.match.params.teamId;
+    const { teamId } = props.match.params;
 
     const isNewTeam = !teamId;
 
-    const teamSubscription = isNewTeam ? null : Meteor.subscribe("team", teamId);
+    const teamSubscription = isNewTeam ? null : Meteor.subscribe('team', teamId);
 
     if (!isNewTeam) {
-      Meteor.subscribe("team", teamId);
+      Meteor.subscribe('team', teamId);
     }
 
     return {

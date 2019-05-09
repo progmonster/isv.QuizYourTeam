@@ -1,13 +1,16 @@
-import { SHOW, DISMISS } from './types'
+import { DISMISS, SHOW } from './types';
 
-const show = (payload) => ({
+const show = payload => ({
   type: SHOW,
-  payload
-})
+  payload,
+});
 
-const dismiss = (payload) => ({
+const dismiss = payload => ({
   type: DISMISS,
-  payload
-})
+  payload,
+});
 
-export default { show, dismiss }
+export default {
+  show,
+  dismiss,
+};

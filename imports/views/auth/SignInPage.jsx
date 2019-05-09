@@ -1,11 +1,11 @@
-import { Meteor } from "meteor/meteor";
-import React from "react";
-import TextField from "@material-ui/core/TextField";
+import { Meteor } from 'meteor/meteor';
+import React from 'react';
+import TextField from '@material-ui/core/TextField';
 import { withStyles } from '@material-ui/core/styles';
-import Grid from "@material-ui/core/Grid";
-import Button from "@material-ui/core/Button";
-import { Link as RouterLink } from "react-router-dom";
-import Link from "@material-ui/core/Link";
+import Grid from '@material-ui/core/Grid';
+import Button from '@material-ui/core/Button';
+import { Link as RouterLink } from 'react-router-dom';
+import Link from '@material-ui/core/Link';
 
 const styles = theme => ({
   container: {
@@ -21,9 +21,12 @@ const styles = theme => ({
 
 // todo progmonster replace path with /dashboard is already signed in
 class SignInPage extends React.Component {
-  state = { email: "", password: "" };
+  state = {
+    email: '',
+    password: '',
+  };
 
-  onTextFieldChange = name => event => {
+  onTextFieldChange = name => (event) => {
     this.setState({ [name]: event.target.value });
   };
 
@@ -33,7 +36,7 @@ class SignInPage extends React.Component {
         console.log(error);
       } else {
         // todo progmonster go to the url that the user had requested before they moved to the login page
-        this.props.history.replace("/dashboard");
+        this.props.history.replace('/dashboard');
       }
     });
   };

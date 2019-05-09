@@ -1,26 +1,30 @@
-import React from "react";
-import withStyles from "@material-ui/core/styles/withStyles";
+import React from 'react';
+import withStyles from '@material-ui/core/styles/withStyles';
 import { Editor } from 'react-draft-wysiwyg';
-import Button from "@material-ui/core/Button";
-import QuizQuestionEditor from "./QuizQuestionEditor";
-import QuizParagraphEditor from "./QuizParagraphEditor";
-import { connect } from "react-redux";
-import { addParagraphToEditingQuiz, addQuestionToEditingQuiz, setEditingQuiz } from "/imports/actions";
-import * as PropTypes from "prop-types";
+import Button from '@material-ui/core/Button';
+import { connect } from 'react-redux';
+import {
+  addParagraphToEditingQuiz,
+  addQuestionToEditingQuiz,
+  setEditingQuiz,
+} from '/imports/actions';
+import * as PropTypes from 'prop-types';
+import TextField from '@material-ui/core/TextField';
+import { compose } from 'redux';
+import Card from '@material-ui/core/Card';
+import CardHeader from '@material-ui/core/CardHeader';
+import CardContent from '@material-ui/core/CardContent';
+import { orange } from '@material-ui/core/colors';
+import Grid from '@material-ui/core/Grid';
+import { Quizzes } from '../../collections';
 import {
   changeDescriptionEditorStateInEditingQuiz,
   changeTitleInEditingQuiz,
   clearEditingQuiz,
-  saveEditingQuiz
-} from "../../actions";
-import TextField from "@material-ui/core/TextField";
-import { compose } from "redux";
-import { Quizzes } from "../../collections";
-import Card from "@material-ui/core/Card";
-import CardHeader from "@material-ui/core/CardHeader";
-import CardContent from "@material-ui/core/CardContent";
-import { orange } from "@material-ui/core/colors";
-import Grid from "@material-ui/core/Grid";
+  saveEditingQuiz,
+} from '../../actions';
+import QuizParagraphEditor from './QuizParagraphEditor';
+import QuizQuestionEditor from './QuizQuestionEditor';
 
 const styles = {
   quizEditorCardHeaderRoot: {
@@ -28,11 +32,11 @@ const styles = {
   },
 
   quizEditorCardHeaderTitle: {
-    color: "white",
+    color: 'white',
   },
 
   quizEditorCardSubheaderTitle: {
-    color: "white",
+    color: 'white',
   },
 };
 
@@ -46,11 +50,11 @@ class QuizEditor extends React.Component {
 
     this.state = {
       originalTitle: null,
-      quizLoaded: this.isNewQuiz
-    }
+      quizLoaded: this.isNewQuiz,
+    };
   }
 
-  static getQuizId = (props) => props.match.params.quizId;
+  static getQuizId = props => props.match.params.quizId;
 
   componentDidMount() {
     const quizId = QuizEditor.getQuizId(this.props);
@@ -58,20 +62,20 @@ class QuizEditor extends React.Component {
     this.props.dispatch(clearEditingQuiz());
 
     if (!this.isNewQuiz) {
-      this.quizSubscription = Meteor.subscribe("quiz", quizId);
+      this.quizSubscription = Meteor.subscribe('quiz', quizId);
 
       Tracker.autorun((computation) => {
         if (this.quizSubscription) {
           const quizLoaded = this.quizSubscription.ready();
 
           if (!quizLoaded) {
-            this.setState({ originalTitle: null })
+            this.setState({ originalTitle: null });
           } else {
             const quiz = Quizzes.findOne(quizId);
 
             this.props.dispatch(setEditingQuiz(quiz));
 
-            this.setState({ originalTitle: quiz.title })
+            this.setState({ originalTitle: quiz.title });
           }
 
           this.setState({ quizLoaded });
@@ -101,7 +105,7 @@ class QuizEditor extends React.Component {
       onQuestionCreate,
       onTitleChange,
       onDescriptionEditorStateChange,
-      onQuizSave
+      onQuizSave,
     } = this.props;
 
     return (
@@ -112,10 +116,10 @@ class QuizEditor extends React.Component {
               classes={{
                 root: classes.quizEditorCardHeaderRoot,
                 title: classes.quizEditorCardHeaderTitle,
-                subheader: classes.quizEditorCardSubheaderTitle
+                subheader: classes.quizEditorCardSubheaderTitle,
               }}
 
-              title={this.isNewQuiz ? "New Quiz" : "Edit Quiz"}
+              title={this.isNewQuiz ? 'New Quiz' : 'Edit Quiz'}
 
               subheader={
                 !this.isNewQuiz && this.state.originalTitle
@@ -129,7 +133,7 @@ class QuizEditor extends React.Component {
                 <Grid item xs={12} sm={12} md={12}>
                   <TextField
                     value={title}
-                    onChange={(event) => onTitleChange(event.target.value)}
+                    onChange={event => onTitleChange(event.target.value)}
                     margin="normal"
                   />
                 </Grid>
@@ -146,11 +150,11 @@ class QuizEditor extends React.Component {
           </Card>
         </Grid>
 
-        {paragraphs.allIds.map((id, idx) =>
-          (<Grid item key={id} xs={12} sm={12} md={8}>
+        {paragraphs.allIds.map((id, idx) => (
+          <Grid item key={id} xs={12} sm={12} md={8}>
             <QuizParagraphEditor id={id} number={idx + 1} />
-          </Grid>)
-        )}
+          </Grid>
+        ))}
 
         <Grid item xs={12} sm={12} md={8}>
           <Button variant="contained" color="primary" onClick={onParagraphCreate}>
@@ -158,11 +162,11 @@ class QuizEditor extends React.Component {
           </Button>
         </Grid>
 
-        {questions.allIds.map((id, idx) =>
-          (<Grid item key={idx} xs={12} sm={12} md={8}>
+        {questions.allIds.map((id, idx) => (
+          <Grid item key={idx} xs={12} sm={12} md={8}>
             <QuizQuestionEditor id={id} number={idx + 1} />
-          </Grid>)
-        )}
+          </Grid>
+        ))}
 
         <Grid item xs={12} sm={12} md={8}>
           <Button variant="contained" color="primary" onClick={onQuestionCreate}>
@@ -192,40 +196,36 @@ QuizEditor.propTypes = {
   onQuizSave: PropTypes.func,
 };
 
-const mapStateToProps = state => {
-  return {
-    title: state.editingQuiz.title,
-    descriptionEditorState: state.editingQuiz.descriptionEditorState,
-    paragraphs: state.editingQuiz.paragraphs,
-    questions: state.editingQuiz.questions,
-  };
-};
+const mapStateToProps = state => ({
+  title: state.editingQuiz.title,
+  descriptionEditorState: state.editingQuiz.descriptionEditorState,
+  paragraphs: state.editingQuiz.paragraphs,
+  questions: state.editingQuiz.questions,
+});
 
-const mapDispatchToProps = (dispatch, { history }) => {
-  return {
-    onParagraphCreate: () => {
-      dispatch(addParagraphToEditingQuiz());
-    },
+const mapDispatchToProps = (dispatch, { history }) => ({
+  onParagraphCreate: () => {
+    dispatch(addParagraphToEditingQuiz());
+  },
 
-    onQuestionCreate: () => {
-      dispatch(addQuestionToEditingQuiz());
-    },
+  onQuestionCreate: () => {
+    dispatch(addQuestionToEditingQuiz());
+  },
 
-    onTitleChange: (title) => {
-      dispatch(changeTitleInEditingQuiz(title));
-    },
+  onTitleChange: (title) => {
+    dispatch(changeTitleInEditingQuiz(title));
+  },
 
-    onDescriptionEditorStateChange: (state) => {
-      dispatch(changeDescriptionEditorStateInEditingQuiz(state));
-    },
+  onDescriptionEditorStateChange: (state) => {
+    dispatch(changeDescriptionEditorStateInEditingQuiz(state));
+  },
 
-    onQuizSave: () => {
-      dispatch(saveEditingQuiz(history));
-    },
+  onQuizSave: () => {
+    dispatch(saveEditingQuiz(history));
+  },
 
-    dispatch
-  }
-};
+  dispatch,
+});
 
 export default compose(
   withStyles(styles),

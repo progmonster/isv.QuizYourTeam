@@ -1,4 +1,10 @@
 import { EditorState } from 'draft-js';
+import omit from 'lodash/omit';
+import pull from 'lodash/pull';
+import max from 'lodash/max';
+import reduce from 'lodash/reduce';
+import { combineReducers } from 'redux';
+import { ANSWER_TYPES } from './views/Quizzes/AnswerTypes';
 import {
   ADD_ANSWER_TO_EDITING_QUIZ,
   ADD_PARAGRAPH_TO_EDITING_QUIZ,
@@ -16,17 +22,14 @@ import {
   REMOVE_PARAGRAPH_FROM_EDITING_QUIZ,
   REMOVE_QUESTION_FROM_EDITING_QUIZ,
   SAVE_EDITING_QUIZ,
-  SET_EDITING_QUIZ
+  SET_EDITING_QUIZ,
 } from './actions';
-import omit from 'lodash/omit';
-import pull from 'lodash/pull';
-import max from 'lodash/max';
-import reduce from 'lodash/reduce';
-import { ANSWER_TYPES } from "./views/Quizzes/AnswerTypes";
-import { combineReducers } from "redux";
-import { snackbarReducer } from "./components/snackbar";
+import { snackbarReducer } from './components/snackbar';
 
-function editingQuizParagraphReducer(state = { byId: {}, allIds: [] }, action) {
+function editingQuizParagraphReducer(state = {
+  byId: {},
+  allIds: [],
+}, action) {
   const newId = (max(state.allIds) || 0) + 1;
 
   switch (action.type) {
@@ -38,11 +41,11 @@ function editingQuizParagraphReducer(state = { byId: {}, allIds: [] }, action) {
           ...state.byId,
 
           [newId]: {
-            editorState: EditorState.createEmpty()
-          }
+            editorState: EditorState.createEmpty(),
+          },
         },
 
-        allIds: [...state.allIds, newId]
+        allIds: [...state.allIds, newId],
       };
 
     case CHANGE_PARAGRAPH_EDITOR_STATE_IN_EDITING_QUIZ:
@@ -54,16 +57,16 @@ function editingQuizParagraphReducer(state = { byId: {}, allIds: [] }, action) {
 
           [action.id]: {
             ...state.byId[action.id],
-            editorState: action.state
-          }
-        }
+            editorState: action.state,
+          },
+        },
       };
 
     case REMOVE_PARAGRAPH_FROM_EDITING_QUIZ:
       return {
         ...state,
         byId: omit(state.byId, action.id),
-        allIds: pull(state.allIds, action.id)
+        allIds: pull(state.allIds, action.id),
       };
 
     default:
@@ -71,7 +74,10 @@ function editingQuizParagraphReducer(state = { byId: {}, allIds: [] }, action) {
   }
 }
 
-function editingQuizAnswerReducer(state = { byId: {}, allIds: [] }, answerType, action) {
+function editingQuizAnswerReducer(state = {
+  byId: {},
+  allIds: [],
+}, answerType, action) {
   switch (action.type) {
     case ADD_ANSWER_TO_EDITING_QUIZ:
       const newAnswerId = (max(state.allIds) || 0) + 1;
@@ -85,7 +91,7 @@ function editingQuizAnswerReducer(state = { byId: {}, allIds: [] }, answerType, 
           [newAnswerId]: {
             title: action.title,
             checked: action.checked,
-          }
+          },
         },
 
         allIds: [...state.allIds, newAnswerId],
@@ -101,7 +107,7 @@ function editingQuizAnswerReducer(state = { byId: {}, allIds: [] }, answerType, 
           [action.answerId]: {
             ...state.byId[action.answerId],
             title: action.title,
-          }
+          },
         },
       };
 
@@ -135,7 +141,10 @@ function editingQuizAnswerReducer(state = { byId: {}, allIds: [] }, answerType, 
         ...state,
 
         byId: reduce(state.byId, (acc, answer, answerId) => {
-          acc[answerId] = { ...answer, checked: false };
+          acc[answerId] = {
+            ...answer,
+            checked: false,
+          };
 
           return acc;
         }, {}),
@@ -146,7 +155,10 @@ function editingQuizAnswerReducer(state = { byId: {}, allIds: [] }, answerType, 
   }
 }
 
-function editingQuizQuestionReducer(state = { byId: {}, allIds: [] }, action) {
+function editingQuizQuestionReducer(state = {
+  byId: {},
+  allIds: [],
+}, action) {
   let question;
 
   switch (action.type) {
@@ -162,11 +174,14 @@ function editingQuizQuestionReducer(state = { byId: {}, allIds: [] }, action) {
           [newQuestionId]: {
             editorState: EditorState.createEmpty(),
             answerType: ANSWER_TYPES.SINGLE_CHOICE,
-            answers: { allIds: [], byId: {} },
-          }
+            answers: {
+              allIds: [],
+              byId: {},
+            },
+          },
         },
 
-        allIds: [...state.allIds, newQuestionId]
+        allIds: [...state.allIds, newQuestionId],
       };
 
     case CHANGE_QUESTION_EDITOR_STATE_IN_EDITING_QUIZ:
@@ -178,16 +193,16 @@ function editingQuizQuestionReducer(state = { byId: {}, allIds: [] }, action) {
 
           [action.id]: {
             ...state.byId[action.id],
-            editorState: action.state
-          }
-        }
+            editorState: action.state,
+          },
+        },
       };
 
     case REMOVE_QUESTION_FROM_EDITING_QUIZ:
       return {
         ...state,
         byId: omit(state.byId, action.id),
-        allIds: pull(state.allIds, action.id)
+        allIds: pull(state.allIds, action.id),
       };
 
     case ADD_ANSWER_TO_EDITING_QUIZ:
@@ -204,9 +219,9 @@ function editingQuizQuestionReducer(state = { byId: {}, allIds: [] }, action) {
 
           [action.questionId]: {
             ...question,
-            answers: editingQuizAnswerReducer(question.answers, question.answerType, action)
-          }
-        }
+            answers: editingQuizAnswerReducer(question.answers, question.answerType, action),
+          },
+        },
       };
 
     case CHANGE_ANSWER_TYPE_IN_EDITING_QUIZ:
@@ -225,9 +240,9 @@ function editingQuizQuestionReducer(state = { byId: {}, allIds: [] }, action) {
           [action.questionId]: {
             ...question,
             answerType: action.answerType,
-            answers: editingQuizAnswerReducer(question.answers, question.answerType, action)
-          }
-        }
+            answers: editingQuizAnswerReducer(question.answers, question.answerType, action),
+          },
+        },
       };
 
     default:
@@ -236,10 +251,16 @@ function editingQuizQuestionReducer(state = { byId: {}, allIds: [] }, action) {
 }
 
 const EDITING_QUIZ_INITIAL_STATE = {
-  title: "",
+  title: '',
   descriptionEditorState: EditorState.createEmpty(),
-  paragraphs: { byId: {}, allIds: [] },
-  questions: { byId: {}, allIds: [] },
+  paragraphs: {
+    byId: {},
+    allIds: [],
+  },
+  questions: {
+    byId: {},
+    allIds: [],
+  },
 };
 
 function editingQuizReducer(state = EDITING_QUIZ_INITIAL_STATE, action) {
@@ -263,12 +284,12 @@ function editingQuizReducer(state = EDITING_QUIZ_INITIAL_STATE, action) {
 
     case CLEAR_EDITING_QUIZ:
       return {
-        ...EDITING_QUIZ_INITIAL_STATE
+        ...EDITING_QUIZ_INITIAL_STATE,
       };
 
     case SET_EDITING_QUIZ:
       return {
-        ...convertQuizForStore(action.quiz)
+        ...convertQuizForStore(action.quiz),
       };
 
     default:
@@ -276,7 +297,7 @@ function editingQuizReducer(state = EDITING_QUIZ_INITIAL_STATE, action) {
         ...state,
         paragraphs: editingQuizParagraphReducer(state.paragraphs, action),
         questions: editingQuizQuestionReducer(state.questions, action),
-      }
+      };
   }
 }
 

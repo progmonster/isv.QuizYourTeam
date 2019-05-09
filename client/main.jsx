@@ -1,27 +1,27 @@
-import "./methods";
+import './methods';
 import { Meteor } from 'meteor/meteor';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { createBrowserHistory } from "history";
-import { Redirect, Route, Router, Switch } from "react-router-dom";
-import "/imports/assets/css/material-dashboard-react.css"; // todo check if it works
-import createSagaMiddleware from "redux-saga";
-import SignInPage from "../imports/views/auth/SignInPage";
-import SignUpPage from "../imports/views/auth/SignUpPage";
-import SignUpConfirmationNotePage from "../imports/views/auth/SignUpConfirmationNotePage";
-import EmailVerificationPage from "../imports/views/auth/EmailVerificationPage";
-import { routes } from "../imports/routes";
-import MainLayoutRoute from "../imports/layouts/MainLayoutRoute";
-import LoginLayoutRoute from "../imports/layouts/LoginLayoutRoute";
-import { createLogger } from "redux-logger";
-import { applyMiddleware, createStore } from "redux";
-import reducers from "../imports/reducers";
-import { rootSaga } from "../imports/actions";
-import { Provider } from "react-redux";
-import SnackbarProvider from "../imports/components/snackbar/SnackbarProvider";
+import { createBrowserHistory } from 'history';
+import { Redirect, Route, Router, Switch } from 'react-router-dom';
+import '/imports/assets/css/material-dashboard-react.css'; // todo check if it works
+import createSagaMiddleware from 'redux-saga';
+import { createLogger } from 'redux-logger';
+import { applyMiddleware, createStore } from 'redux';
+import { Provider } from 'react-redux';
+import SignInPage from '../imports/views/auth/SignInPage';
+import SignUpPage from '../imports/views/auth/SignUpPage';
+import SignUpConfirmationNotePage from '../imports/views/auth/SignUpConfirmationNotePage';
+import EmailVerificationPage from '../imports/views/auth/EmailVerificationPage';
+import { routes } from '../imports/routes';
+import MainLayoutRoute from '../imports/layouts/MainLayoutRoute';
+import LoginLayoutRoute from '../imports/layouts/LoginLayoutRoute';
+import reducers from '../imports/reducers';
+import { rootSaga } from '../imports/actions';
+import SnackbarProvider from '../imports/components/snackbar/SnackbarProvider';
 
-Meteor.subscribe("quizzes");
-Meteor.subscribe("teams");
+Meteor.subscribe('quizzes');
+Meteor.subscribe('teams');
 
 Meteor.startup(() => {
   const hist = createBrowserHistory();
@@ -32,20 +32,18 @@ Meteor.startup(() => {
 
   const store = createStore(
     reducers,
-    applyMiddleware(loggerMiddleware, sagaMiddleware)
+    applyMiddleware(loggerMiddleware, sagaMiddleware),
   );
 
   sagaMiddleware.run(rootSaga);
 
-  const mainLayoutRoutes = routes.map((prop, key) => {
-    return (
-      <MainLayoutRoute
-        path={prop.path}
-        component={prop.component}
-        key={key}
-      />
-    );
-  });
+  const mainLayoutRoutes = routes.map((prop, key) => (
+    <MainLayoutRoute
+      path={prop.path}
+      component={prop.component}
+      key={key}
+    />
+  ));
 
   ReactDOM.render(
     <Provider store={store}>
@@ -58,7 +56,8 @@ Meteor.startup(() => {
 
             <LoginLayoutRoute path="/login" component={SignInPage} />
             <LoginLayoutRoute path="/signup" component={SignUpPage} />
-            <LoginLayoutRoute path="/signup-confirmation-note" component={SignUpConfirmationNotePage} />
+            <LoginLayoutRoute path="/signup-confirmation-note"
+                              component={SignUpConfirmationNotePage} />
             <LoginLayoutRoute path="/verify-email" component={EmailVerificationPage} />
 
             {mainLayoutRoutes}
@@ -67,7 +66,6 @@ Meteor.startup(() => {
       </SnackbarProvider>
     </Provider>,
 
-    document.getElementById("root")
+    document.getElementById('root'),
   );
 });
-

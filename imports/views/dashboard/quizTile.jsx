@@ -1,24 +1,24 @@
 import { Meteor } from 'meteor/meteor';
-import React from "react";
-import withStyles from "@material-ui/core/styles/withStyles";
-import PropTypes from "prop-types";
-import { convertFromRaw } from "draft-js";
-import { stateToHTML } from "draft-js-export-html";
-import { withTracker } from "meteor/react-meteor-data";
-import { Quizzes } from "../../collections";
-import IconButton from "@material-ui/core/IconButton";
-import CardActions from "@material-ui/core/CardActions";
-import CardContent from "@material-ui/core/CardContent";
-import Button from "@material-ui/core/Button";
-import { Delete, Edit } from "@material-ui/icons";
-import CardHeader from "@material-ui/core/CardHeader";
-import { orange } from "@material-ui/core/colors";
-import AlertDialog from "../../components/alertDialog";
-import { removeQuiz } from "../../actions";
-import { connect } from "react-redux";
-import { Link } from "react-router-dom";
-import Card from "@material-ui/core/Card";
-import { Roles } from "meteor/alanning:roles";
+import React from 'react';
+import withStyles from '@material-ui/core/styles/withStyles';
+import PropTypes from 'prop-types';
+import { convertFromRaw } from 'draft-js';
+import { stateToHTML } from 'draft-js-export-html';
+import { withTracker } from 'meteor/react-meteor-data';
+import IconButton from '@material-ui/core/IconButton';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import Button from '@material-ui/core/Button';
+import { Delete, Edit } from '@material-ui/icons';
+import CardHeader from '@material-ui/core/CardHeader';
+import { orange } from '@material-ui/core/colors';
+import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
+import Card from '@material-ui/core/Card';
+import { Roles } from 'meteor/alanning:roles';
+import { removeQuiz } from '../../actions';
+import AlertDialog from '../../components/alertDialog';
+import { Quizzes } from '../../collections';
 
 const styles = theme => ({
   headerRoot: {
@@ -26,9 +26,9 @@ const styles = theme => ({
   },
 
   headerTitle: {
-    color: "white",
+    color: 'white',
     fontSize: 16,
-  }
+  },
 });
 
 class QuizTile extends React.Component {
@@ -36,7 +36,7 @@ class QuizTile extends React.Component {
     super(props, context);
 
     this.state = {
-      removeConfirmationOpened: false
+      removeConfirmationOpened: false,
     };
   }
 
@@ -56,7 +56,10 @@ class QuizTile extends React.Component {
     return (
       <Card>
         <CardHeader
-          classes={{ root: classes.headerRoot, title: classes.headerTitle }}
+          classes={{
+            root: classes.headerRoot,
+            title: classes.headerTitle,
+          }}
           title={quiz.title}
         />
 
@@ -80,7 +83,8 @@ class QuizTile extends React.Component {
           )}
 
           {roles.removeQuiz && (
-            <IconButton color="secondary" onClick={() => this.setState({ removeConfirmationOpened: true })}>
+            <IconButton color="secondary"
+                        onClick={() => this.setState({ removeConfirmationOpened: true })}>
               <Delete />
             </IconButton>
           )}
@@ -91,10 +95,10 @@ class QuizTile extends React.Component {
         */}
         <AlertDialog
           open={this.state.removeConfirmationOpened}
-          title={"Remove the quiz?"}
-          contentText={""}
-          okText={"Remove"}
-          cancelText={"Cancel"}
+          title="Remove the quiz?"
+          contentText=""
+          okText="Remove"
+          cancelText="Cancel"
           handleClose={this.handleRemoveConfirmationClosed}
         />
       </Card>
@@ -103,33 +107,26 @@ class QuizTile extends React.Component {
 }
 
 QuizTile.propTypes = {
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired,
 };
 
-const mapStateToProps = state => {
-  return {};
-};
+const mapStateToProps = state => ({});
 
-const mapDispatchToProps = (dispatch, { quizId }) => {
-  return {
-    onQuizRemove() {
-      dispatch(removeQuiz(quizId));
-    },
-  }
-};
+const mapDispatchToProps = (dispatch, { quizId }) => ({
+  onQuizRemove() {
+    dispatch(removeQuiz(quizId));
+  },
+});
 
-const QuizTileContainer = withTracker(({ quizId }) => {
-  return {
-    quiz: Quizzes.findOne(quizId),
+const QuizTileContainer = withTracker(({ quizId }) => ({
+  quiz: Quizzes.findOne(quizId),
 
-    roles: {
-      editQuiz: Roles.userIsInRole(Meteor.userId(), "editQuiz", `quizzes/${quizId}`),
-      removeQuiz: Roles.userIsInRole(Meteor.userId(), "removeQuiz", `quizzes/${quizId}`),
-      passQuiz: Roles.userIsInRole(Meteor.userId(), "passQuiz", `quizzes/${quizId}`),
-    }
-  };
-})(withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(QuizTile)));
+  roles: {
+    editQuiz: Roles.userIsInRole(Meteor.userId(), 'editQuiz', `quizzes/${quizId}`),
+    removeQuiz: Roles.userIsInRole(Meteor.userId(), 'removeQuiz', `quizzes/${quizId}`),
+    passQuiz: Roles.userIsInRole(Meteor.userId(), 'passQuiz', `quizzes/${quizId}`),
+  },
+}))(withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(QuizTile)));
 
 
 export default QuizTileContainer;
-

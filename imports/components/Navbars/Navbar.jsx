@@ -1,21 +1,21 @@
-import React from "react";
-import classNames from "classnames";
-import PropTypes from "prop-types";
-import withStyles from "@material-ui/core/styles/withStyles";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import IconButton from "@material-ui/core/IconButton";
-import Hidden from "@material-ui/core/Hidden";
-import Menu from "@material-ui/icons/Menu";
-import AdminNavbarLinks from "./AdminNavbarLinks.jsx"; // todo progmonster remove Admin from all names
-import headerStyle from "/imports/assets/jss/material-dashboard-react/components/headerStyle.jsx";
-import Button from "@material-ui/core/Button";
-import { compose } from "redux";
-import { withRouter } from "react-router-dom";
+import React from 'react';
+import classNames from 'classnames';
+import PropTypes from 'prop-types';
+import withStyles from '@material-ui/core/styles/withStyles';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import IconButton from '@material-ui/core/IconButton';
+import Hidden from '@material-ui/core/Hidden';
+import Menu from '@material-ui/icons/Menu';
+import headerStyle from '/imports/assets/jss/material-dashboard-react/components/headerStyle.jsx';
+import Button from '@material-ui/core/Button';
+import { compose } from 'redux';
+import { withRouter } from 'react-router-dom';
+import AdminNavbarLinks from './AdminNavbarLinks.jsx'; // todo progmonster remove Admin from all names
 
 function Header({ ...props }) {
   function makeBrand() {
-    var name;
+    let name;
     props.routes.map((prop, key) => {
       if (prop.path === props.location.pathname) {
         name = prop.name;
@@ -27,7 +27,7 @@ function Header({ ...props }) {
 
   const { classes, color } = props;
   const appBarClasses = classNames({
-    [" " + classes[color]]: color
+    [` ${classes[color]}`]: color,
   });
 
   const brand = makeBrand();
@@ -37,9 +37,11 @@ function Header({ ...props }) {
       <Toolbar className={classes.container}>
         <div className={classes.flex}>
           {/* Here we create navbar brand, based on route name */}
-          {!!brand && (<Button href="#" className={classes.title}>
-            {makeBrand()}
-          </Button>)}
+          {!!brand && (
+            <Button href="#" className={classes.title}>
+              {makeBrand()}
+            </Button>
+          )}
         </div>
         <Hidden smDown implementation="css">
           <AdminNavbarLinks />
@@ -60,10 +62,10 @@ function Header({ ...props }) {
 
 Header.propTypes = {
   classes: PropTypes.object.isRequired,
-  color: PropTypes.oneOf(["primary", "info", "success", "warning", "danger"])
+  color: PropTypes.oneOf(['primary', 'info', 'success', 'warning', 'danger']),
 };
 
 export default compose(
   withStyles(headerStyle),
-  withRouter
+  withRouter,
 )(Header);

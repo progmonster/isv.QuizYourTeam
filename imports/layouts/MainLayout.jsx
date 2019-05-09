@@ -1,53 +1,55 @@
-import React from "react";
-import PropTypes from "prop-types";
-import PerfectScrollbar from "perfect-scrollbar";
-import "perfect-scrollbar/css/perfect-scrollbar.css";
-import withStyles from "@material-ui/core/styles/withStyles";
-import Navbar from "/imports/components/Navbars/Navbar.jsx";
-import Sidebar from "/imports/components/Sidebar/Sidebar.jsx";
-import { drawerRoutes } from "/imports/routes.js";
+import React from 'react';
+import PropTypes from 'prop-types';
+import PerfectScrollbar from 'perfect-scrollbar';
+import 'perfect-scrollbar/css/perfect-scrollbar.css';
+import withStyles from '@material-ui/core/styles/withStyles';
+import Navbar from '/imports/components/Navbars/Navbar.jsx';
+import Sidebar from '/imports/components/Sidebar/Sidebar.jsx';
+import { drawerRoutes } from '/imports/routes.js';
 
-import dashboardStyle from "/imports/assets/jss/material-dashboard-react/layouts/dashboardStyle.jsx";
-import { compose } from "redux";
-import { Switch, Route } from "react-router-dom";
-import { routes } from "../routes";
-import authForwarder from "../views/auth/authForwarder";
+import dashboardStyle
+  from '/imports/assets/jss/material-dashboard-react/layouts/dashboardStyle.jsx';
+import { compose } from 'redux';
+import authForwarder from '../views/auth/authForwarder';
 
-const image = ""/*"/assets/img/sidebar-2.jpg"*/;
+const image = ''/* "/assets/img/sidebar-2.jpg" */;
 
-const logo = "/img/reactlogo.png";
+const logo = '/img/reactlogo.png';
 
 class Dashboard extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      image: image,
-      color: "blue",
+      image,
+      color: 'blue',
       hasImage: true,
-      fixedClasses: "dropdown show",
-      mobileOpen: false
+      fixedClasses: 'dropdown show',
+      mobileOpen: false,
     };
   }
 
-  handleImageClick = image => {
-    this.setState({ image: image });
+  handleImageClick = (image) => {
+    this.setState({ image });
   };
-  handleColorClick = color => {
-    this.setState({ color: color });
+
+  handleColorClick = (color) => {
+    this.setState({ color });
   };
+
   handleFixedClick = () => {
-    if (this.state.fixedClasses === "dropdown") {
-      this.setState({ fixedClasses: "dropdown show" });
+    if (this.state.fixedClasses === 'dropdown') {
+      this.setState({ fixedClasses: 'dropdown show' });
     } else {
-      this.setState({ fixedClasses: "dropdown" });
+      this.setState({ fixedClasses: 'dropdown' });
     }
   };
+
   handleDrawerToggle = () => {
     this.setState({ mobileOpen: !this.state.mobileOpen });
   };
 
   getRoute() {
-    return this.props.location.pathname !== "/maps";
+    return this.props.location.pathname !== '/maps';
   }
 
   resizeFunction = () => {
@@ -57,10 +59,10 @@ class Dashboard extends React.Component {
   };
 
   componentDidMount() {
-    if (navigator.platform.indexOf("Win") > -1) {
+    if (navigator.platform.indexOf('Win') > -1) {
       const ps = new PerfectScrollbar(this.refs.mainPanel);
     }
-    window.addEventListener("resize", this.resizeFunction);
+    window.addEventListener('resize', this.resizeFunction);
   }
 
   componentDidUpdate(e) {
@@ -73,7 +75,7 @@ class Dashboard extends React.Component {
   }
 
   componentWillUnmount() {
-    window.removeEventListener("resize", this.resizeFunction);
+    window.removeEventListener('resize', this.resizeFunction);
   }
 
   render() {
@@ -82,7 +84,7 @@ class Dashboard extends React.Component {
       <div className={classes.wrapper}>
         <Sidebar
           routes={drawerRoutes}
-          logoText={"Quiz Your Teams"}
+          logoText="Quiz Your Teams"
           logo={logo}
           image={this.state.image}
           handleDrawerToggle={this.handleDrawerToggle}
@@ -107,7 +109,7 @@ class Dashboard extends React.Component {
 }
 
 Dashboard.propTypes = {
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired,
 };
 
 export default compose(

@@ -1,19 +1,19 @@
-import withStyles from "@material-ui/core/styles/withStyles";
-import React, { Fragment } from "react";
-import * as PropTypes from "prop-types";
-import Radio from "@material-ui/core/Radio";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import TextField from "@material-ui/core/TextField";
-import IconButton from "@material-ui/core/IconButton";
-import DeleteIcon from "@material-ui/icons/Delete";
+import withStyles from '@material-ui/core/styles/withStyles';
+import React, { Fragment } from 'react';
+import * as PropTypes from 'prop-types';
+import Radio from '@material-ui/core/Radio';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import TextField from '@material-ui/core/TextField';
+import IconButton from '@material-ui/core/IconButton';
+import DeleteIcon from '@material-ui/icons/Delete';
+import { connect } from 'react-redux';
 import {
   changeAnswerCheckStateInEditingQuiz,
   changeAnswerTitleInEditingQuiz,
-  removeAnswerFromEditingQuiz
-} from "../../actions";
-import { connect } from "react-redux";
+  removeAnswerFromEditingQuiz,
+} from '../../actions';
 
-const styles = (theme) => ({});
+const styles = theme => ({});
 
 class SingleChoiceAnswer extends React.PureComponent {
   render() {
@@ -21,7 +21,8 @@ class SingleChoiceAnswer extends React.PureComponent {
       answerId,
     } = this.props;
 
-    return (<FormControlLabel value={answerId.toString()} control={this._renderLabelChildren()} label="" />)
+    return (<FormControlLabel value={answerId.toString()} control={this._renderLabelChildren()}
+                              label="" />);
   }
 
   _renderLabelChildren() {
@@ -43,7 +44,7 @@ class SingleChoiceAnswer extends React.PureComponent {
 
         <TextField
           value={title}
-          onChange={(event) => onTitleChange(event.target.value)}
+          onChange={event => onTitleChange(event.target.value)}
           margin="normal"
         />
 
@@ -69,24 +70,20 @@ SingleChoiceAnswer.propTypes = {
   onCheckStateChange: PropTypes.func,
 };
 
-const mapStateToProps = (state, { questionId, answerId }) => {
-  return { ...state.editingQuiz.questions.byId[questionId].answers.byId[answerId] };
-};
+const mapStateToProps = (state, { questionId, answerId }) => ({ ...state.editingQuiz.questions.byId[questionId].answers.byId[answerId] });
 
-const mapDispatchToProps = (dispatch, { questionId, answerId }) => {
-  return {
-    onRemove: () => {
-      dispatch(removeAnswerFromEditingQuiz(questionId, answerId));
-    },
+const mapDispatchToProps = (dispatch, { questionId, answerId }) => ({
+  onRemove: () => {
+    dispatch(removeAnswerFromEditingQuiz(questionId, answerId));
+  },
 
-    onTitleChange: (title) => {
-      dispatch(changeAnswerTitleInEditingQuiz(questionId, answerId, title));
-    },
+  onTitleChange: (title) => {
+    dispatch(changeAnswerTitleInEditingQuiz(questionId, answerId, title));
+  },
 
-    onCheckStateChange: (checked) => {
-      dispatch(changeAnswerCheckStateInEditingQuiz(questionId, answerId, checked));
-    },
-  };
-};
+  onCheckStateChange: (checked) => {
+    dispatch(changeAnswerCheckStateInEditingQuiz(questionId, answerId, checked));
+  },
+});
 
 export default withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(SingleChoiceAnswer));

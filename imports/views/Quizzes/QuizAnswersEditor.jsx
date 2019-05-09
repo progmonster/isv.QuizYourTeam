@@ -1,24 +1,24 @@
-import withStyles from "@material-ui/core/styles/withStyles";
-import React from "react";
-import Button from "@material-ui/core/Button";
-import * as PropTypes from "prop-types";
-import Tabs from "@material-ui/core/Tabs";
-import Tab from "@material-ui/core/Tab";
-import { ANSWER_TYPES } from "./AnswerTypes";
-import RadioGroup from "@material-ui/core/RadioGroup";
-import { addAnswerToEditingQuiz, changeAnswerTypeInEditingQuiz } from "../../actions";
-import { connect } from "react-redux";
-import SingleChoiceAnswer from "./SingleChoiceAnswer";
-import MultipleChoiceAnswer from "./MultipleChoiceAnswer";
-import FormGroup from "@material-ui/core/FormGroup";
-import Grid from "@material-ui/core/Grid";
+import withStyles from '@material-ui/core/styles/withStyles';
+import React from 'react';
+import Button from '@material-ui/core/Button';
+import * as PropTypes from 'prop-types';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
+import RadioGroup from '@material-ui/core/RadioGroup';
+import { connect } from 'react-redux';
+import FormGroup from '@material-ui/core/FormGroup';
+import Grid from '@material-ui/core/Grid';
+import { ANSWER_TYPES } from './AnswerTypes';
+import { addAnswerToEditingQuiz, changeAnswerTypeInEditingQuiz } from '../../actions';
+import SingleChoiceAnswer from './SingleChoiceAnswer';
+import MultipleChoiceAnswer from './MultipleChoiceAnswer';
 
-const styles = (theme) => ({
+const styles = theme => ({
   quizAnswersEditor: {
-    ...theme.mixins.gutters(),/*todo why?*/
-    paddingTop: theme.spacing.unit * 2,/*todo why?*/
-    paddingBottom: theme.spacing.unit * 2,/*todo why?*/
-  }
+    ...theme.mixins.gutters(), /* todo why? */
+    paddingTop: theme.spacing.unit * 2, /* todo why? */
+    paddingBottom: theme.spacing.unit * 2, /* todo why? */
+  },
 });
 
 class QuizAnswersEditor extends React.PureComponent {
@@ -26,7 +26,7 @@ class QuizAnswersEditor extends React.PureComponent {
     const {
       answerType,
       onAnswerAdd,
-      onAnswerTypeChange
+      onAnswerTypeChange,
     } = this.props;
 
     return (
@@ -35,8 +35,7 @@ class QuizAnswersEditor extends React.PureComponent {
           <Tabs
             value={answerType === ANSWER_TYPES.SINGLE_CHOICE ? 0 : 1}
 
-            onChange={(event, value) =>
-              onAnswerTypeChange(value === 0 ? ANSWER_TYPES.SINGLE_CHOICE : ANSWER_TYPES.MULTIPLE_CHOICE)
+            onChange={(event, value) => onAnswerTypeChange(value === 0 ? ANSWER_TYPES.SINGLE_CHOICE : ANSWER_TYPES.MULTIPLE_CHOICE)
             }
           >
             <Tab label="Single choice" />
@@ -49,8 +48,11 @@ class QuizAnswersEditor extends React.PureComponent {
         </Grid>
 
         <Grid item xs={12} sm={12} md={8}>
-          <Button variant="contained" color="primary"
-                  onClick={() => onAnswerAdd("", false)}>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => onAnswerAdd('', false)}
+          >
             Add an answer
           </Button>
         </Grid>
@@ -61,53 +63,45 @@ class QuizAnswersEditor extends React.PureComponent {
   _renderSingleChoiceAnswerBlock() {
     const {
       questionId,
-      answers
+      answers,
     } = this.props;
 
-    return (<RadioGroup
-      aria-label="Gender" /*todo*/
-      name="gender1" /*todo*/
-      /*
-            value={0}
-            onChange={this.handleChange}
-      */
-    >
-      {answers.allIds.map((answerId) => {
-        return (
+    return (
+      <RadioGroup
+        aria-label="Gender" /* todo */
+        name="gender1"
+      >
+        {answers.allIds.map(answerId => (
           <SingleChoiceAnswer
             key={answerId}
             questionId={questionId}
             answerId={answerId}
           />
-        );
-      })}
-    </RadioGroup>)
+        ))}
+      </RadioGroup>
+    );
   }
 
   _renderMultipleChoiceAnswerBlock() {
     const {
       questionId,
-      answers
+      answers,
     } = this.props;
 
-    return (<FormGroup
-      aria-label="Gender" /*todo*/
-      name="gender1" /*todo*/
-      /*
-            value={0}
-            onChange={this.handleChange}
-      */
-    >
-      {answers.allIds.map((answerId) => {
-        return (
+    return (
+      <FormGroup
+        aria-label="Gender" /* todo */
+        name="gender1"
+      >
+        {answers.allIds.map(answerId => (
           <MultipleChoiceAnswer
             key={answerId}
             questionId={questionId}
             answerId={answerId}
           />
-        );
-      })}
-    </FormGroup>)
+        ))}
+      </FormGroup>
+    );
   }
 }
 
@@ -118,20 +112,16 @@ QuizAnswersEditor.propTypes = {
   onAnswerAdd: PropTypes.func,
 };
 
-const mapStateToProps = (state, { questionId }) => {
-  return { ...state.editingQuiz.questions.byId[questionId] };
-};
+const mapStateToProps = (state, { questionId }) => ({ ...state.editingQuiz.questions.byId[questionId] });
 
-const mapDispatchToProps = (dispatch, { questionId }) => {
-  return {
-    onAnswerAdd: (title, checked) => {
-      dispatch(addAnswerToEditingQuiz(questionId, title, checked));
-    },
+const mapDispatchToProps = (dispatch, { questionId }) => ({
+  onAnswerAdd: (title, checked) => {
+    dispatch(addAnswerToEditingQuiz(questionId, title, checked));
+  },
 
-    onAnswerTypeChange: (answerType) => {
-      dispatch(changeAnswerTypeInEditingQuiz(questionId, answerType));
-    }
-  };
-};
+  onAnswerTypeChange: (answerType) => {
+    dispatch(changeAnswerTypeInEditingQuiz(questionId, answerType));
+  },
+});
 
 export default withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(QuizAnswersEditor));

@@ -1,33 +1,33 @@
-import { Meteor } from "meteor/meteor";
-import React from "react";
-import classNames from "classnames";
-import PropTypes from "prop-types";
-import { NavLink, withHistory, withRouter } from "react-router-dom";
-import withStyles from "@material-ui/core/styles/withStyles";
-import Drawer from "@material-ui/core/Drawer";
-import Hidden from "@material-ui/core/Hidden";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemText from "@material-ui/core/ListItemText";
-import Icon from "@material-ui/core/Icon";
-import AdminNavbarLinks from "/imports/components/Navbars/AdminNavbarLinks.jsx";
-import sidebarStyle from "/imports/assets/jss/material-dashboard-react/components/sidebarStyle.jsx";
-import { compose } from "redux";
-import { ExitToApp } from "@material-ui/icons";
-import { withTracker } from "meteor/react-meteor-data";
-import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
-import IconButton from "@material-ui/core/IconButton";
+import { Meteor } from 'meteor/meteor';
+import React from 'react';
+import classNames from 'classnames';
+import PropTypes from 'prop-types';
+import { NavLink, withHistory } from 'react-router-dom';
+import withStyles from '@material-ui/core/styles/withStyles';
+import Drawer from '@material-ui/core/Drawer';
+import Hidden from '@material-ui/core/Hidden';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import Icon from '@material-ui/core/Icon';
+import AdminNavbarLinks from '/imports/components/Navbars/AdminNavbarLinks.jsx';
+import sidebarStyle from '/imports/assets/jss/material-dashboard-react/components/sidebarStyle.jsx';
+import { compose } from 'redux';
+import { ExitToApp } from '@material-ui/icons';
+import { withTracker } from 'meteor/react-meteor-data';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import IconButton from '@material-ui/core/IconButton';
 
 const Sidebar = ({ ...props }) => {
   const userEmail = props.user && props.user.emails[0].address;
 
   // verifies if routeName is the one active (in browser input)
   function activeRoute(routeName) {
-    return props.location.pathname.indexOf(routeName) > -1 ? true : false;
+    return props.location.pathname.indexOf(routeName) > -1;
   }
 
   const onSignOut = () => {
-    props.history.replace("/login");
+    props.history.replace('/login');
 
     /*
         Meteor.logout((error) => {
@@ -40,24 +40,26 @@ const Sidebar = ({ ...props }) => {
     */
   };
 
-  const { classes, color, logo, image, logoText, routes } = props;
-  var links = (
+  const {
+    classes, color, logo, image, logoText, routes,
+  } = props;
+  const links = (
     <List className={classes.list}>
       {routes.map((prop, key) => {
-        var activePro = " ";
-        var listItemClasses;
-        if (prop.path === "/upgrade-to-pro") {
-          activePro = classes.activePro + " ";
+        let activePro = ' ';
+        let listItemClasses;
+        if (prop.path === '/upgrade-to-pro') {
+          activePro = `${classes.activePro} `;
           listItemClasses = classNames({
-            [" " + classes[color]]: true
+            [` ${classes[color]}`]: true,
           });
         } else {
           listItemClasses = classNames({
-            [" " + classes[color]]: activeRoute(prop.path)
+            [` ${classes[color]}`]: activeRoute(prop.path),
           });
         }
         const whiteFontClasses = classNames({
-          [" " + classes.whiteFont]: activeRoute(prop.path)
+          [` ${classes.whiteFont}`]: activeRoute(prop.path),
         });
         return (
           <NavLink
@@ -67,7 +69,7 @@ const Sidebar = ({ ...props }) => {
             key={key}
           >
             <ListItem button className={classes.itemLink + listItemClasses}>
-              {typeof prop.icon === "string" ? (
+              {typeof prop.icon === 'string' ? (
                 <Icon
                   className={classNames(classes.itemIcon, whiteFontClasses)}
                 >
@@ -83,7 +85,7 @@ const Sidebar = ({ ...props }) => {
                   prop.name
                 }
                 className={classNames(classes.itemText, whiteFontClasses)}
-                disableTypography={true}
+                disableTypography
               />
             </ListItem>
 
@@ -95,7 +97,7 @@ const Sidebar = ({ ...props }) => {
         <ListItemText
           primary={userEmail}
           className={classNames(classes.itemText)}
-          disableTypography={true}
+          disableTypography
 
         />
 
@@ -107,7 +109,7 @@ const Sidebar = ({ ...props }) => {
       </ListItem>
     </List>
   );
-  var brand = (
+  const brand = (
     <div className={classes.logo}>
       <a
         href="https://www.creative-tim.com"
@@ -125,14 +127,14 @@ const Sidebar = ({ ...props }) => {
       <Hidden mdUp implementation="css">
         <Drawer
           variant="temporary"
-          anchor={"right"}
+          anchor="right"
           open={props.open}
           classes={{
-            paper: classNames(classes.drawerPaper)
+            paper: classNames(classes.drawerPaper),
           }}
           onClose={props.handleDrawerToggle}
           ModalProps={{
-            keepMounted: true // Better open performance on mobile.
+            keepMounted: true, // Better open performance on mobile.
           }}
         >
           {brand}
@@ -143,18 +145,18 @@ const Sidebar = ({ ...props }) => {
           {image !== undefined ? (
             <div
               className={classes.background}
-              style={{ backgroundImage: "url(" + image + ")" }}
+              style={{ backgroundImage: `url(${image})` }}
             />
           ) : null}
         </Drawer>
       </Hidden>
       <Hidden smDown implementation="css">
         <Drawer
-          anchor={"left"}
+          anchor="left"
           variant="permanent"
           open
           classes={{
-            paper: classNames(classes.drawerPaper)
+            paper: classNames(classes.drawerPaper),
           }}
         >
           {brand}
@@ -165,7 +167,7 @@ const Sidebar = ({ ...props }) => {
           {image !== undefined ? (
             <div
               className={classes.background}
-              style={{ backgroundImage: "url(" + image + ")" }}
+              style={{ backgroundImage: `url(${image})` }}
             />
           ) : null}
         </Drawer>
@@ -175,16 +177,13 @@ const Sidebar = ({ ...props }) => {
 };
 
 Sidebar.propTypes = {
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired,
 };
 
 export default compose(
   withStyles(sidebarStyle),
 
-  withTracker(() => {
-    return {
-      user: Meteor.user(),
-    }
-  }),
+  withTracker(() => ({
+    user: Meteor.user(),
+  })),
 )(Sidebar);
-

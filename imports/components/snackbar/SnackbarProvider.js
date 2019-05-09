@@ -1,67 +1,76 @@
-import React, { PureComponent } from 'react'
-import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
-import Snackbar from '@material-ui/core/Snackbar'
-import Button from '@material-ui/core/Button'
-import actions from './actions'
+import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import Snackbar from '@material-ui/core/Snackbar';
+import Button from '@material-ui/core/Button';
+import actions from './actions';
 
 class SnackbarProvider extends PureComponent {
   state = {
     open: false,
     message: null,
-    action: null
-  }
+    action: null,
+  };
 
-  getChildContext () {
+  getChildContext() {
     return {
       snackbar: {
-        show: this.props.show
-      }
-    }
+        show: this.props.show,
+      },
+    };
   }
 
-  componentDidUpdate (prevProps, prevState) {
+  componentDidUpdate(prevProps, prevState) {
     if (this.props.snackbar !== prevProps.snackbar) {
       if (this.props.snackbar) {
         if (this.state.open) {
-          this.setState({ open: false })
+          this.setState({ open: false });
         } else {
-          this.processQueue()
+          this.processQueue();
         }
       }
     }
   }
 
   handleClose = (event, reason) => {
-    if (reason === 'clickaway') return
-    this.setState({ open: false, handleAction: null })
-  }
+    if (reason === 'clickaway') return;
+    this.setState({
+      open: false,
+      handleAction: null,
+    });
+  };
 
   handleExited = () => {
-    this.processQueue()
-  }
+    this.processQueue();
+  };
 
   handleActionClick = () => {
-    this.handleClose()
-    this.state.handleAction()
-  }
+    this.handleClose();
+    this.state.handleAction();
+  };
 
   processQueue = () => {
     if (this.props.snackbar) {
-      const { message, action, handleAction } = this.props.snackbar
-      this.setState({ open: true, message, action, handleAction })
-      this.props.dismiss(this.props.snackbar.id)
+      const { message, action, handleAction } = this.props.snackbar;
+      this.setState({
+        open: true,
+        message,
+        action,
+        handleAction,
+      });
+      this.props.dismiss(this.props.snackbar.id);
     }
-  }
+  };
 
-  render () {
-    const { children, SnackbarProps = {} } = this.props
-    const { action, message, open } = this.state
+  render() {
+    const { children, SnackbarProps = {} } = this.props;
+    const { action, message, open } = this.state;
 
     return (
       <React.Fragment>
         {children}
-        <Snackbar {...SnackbarProps}
+        <Snackbar
+          {...SnackbarProps}
           open={open}
           message={message || ''}
           action={action && (
@@ -73,25 +82,29 @@ class SnackbarProvider extends PureComponent {
           onExited={this.handleExited}
         />
       </React.Fragment>
-    )
+    );
   }
 }
 
 SnackbarProvider.childContextTypes = {
-  snackbar: PropTypes.object
-}
+  snackbar: PropTypes.object,
+};
 
 SnackbarProvider.propTypes = {
   children: PropTypes.node,
-  SnackbarProps: PropTypes.object
-}
+  SnackbarProps: PropTypes.object,
+};
 
 export default connect(
   state => ({
-    snackbar: state.snackbar.queue[0] || null
+    snackbar: state.snackbar.queue[0] || null,
   }),
   dispatch => ({
-    show: (message, action, handleAction) => dispatch(actions.show({ message, action, handleAction })),
-    dismiss: (id) => dispatch(actions.dismiss({ id }))
-  })
-)(SnackbarProvider)
+    show: (message, action, handleAction) => dispatch(actions.show({
+      message,
+      action,
+      handleAction,
+    })),
+    dismiss: id => dispatch(actions.dismiss({ id })),
+  }),
+)(SnackbarProvider);

@@ -1,17 +1,19 @@
-import React from "react";
+import React from 'react';
 // @material-ui/core components
-import withStyles from "@material-ui/core/styles/withStyles";
-import headerLinksStyle from "/imports/assets/jss/material-dashboard-react/components/headerLinksStyle.jsx";
+import withStyles from '@material-ui/core/styles/withStyles';
+import headerLinksStyle
+  from '/imports/assets/jss/material-dashboard-react/components/headerLinksStyle.jsx';
 
 class HeaderLinks extends React.Component {
   state = {
-    open: false
+    open: false,
   };
+
   handleToggle = () => {
     this.setState(state => ({ open: !state.open }));
   };
 
-  handleClose = event => {
+  handleClose = (event) => {
     if (this.anchorEl.contains(event.target)) {
       return;
     }
@@ -24,7 +26,7 @@ class HeaderLinks extends React.Component {
     const { open } = this.state;
     return (
       <div>
-{/*
+        {/*
         <div className={classes.searchWrapper}>
           <CustomInput
             formControlProps={{
@@ -42,7 +44,7 @@ class HeaderLinks extends React.Component {
           </Button>
         </div>
 */}
-{/*
+        {/*
         <Button
           color={window.innerWidth > 959 ? "transparent" : "white"}
           justIcon={window.innerWidth > 959}
@@ -56,7 +58,7 @@ class HeaderLinks extends React.Component {
           </Hidden>
         </Button>
 */}
-{/*
+        {/*
         <div className={classes.manager}>
           <Button
             buttonRef={node => {
@@ -137,7 +139,7 @@ class HeaderLinks extends React.Component {
           </Poppers>
         </div>
 */}
-{/*
+        {/*
         <Button
           color={window.innerWidth > 959 ? "transparent" : "white"}
           justIcon={window.innerWidth > 959}
