@@ -3,11 +3,6 @@ import withStyles from '@material-ui/core/styles/withStyles';
 import { Editor } from 'react-draft-wysiwyg';
 import Button from '@material-ui/core/Button';
 import { connect } from 'react-redux';
-import {
-  addParagraphToEditingQuiz,
-  addQuestionToEditingQuiz,
-  setEditingQuiz,
-} from '/imports/actions';
 import * as PropTypes from 'prop-types';
 import TextField from '@material-ui/core/TextField';
 import { compose } from 'redux';
@@ -17,14 +12,17 @@ import CardContent from '@material-ui/core/CardContent';
 import { orange } from '@material-ui/core/colors';
 import Grid from '@material-ui/core/Grid';
 import { Quizzes } from '../../collections';
+import QuizQuestionEditor from './QuizQuestionEditor';
+import QuizParagraphEditor from './QuizParagraphEditor';
 import {
+  addParagraphToEditingQuiz,
+  addQuestionToEditingQuiz,
   changeDescriptionEditorStateInEditingQuiz,
   changeTitleInEditingQuiz,
   clearEditingQuiz,
   saveEditingQuiz,
+  setEditingQuiz,
 } from '../../actions';
-import QuizParagraphEditor from './QuizParagraphEditor';
-import QuizQuestionEditor from './QuizQuestionEditor';
 
 const styles = {
   quizEditorCardHeaderRoot: {
@@ -59,7 +57,11 @@ class QuizEditor extends React.Component {
   componentDidMount() {
     const quizId = QuizEditor.getQuizId(this.props);
 
-    this.props.dispatch(clearEditingQuiz());
+    const {
+      dispatch,
+    } = this.props;
+
+    dispatch(clearEditingQuiz());
 
     if (!this.isNewQuiz) {
       this.quizSubscription = Meteor.subscribe('quiz', quizId);
@@ -73,7 +75,7 @@ class QuizEditor extends React.Component {
           } else {
             const quiz = Quizzes.findOne(quizId);
 
-            this.props.dispatch(setEditingQuiz(quiz));
+            dispatch(setEditingQuiz(quiz));
 
             this.setState({ originalTitle: quiz.title });
           }
@@ -108,6 +110,15 @@ class QuizEditor extends React.Component {
       onQuizSave,
     } = this.props;
 
+    const {
+      quizLoaded,
+      originalTitle,
+    } = this.state;
+
+    if (!quizLoaded) {
+      return <div />;
+    }
+
     return (
       <Grid container justify="space-around">
         <Grid item xs={12} sm={12} md={8}>
@@ -122,8 +133,8 @@ class QuizEditor extends React.Component {
               title={this.isNewQuiz ? 'New Quiz' : 'Edit Quiz'}
 
               subheader={
-                !this.isNewQuiz && this.state.originalTitle
-                  ? `You are editing '${this.state.originalTitle}' quiz`
+                !this.isNewQuiz && originalTitle
+                  ? `You are editing '${originalTitle}' quiz`
                   : null
               }
             />

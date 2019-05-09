@@ -10,7 +10,7 @@ import Grid from '@material-ui/core/Grid';
 import { compose } from 'redux';
 import { Teams } from '../../collections';
 import TeamTile from './teamTile';
-import teamsPageStyle from './teamsPageStyle.jsx';
+import teamsPageStyle from './teamsPageStyle';
 
 class TeamsPage extends React.PureComponent {
   render() {
