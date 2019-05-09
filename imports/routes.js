@@ -3,7 +3,7 @@ import People from '@material-ui/icons/People';
 import DashboardPage from '/imports/views/dashboard/dashboard.jsx';
 import TeamsPage from '/imports/views/teams/teamsPage';
 import QuizEditor from './views/Quizzes/QuizEditor';
-import TeamSettings from './views/teams/TeamSettings';
+import TeamSettings from './views/teams/teamSettings';
 
 export const routes = [
   {
