@@ -82,7 +82,7 @@ class Dashboard extends React.Component {
       <div className={classes.wrapper}>
         <Sidebar
           routes={drawerRoutes}
-          logoText={"Quiz Your Team"}
+          logoText={"Quiz Your Teams"}
           logo={logo}
           image={this.state.image}
           handleDrawerToggle={this.handleDrawerToggle}

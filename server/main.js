@@ -2,8 +2,8 @@ import { Meteor } from 'meteor/meteor';
 import { check } from 'meteor/check';
 import { Accounts } from "meteor/accounts-base";
 import { Roles } from "meteor/alanning:roles";
-
-import { Quizzes } from "../imports/collections"
+import "../imports/collections";
+import { Quizzes, Teams } from "../imports/collections"
 
 Meteor.publish("quizzes", function () {
   if (!this.userId) {
@@ -23,9 +23,39 @@ Meteor.publish("quiz", function (quizId) {
     return [];
   }
 
-  // todo progmonster  check permissions
+  this.autorun(() => {
+    // todo progmonster  check permissions
 
-  return Quizzes.find(quizId);
+    return Quizzes.find(quizId);
+  });
+});
+
+Meteor.publish("teams", function () {
+  if (!this.userId) {
+    return [];
+  }
+
+  this.autorun(() => {
+    // todo progmonster  check permissions
+    /*
+        const grantedQuizzes = Roles.getGroupsForUser(this.userId, "viewQuiz")
+          .map(grantedGroup => grantedGroup.replace(/^quizzes\//, ""));
+    */
+
+    return Teams.find({});
+  });
+});
+
+Meteor.publish("team", function (teamId) {
+  if (!this.userId) {
+    return [];
+  }
+
+  this.autorun(() => {
+    // todo progmonster  check permissions
+
+    return Teams.find(teamId);
+  });
 });
 
 Accounts.urls.verifyEmail = function (token) {
@@ -58,7 +88,6 @@ Meteor.methods({
     Roles.addUsersToRoles(this.userId, ["removeQuiz"], "quizzes/" + quizId);
     Roles.addUsersToRoles(this.userId, ["passQuiz"], "quizzes/" + quizId);
 
-
     return quizId;
   },
 
@@ -70,7 +99,52 @@ Meteor.methods({
     Quizzes.remove(quizId);
 
     Meteor.users.update({}, { $unset: { [`roles.quizzes/${quizId}`]: "" } }, { multi: true })
+  },
+
+  "teams.createTeam"({ title, description }) {
+    check(this.userId, String);
+    check(title, String);
+    check(description, String);
+
+    const createdAt = new Date();
+
+    const teamId = Teams.insert({
+      title,
+      description,
+      createdAt,
+      updatedAt: createdAt,
+      creator: this.userId,
+
+      participants: [
+        { userId: this.userId }
+      ],
+    });
+
+    return teamId;
+  },
+
+  "teams.updateTeamSettings"({ _id, title, description }) {
+    check(this.userId, String);
+    check(_id, String);
+    check(title, String);
+    check(description, String);
+
+    Teams.update(_id, {
+      $set: {
+        title,
+        description,
+        updatedAt: new Date(),
+      }
+    });
+  },
+
+  "teams.removeTeam"(teamId) {
+    check(this.userId, String);
+    check(teamId, String);
+
+    Teams.remove(teamId);
   }
+
 });
 
 Meteor.startup(() => {

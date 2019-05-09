@@ -21,6 +21,7 @@ import { Provider } from "react-redux";
 import SnackbarProvider from "../imports/components/snackbar/SnackbarProvider";
 
 Meteor.subscribe("quizzes");
+Meteor.subscribe("teams");
 
 Meteor.startup(() => {
   const hist = createBrowserHistory();

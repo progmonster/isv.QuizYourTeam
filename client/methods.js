@@ -10,5 +10,13 @@ export default {
     insertAsync: (quiz) => Meteor.callAsync("quizzes.insert", quiz),
 
     removeAsync: (quizId) => Meteor.callAsync("quizzes.remove", quizId)
-  }
+  },
+
+  teams: {
+    createTeamAsync: (teamSettings) => Meteor.callAsync("teams.createTeam", teamSettings),
+
+    updateTeamSettingsAsync: (teamSettings) => Meteor.callAsync("teams.updateTeamSettings", teamSettings),
+
+    removeTeamAsync: (teamId) => Meteor.callAsync("teams.removeTeam", teamId)
+  },
 }

@@ -1,8 +1,9 @@
 import Dashboard from "@material-ui/icons/Dashboard";
 import People from "@material-ui/icons/People";
 import DashboardPage from "/imports/views/dashboard/dashboard.jsx";
-import Team from "/imports/views/Team/Team.jsx";
+import TeamsPage from "/imports/views/teams/teamsPage";
 import QuizEditor from "./views/Quizzes/QuizEditor";
+import TeamSettings from "./views/teams/TeamSettings";
 
 export const routes = [
   {
@@ -22,11 +23,19 @@ export const routes = [
   },
 
   {
-    path: "/team",
-    name: "Your Team",
+    path: "/teams",
+    name: "Your Teams",
     icon: People,
-    component: Team,
+    component: TeamsPage,
     showInDrawer: true,
+  },
+
+  {
+    path: "/team-settings/:teamId?",
+    name: "Team Settings",
+    icon: People,
+    component: TeamSettings,
+    showInDrawer: false,
   },
 ];
 
