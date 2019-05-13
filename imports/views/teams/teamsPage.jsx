@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
-import '/node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css'; // todo check it (all occurrences)
 import withStyles from '@material-ui/core/styles/withStyles';
 import { Link } from 'react-router-dom';
 import { withTracker } from 'meteor/react-meteor-data';

@@ -1,14 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Editor } from 'react-draft-wysiwyg';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
-import '/node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css'; // todo check it (all occurrences)
 import withStyles from '@material-ui/core/styles/withStyles';
 import { Link } from 'react-router-dom';
 import { withTracker } from 'meteor/react-meteor-data';
 import Grid from '@material-ui/core/Grid';
-import dashboardStyle from './dashboardStyle.jsx';
+import dashboardStyle from './dashboardStyle';
 import QuizTileContainer from './quizTile';
 import { Quizzes } from '../../collections';
 

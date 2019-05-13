@@ -19,6 +19,7 @@ import LoginLayoutRoute from '../imports/layouts/LoginLayoutRoute';
 import reducers from '../imports/reducers';
 import { rootSaga } from '../imports/actions';
 import SnackbarProvider from '../imports/components/snackbar/SnackbarProvider';
+import CssBaseline from '@material-ui/core/CssBaseline';
 
 Meteor.subscribe('quizzes');
 Meteor.subscribe('teams');
@@ -46,25 +47,27 @@ Meteor.startup(() => {
   ));
 
   ReactDOM.render(
-    <Provider store={store}>
-      <SnackbarProvider SnackbarProps={{ autoHideDuration: 3500 }}>
-        <Router history={hist}>
-          <Switch>
-            <Route exact path="/">
-              <Redirect from="/" to="/dashboard" />
-            </Route>
+    <CssBaseline>
+      <Provider store={store}>
+        <SnackbarProvider SnackbarProps={{ autoHideDuration: 3500 }}>
+          <Router history={hist}>
+            <Switch>
+              <Route exact path="/">
+                <Redirect from="/" to="/dashboard" />
+              </Route>
 
-            <LoginLayoutRoute path="/login" component={SignInPage} />
-            <LoginLayoutRoute path="/signup" component={SignUpPage} />
-            <LoginLayoutRoute path="/signup-confirmation-note"
-                              component={SignUpConfirmationNotePage} />
-            <LoginLayoutRoute path="/verify-email" component={EmailVerificationPage} />
+              <LoginLayoutRoute path="/login" component={SignInPage} />
+              <LoginLayoutRoute path="/signup" component={SignUpPage} />
+              <LoginLayoutRoute path="/signup-confirmation-note"
+                                component={SignUpConfirmationNotePage} />
+              <LoginLayoutRoute path="/verify-email" component={EmailVerificationPage} />
 
-            {mainLayoutRoutes}
-          </Switch>
-        </Router>
-      </SnackbarProvider>
-    </Provider>,
+              {mainLayoutRoutes}
+            </Switch>
+          </Router>
+        </SnackbarProvider>
+      </Provider>
+    </CssBaseline>,
 
     document.getElementById('root'),
   );
