@@ -31,7 +31,7 @@ const styles = {
   },
 };
 
-class TeamSettings extends React.Component {
+class TeamSettingsPage extends React.Component {
   constructor(props, context) {
     super(props, context);
 
@@ -199,7 +199,7 @@ class TeamSettings extends React.Component {
   }
 }
 
-TeamSettings.propTypes = {
+TeamSettingsPage.propTypes = {
   classes: PropTypes.shape({
     teamSettingsCardSubheaderTitle: PropTypes.string.isRequired,
     teamSettingsCardHeaderTitle: PropTypes.string.isRequired,
@@ -213,7 +213,7 @@ TeamSettings.propTypes = {
   onTeamRemove: PropTypes.func.isRequired,
 };
 
-TeamSettings.defaultProps = {
+TeamSettingsPage.defaultProps = {
   team: null,
 };
 
@@ -289,4 +289,4 @@ export default compose(
 
   withStyles(styles),
   connect(null, mapDispatchToProps),
-)(TeamSettings);
+)(TeamSettingsPage);
