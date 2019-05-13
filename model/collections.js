@@ -1,12 +1,5 @@
 import { Mongo } from 'meteor/mongo';
-
-// todo progmonster  move to model
-export class Team {
-  constructor({ title, description }) {
-    this.title = title;
-    this.description = description;
-  }
-}
+import Team from './team';
 
 export const Quizzes = new Mongo.Collection('quizzes');
 

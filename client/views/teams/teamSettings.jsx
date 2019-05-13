@@ -11,10 +11,11 @@ import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import { withTracker } from 'meteor/react-meteor-data';
 import { connect } from 'react-redux';
-import { Team, Teams } from '../../../model/collections';
+import { Teams } from '../../../model/collections';
 import Methods from '../../methods';
 import AlertDialog from '../../components/alertDialog';
 import { snackbarActions as snackbar } from '../../components/snackbar';
+import Team from '../../../model/team';
 
 const styles = {
   teamSettingsCardHeaderRoot: {
