@@ -2,8 +2,9 @@ import { Meteor } from 'meteor/meteor';
 import { check } from 'meteor/check';
 import { Accounts } from 'meteor/accounts-base';
 import { Roles } from 'meteor/alanning:roles';
-import '../imports/collections';
-import { Quizzes, Teams } from '../imports/collections';
+import '../model/collections';
+import { Quizzes, Teams } from '../model/collections';
+
 
 Meteor.publish('quizzes', function () {
   if (!this.userId) {

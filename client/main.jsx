@@ -4,21 +4,21 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { createBrowserHistory } from 'history';
 import { Redirect, Route, Router, Switch } from 'react-router-dom';
-import '/imports/assets/css/material-dashboard-react.css'; // todo check if it works
+import '/client/assets/css/material-dashboard-react.css'; // todo check if it works
 import createSagaMiddleware from 'redux-saga';
 import { createLogger } from 'redux-logger';
 import { applyMiddleware, createStore } from 'redux';
 import { Provider } from 'react-redux';
-import SignInPage from '../imports/views/auth/SignInPage';
-import SignUpPage from '../imports/views/auth/SignUpPage';
-import SignUpConfirmationNotePage from '../imports/views/auth/SignUpConfirmationNotePage';
-import EmailVerificationPage from '../imports/views/auth/EmailVerificationPage';
-import { routes } from '../imports/routes';
-import MainLayoutRoute from '../imports/layouts/MainLayoutRoute';
-import LoginLayoutRoute from '../imports/layouts/LoginLayoutRoute';
-import reducers from '../imports/reducers';
-import { rootSaga } from '../imports/actions';
-import SnackbarProvider from '../imports/components/snackbar/SnackbarProvider';
+import SignInPage from './views/auth/SignInPage';
+import SignUpPage from './views/auth/SignUpPage';
+import SignUpConfirmationNotePage from './views/auth/SignUpConfirmationNotePage';
+import EmailVerificationPage from './views/auth/EmailVerificationPage';
+import { routes } from './routes';
+import MainLayoutRoute from './layouts/MainLayoutRoute';
+import LoginLayoutRoute from './layouts/LoginLayoutRoute';
+import reducers from './reducers';
+import { rootSaga } from './actions';
+import SnackbarProvider from './components/snackbar/SnackbarProvider';
 import CssBaseline from '@material-ui/core/CssBaseline';
 
 Meteor.subscribe('quizzes');
