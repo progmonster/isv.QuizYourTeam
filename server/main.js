@@ -114,7 +114,12 @@ Meteor.methods({
       creator: this.userId,
 
       participants: [
-        { userId: this.userId },
+        {
+          [this.userId]: {
+            userId: this.userId,
+            joinedAt: createdAt,
+          },
+        },
       ],
     });
 

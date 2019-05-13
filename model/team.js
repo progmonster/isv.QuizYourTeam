@@ -1,6 +1,9 @@
 export default class Team {
-  constructor({ title, description }) {
-    this.title = title;
-    this.description = description;
+  title;
+
+  description;
+
+  constructor(doc) {
+    Object.assign(this, doc);
   }
 }
