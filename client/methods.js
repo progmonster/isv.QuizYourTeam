@@ -15,9 +15,12 @@ export default {
   teams: {
     createTeamAsync: teamSettings => Meteor.callAsync('teams.createTeam', teamSettings),
 
-    updateTeamSettingsAsync: teamSettings => Meteor.callAsync('teams.updateTeamSettings', teamSettings),
+    updateTeamSettingsAsync: teamSettings => Meteor
+      .callAsync('teams.updateTeamSettings', teamSettings),
 
     removeTeamAsync: teamId => Meteor.callAsync('teams.removeTeam', teamId),
 
+    inviteNewUserAsync: (teamId, newUserEmail) => Meteor
+      .callAsync('teams.inviteNewUserAsync', teamId, newUserEmail),
   },
 };

@@ -64,7 +64,7 @@ class TeamTile extends React.Component {
       <Card className={classes.card}>
         <CardHeader
           title={team.title}
-          subheader={`Participants: ${size(team.participants)}`}
+          subheader={`Participants: ${team.getActiveParticipantCount()}`}
         />
 
         <CardContent>

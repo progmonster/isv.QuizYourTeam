@@ -4,7 +4,7 @@ import { Accounts } from 'meteor/accounts-base';
 import { Roles } from 'meteor/alanning:roles';
 import '../model/collections';
 import { Quizzes, Teams } from '../model/collections';
-
+import { getUserFullName } from '../users/userUtils';
 
 Meteor.publish('quizzes', function () {
   if (!this.userId) {
@@ -104,6 +104,12 @@ Meteor.methods({
     check(title, String);
     check(description, String);
 
+    const creator = Meteor.user();
+
+    const creatorEmail = creator.emails[0].address;
+
+    const creatorFullName = getUserFullName(creator);
+
     const createdAt = new Date();
 
     const teamId = Teams.insert({
@@ -111,16 +117,20 @@ Meteor.methods({
       description,
       createdAt,
       updatedAt: createdAt,
-      creator: this.userId,
+      creator: {
+        userId: this.userId,
+        email: creatorEmail,
+        fullName: creatorFullName,
+      },
 
-      participants: [
-        {
-          [this.userId]: {
-            userId: this.userId,
-            joinedAt: createdAt,
-          },
+      participants: {
+        [this.userId]: {
+          userId: this.userId,
+          joinedAt: createdAt,
+          email: creatorEmail,
+          fullName: creatorFullName,
         },
-      ],
+      },
     });
 
     return teamId;
@@ -146,6 +156,23 @@ Meteor.methods({
     check(teamId, String);
 
     Teams.remove(teamId);
+  },
+
+  'teams.inviteNewUserAsync': function (teamId, newUserEmail) {
+    check(this.userId, String);
+    check(teamId, String);
+    check(newUserEmail, String);
+
+    //todo error on invitation  yourself
+    // todo progmonster validate email
+
+    // todo if the user was not registered then create and send email with confirmation
+    // add to the email info about adding invitation to team after registration confirmation
+    // set password
+
+    // todo if the user already signed then add the invite to user model and send the email
+
+    // todo add the participant to the team.
   },
 
 });

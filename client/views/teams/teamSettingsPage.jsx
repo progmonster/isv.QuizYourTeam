@@ -16,6 +16,7 @@ import Methods from '../../methods';
 import AlertDialog from '../../components/alertDialog';
 import { snackbarActions as snackbar } from '../../components/snackbar';
 import Team from '../../../model/team';
+import TeamParticipants from './teamParticipants';
 
 const styles = {
   teamSettingsCardHeaderRoot: {
@@ -105,11 +106,28 @@ class TeamSettingsPage extends React.Component {
     });
   }
 
+  getCreatorFormatted = () => {
+    const { team } = this.props;
+
+    if (!team) {
+      return undefined;
+    }
+
+    const { creator } = team;
+
+    if (creator.fullName) {
+      return `${creator.fullName} (${creator.email})`;
+    }
+
+    return creator.email;
+  };
+
   render() {
     const {
       classes,
       isNewTeam,
       teamLoaded,
+      team,
     } = this.props;
 
     const {
@@ -153,6 +171,7 @@ class TeamSettingsPage extends React.Component {
                     margin="normal"
                   />
                 </Grid>
+
                 <Grid item xs={12} sm={12} md={12}>
                   <TextField
                     label="Description"
@@ -161,6 +180,16 @@ class TeamSettingsPage extends React.Component {
                     value={description}
                     onChange={event => this.onDescriptionChange(event.target.value)}
                     margin="normal"
+                  />
+                </Grid>
+
+                <Grid item xs={12} sm={12} md={12}>
+                  <TextField
+                    label="Creator"
+                    value={this.getCreatorFormatted()}
+                    margin="normal"
+                    disabled
+                    fullWidth
                   />
                 </Grid>
               </Grid>
@@ -194,6 +223,14 @@ class TeamSettingsPage extends React.Component {
           cancelText="Cancel"
           handleClose={this.handleRemoveConfirmationClosed}
         />
+
+        {!isNewTeam && (
+          <Grid item xs={12} sm={12} md={8}>
+            <TeamParticipants
+              team={team}
+            />
+          </Grid>
+        )}
       </Grid>
     );
   }
@@ -218,12 +255,6 @@ TeamSettingsPage.defaultProps = {
 };
 
 const mapDispatchToProps = (dispatch, { history, isNewTeam, teamId }) => ({
-  /*
-        onTeamSave: () => {
-          dispatch(saveEditingQuiz(history));
-        },
-    */
-
   async onTeamSave(teamSettings) {
     if (isNewTeam) {
       try {
