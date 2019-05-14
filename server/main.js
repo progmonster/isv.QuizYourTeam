@@ -5,6 +5,7 @@ import { Roles } from 'meteor/alanning:roles';
 import '../model/collections';
 import { Quizzes, Teams } from '../model/collections';
 import { getUserFullName } from '../users/userUtils';
+import { ACTIVE } from '../model/participantStates';
 
 Meteor.publish('quizzes', function () {
   if (!this.userId) {
@@ -129,6 +130,7 @@ Meteor.methods({
           joinedAt: createdAt,
           email: creatorEmail,
           fullName: creatorFullName,
+          state: ACTIVE,
         },
       },
     });

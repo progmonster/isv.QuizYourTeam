@@ -287,9 +287,9 @@ const mapDispatchToProps = (dispatch, { history, isNewTeam, teamId }) => ({
     try {
       await Methods.teams.removeTeamAsync(teamId);
 
-      dispatch(snackbar.show({ message: 'The team has been successfully removed' }));
-
       history.replace('/teams');
+
+      dispatch(snackbar.show({ message: 'The team has been successfully removed' }));
     } catch (error) {
       console.log(error);
 
