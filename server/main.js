@@ -71,7 +71,7 @@ Accounts.config({
 
 Meteor.methods({
   // todo move to quizService
-  'quizzes.update': function (quiz) {
+  'quizMethods.update': function (quiz) {
     check(this.userId, String);
     check(quiz._id, String);
     check(Roles.userIsInRole(this.userId, 'editQuiz', `quizzes/${quiz._id}`), true);
@@ -82,7 +82,7 @@ Meteor.methods({
   },
 
   // todo move to quizService
-  'quizzes.insert': function (quiz) {
+  'quizMethods.insert': function (quiz) {
     check(this.userId, String);
     check(quiz._id, undefined);
 
@@ -99,7 +99,7 @@ Meteor.methods({
   },
 
   // todo move to quizService
-  'quizzes.remove': function (quizId) {
+  'quizMethods.remove': function (quizId) {
     check(this.userId, String);
     check(quizId, String);
     check(Roles.userIsInRole(this.userId, 'removeQuiz', `quizzes/${quizId}`), true);
@@ -111,7 +111,7 @@ Meteor.methods({
     Meteor.users.update({}, { $unset: { [`roles.quizzes/${quizId}`]: '' } }, { multi: true });
   },
 
-  'teams.createTeam': function ({ title, description }) {
+  'teamMethods.createTeam': function ({ title, description }) {
     this.unblock();
 
     return teamService.createTeam({
@@ -121,7 +121,7 @@ Meteor.methods({
   },
 
   // todo move to teamService
-  'teams.updateTeamSettings': function ({ _id, title, description }) {
+  'teamMethods.updateTeamSettings': function ({ _id, title, description }) {
     check(this.userId, String);
     check(_id, String);
     check(title, String);
@@ -139,14 +139,14 @@ Meteor.methods({
   },
 
   // todo move to teamService
-  'teams.removeTeam': function (teamId) {
+  'teamMethods.removeTeam': function (teamId) {
     check(this.userId, String);
     check(teamId, String);
 
     Teams.remove(teamId);
   },
 
-  'teams.invitePersonByEmailAsync': function (teamId, personEmail) {
+  'teamMethods.invitePersonByEmailAsync': function (teamId, personEmail) {
     this.unblock();
 
     teamService.invitePersonByEmail(teamId, personEmail, Meteor.user());

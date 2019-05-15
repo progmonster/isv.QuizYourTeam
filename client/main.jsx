@@ -1,4 +1,3 @@
-import './methods';
 import { Meteor } from 'meteor/meteor';
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -21,6 +20,9 @@ import reducers from './reducers';
 import { rootSaga } from './actions';
 import SnackbarProvider from './components/snackbar/snackbarProvider';
 import CssBaseline from '@material-ui/core/CssBaseline';
+import { promisify } from 'util';
+
+Meteor.callAsync = promisify(Meteor.call);
 
 Meteor.subscribe('quizzes');
 Meteor.subscribe('teams');

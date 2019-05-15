@@ -2,7 +2,7 @@ import { all, put, select, takeEvery } from 'redux-saga/effects';
 import { convertFromRaw, convertToRaw, EditorState } from 'draft-js';
 import range from 'lodash/range';
 import { snackbarActions as snackbar } from './components/snackbar';
-import Methods from './methods';
+import quizService from './services/quizService';
 
 export const CLEAR_EDITING_QUIZ = 'CLEAR_EDITING_QUIZ';
 
@@ -257,9 +257,9 @@ function* saveEditingQuizAsync({ history }) {
 
   try {
     if (editingQuiz._id) {
-      yield Methods.quizzes.updateAsync(editingQuiz);
+      yield quizService.update(editingQuiz);
     } else {
-      yield Methods.quizzes.insertAsync(editingQuiz);
+      yield quizService.insert(editingQuiz);
     }
 
     yield put(clearEditingQuiz());
@@ -276,7 +276,7 @@ function* saveEditingQuizAsync({ history }) {
 
 function* removeQuizAsync({ quizId }) {
   try {
-    yield Methods.quizzes.removeAsync(quizId);
+    yield quizService.remove(quizId);
 
     yield put(snackbar.show({ message: 'The quiz has been successfully removed' }));
   } catch (error) {

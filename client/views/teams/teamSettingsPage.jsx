@@ -12,11 +12,11 @@ import Button from '@material-ui/core/Button';
 import { withTracker } from 'meteor/react-meteor-data';
 import { connect } from 'react-redux';
 import { Teams } from '../../../model/collections';
-import Methods from '../../methods';
 import AlertDialog from '../../components/alertDialog';
 import { snackbarActions as snackbar } from '../../components/snackbar';
 import Team from '../../../model/team';
 import TeamParticipants from './teamParticipants';
+import teamService from '../../services/teamService';
 
 const styles = {
   teamSettingsCardHeaderRoot: {
@@ -94,18 +94,6 @@ class TeamSettingsPage extends React.Component {
     });
   };
 
-  updateStateFromProps() {
-    const {
-      team,
-    } = this.props;
-
-    this.setState({
-      originalTitle: team ? team.title : '',
-      title: team ? team.title : '',
-      description: team ? team.description : '',
-    });
-  }
-
   getCreatorFormatted = () => {
     const { team } = this.props;
 
@@ -121,6 +109,18 @@ class TeamSettingsPage extends React.Component {
 
     return creator.email;
   };
+
+  updateStateFromProps() {
+    const {
+      team,
+    } = this.props;
+
+    this.setState({
+      originalTitle: team ? team.title : '',
+      title: team ? team.title : '',
+      description: team ? team.description : '',
+    });
+  }
 
   render() {
     const {
@@ -258,7 +258,7 @@ const mapDispatchToProps = (dispatch, { history, isNewTeam, teamId }) => ({
   async onTeamSave(teamSettings) {
     if (isNewTeam) {
       try {
-        await Methods.teams.createTeamAsync(teamSettings);
+        await teamService.create(teamSettings);
 
         dispatch(snackbar.show({ message: 'The team has been successfully created' }));
 
@@ -270,7 +270,7 @@ const mapDispatchToProps = (dispatch, { history, isNewTeam, teamId }) => ({
       }
     } else {
       try {
-        await Methods.teams.updateTeamSettingsAsync({ _id: teamId, ...teamSettings });
+        await teamService.updateTeamSettings({ _id: teamId, ...teamSettings });
 
         dispatch(snackbar.show({ message: 'The team settings have been successfully updated' }));
 
@@ -285,7 +285,7 @@ const mapDispatchToProps = (dispatch, { history, isNewTeam, teamId }) => ({
 
   async onTeamRemove() {
     try {
-      await Methods.teams.removeTeamAsync(teamId);
+      await teamService.remove(teamId);
 
       history.replace('/teams');
 

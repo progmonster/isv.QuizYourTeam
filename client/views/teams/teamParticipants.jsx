@@ -14,8 +14,8 @@ import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import { INVITED } from '../../../model/participantStates';
-import Methods from '../../methods';
 import { snackbarActions as snackbar } from '../../components/snackbar';
+import teamService from '../../services/teamService';
 
 const styles = {
   participantTableRowRoot_currentUser: {
@@ -254,7 +254,7 @@ TeamParticipants.defaultProps = {
 const mapDispatchToProps = (dispatch, { team }) => ({
   async onPersonInvite(personEmail) {
     try {
-      await Methods.teams.invitePersonByEmailAsync(team._id, personEmail);
+      await teamService.invitePersonByEmailAsync(team._id, personEmail);
 
       dispatch(snackbar.show({ message: 'The invitation has been sent' }));
     } catch (error) {
