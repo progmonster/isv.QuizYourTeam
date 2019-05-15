@@ -175,7 +175,7 @@ class TeamParticipants extends React.Component {
       classes,
       team,
       currentUserId,
-      onNewPersonInvite,
+      onPersonInvite,
     } = this.props;
 
     const {
@@ -221,7 +221,7 @@ class TeamParticipants extends React.Component {
           <Button
             variant="contained"
             color="primary"
-            onClick={() => onNewPersonInvite(personEmail.trim())}
+            onClick={() => onPersonInvite(personEmail.trim())}
           >
             Invite an user
           </Button>
@@ -252,7 +252,7 @@ TeamParticipants.defaultProps = {
 };
 
 const mapDispatchToProps = (dispatch, { team }) => ({
-  async onNewPersonInvite(personEmail) {
+  async onPersonInvite(personEmail) {
     try {
       await Methods.teams.invitePersonByEmailAsync(team._id, personEmail);
 
