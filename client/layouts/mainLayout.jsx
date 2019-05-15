@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import PerfectScrollbar from 'perfect-scrollbar';
 import 'perfect-scrollbar/css/perfect-scrollbar.css';
 import withStyles from '@material-ui/core/styles/withStyles';
-import Navbar from '/client/components/Navbars/Navbar.jsx';
-import Sidebar from '/client/components/Sidebar/Sidebar.jsx';
+import Navbar from '/client/components/navbars/navbar.jsx';
+import Sidebar from '/client/components/sidebar/sidebar.jsx';
 import { drawerRoutes } from '/client/routes.js';
 
 import dashboardStyle

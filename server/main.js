@@ -165,7 +165,7 @@ Meteor.methods({
     check(teamId, String);
     check(newUserEmail, String);
 
-    //todo error on invitation  yourself
+    // todo error on invitation  yourself
     // todo progmonster validate email
 
     // todo if the user was not registered then create and send email with confirmation

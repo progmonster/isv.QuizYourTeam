@@ -7,10 +7,10 @@ import { Link } from 'react-router-dom';
 import { withTracker } from 'meteor/react-meteor-data';
 import Grid from '@material-ui/core/Grid';
 import dashboardStyle from './dashboardStyle';
-import QuizTileContainer from './quizTile';
+import QuizTileContainer from '../quizzes/quizTile';
 import { Quizzes } from '../../../model/collections';
 
-class Dashboard extends React.PureComponent {
+class DashboardPage extends React.PureComponent {
   render() {
     const { classes, quizzes } = this.props;
 
@@ -32,14 +32,14 @@ class Dashboard extends React.PureComponent {
   }
 }
 
-Dashboard.propTypes = {
+DashboardPage.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
 const DashboardContainer = withTracker(() => ({
   quizzes: Quizzes.find()
     .fetch(),
-}))(withStyles(dashboardStyle)(Dashboard));
+}))(withStyles(dashboardStyle)(DashboardPage));
 
 
 export default DashboardContainer;

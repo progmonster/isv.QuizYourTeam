@@ -8,7 +8,7 @@ import Button from '@material-ui/core/Button';
 import * as PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Grid from '@material-ui/core/Grid';
-import QuizAnswersEditor from './QuizAnswersEditor';
+import QuizAnswersEditor from './quizAnswersEditor';
 import {
   changeQuestionEditorStateInEditingQuiz,
   removeQuestionFromEditingQuiz,

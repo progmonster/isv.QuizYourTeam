@@ -8,10 +8,10 @@ import RadioGroup from '@material-ui/core/RadioGroup';
 import { connect } from 'react-redux';
 import FormGroup from '@material-ui/core/FormGroup';
 import Grid from '@material-ui/core/Grid';
-import { ANSWER_TYPES } from './AnswerTypes';
+import ANSWER_TYPES from '../../../model/answerTypes';
 import { addAnswerToEditingQuiz, changeAnswerTypeInEditingQuiz } from '../../actions';
-import SingleChoiceAnswer from './SingleChoiceAnswer';
-import MultipleChoiceAnswer from './MultipleChoiceAnswer';
+import SingleChoiceAnswer from './singleChoiceAnswer';
+import MultipleChoiceAnswer from './multipleChoiceAnswer';
 
 const styles = theme => ({
   quizAnswersEditor: {

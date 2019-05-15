@@ -10,7 +10,7 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Icon from '@material-ui/core/Icon';
-import AdminNavbarLinks from '/client/components/Navbars/AdminNavbarLinks.jsx';
+import AdminNavbarLinks from '/client/components/navbars/adminNavbarLinks.jsx';
 import sidebarStyle from '/client/assets/jss/material-dashboard-react/components/sidebarStyle.jsx';
 import { compose } from 'redux';
 import { ExitToApp } from '@material-ui/icons';

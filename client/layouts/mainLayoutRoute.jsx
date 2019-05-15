@@ -1,6 +1,6 @@
 import React from 'react';
 import { Route } from 'react-router-dom';
-import MainLayout from './MainLayout';
+import MainLayout from './mainLayout';
 
 const MainLayoutRoute = ({ component: Component, ...rest }) => (
   <Route

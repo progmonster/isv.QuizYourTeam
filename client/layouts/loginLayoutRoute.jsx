@@ -1,6 +1,6 @@
 import React from 'react';
 import { Route } from 'react-router-dom';
-import LoginLayout from './LoginLayout';
+import LoginLayout from './loginLayout';
 
 const LoginLayoutRoute = ({ component: Component, ...rest }) => (
   <Route

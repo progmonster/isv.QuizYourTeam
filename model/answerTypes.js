@@ -1,4 +1,6 @@
-export const ANSWER_TYPES = {
+const ANSWER_TYPES = {
   SINGLE_CHOICE: 'SINGLE_CHOICE',
   MULTIPLE_CHOICE: 'MULTIPLE_CHOICE',
 };
+
+export default ANSWER_TYPES;

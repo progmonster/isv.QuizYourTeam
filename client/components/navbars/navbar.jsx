@@ -11,7 +11,7 @@ import headerStyle from '/client/assets/jss/material-dashboard-react/components/
 import Button from '@material-ui/core/Button';
 import { compose } from 'redux';
 import { withRouter } from 'react-router-dom';
-import AdminNavbarLinks from './AdminNavbarLinks.jsx'; // todo progmonster remove Admin from all names
+import AdminNavbarLinks from './adminNavbarLinks.jsx'; // todo progmonster remove Admin from all names
 
 function Header({ ...props }) {
   function makeBrand() {

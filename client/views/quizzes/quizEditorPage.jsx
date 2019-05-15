@@ -13,8 +13,8 @@ import CardContent from '@material-ui/core/CardContent';
 import { orange } from '@material-ui/core/colors';
 import Grid from '@material-ui/core/Grid';
 import { Quizzes } from '../../../model/collections';
-import QuizQuestionEditor from './QuizQuestionEditor';
-import QuizParagraphEditor from './QuizParagraphEditor';
+import QuizQuestionEditor from './quizQuestionEditor';
+import QuizParagraphEditor from './quizParagraphEditor';
 import {
   addParagraphToEditingQuiz,
   addQuestionToEditingQuiz,
@@ -39,11 +39,11 @@ const styles = {
   },
 };
 
-class QuizEditor extends React.Component {
+class QuizEditorPage extends React.Component {
   constructor(props, context) {
     super(props, context);
 
-    this.isNewQuiz = !QuizEditor.getQuizId(props);
+    this.isNewQuiz = !QuizEditorPage.getQuizId(props);
 
     this.quizSubscription = null;
 
@@ -56,7 +56,7 @@ class QuizEditor extends React.Component {
   static getQuizId = props => props.match.params.quizId;
 
   componentDidMount() {
-    const quizId = QuizEditor.getQuizId(this.props);
+    const quizId = QuizEditorPage.getQuizId(this.props);
 
     const {
       dispatch,
@@ -196,7 +196,7 @@ class QuizEditor extends React.Component {
   }
 }
 
-QuizEditor.propTypes = {
+QuizEditorPage.propTypes = {
   classes: PropTypes.any,
   title: PropTypes.string,
   paragraphs: PropTypes.any,
@@ -242,4 +242,4 @@ const mapDispatchToProps = (dispatch, { history }) => ({
 export default compose(
   withStyles(styles),
   connect(mapStateToProps, mapDispatchToProps),
-)(QuizEditor);
+)(QuizEditorPage);

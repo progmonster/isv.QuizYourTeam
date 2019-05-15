@@ -1,8 +1,8 @@
 import Dashboard from '@material-ui/icons/Dashboard';
 import People from '@material-ui/icons/People';
-import DashboardPage from '/client/views/dashboard/dashboard.jsx';
+import DashboardPage from '/client/views/dashboard/dashboardPage.jsx';
 import TeamsPage from '/client/views/teams/teamsPage';
-import QuizEditor from './views/Quizzes/QuizEditor';
+import QuizEditor from './views/quizzes/quizEditorPage';
 import TeamSettings from './views/teams/teamSettingsPage';
 
 export const routes = [
