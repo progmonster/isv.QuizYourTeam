@@ -1,3 +1,4 @@
+import { Meteor } from 'meteor/meteor';
 import { Accounts } from 'meteor/accounts-base';
 import { check } from 'meteor/check';
 import { Teams } from '../../model/collections';
@@ -39,14 +40,7 @@ const teamService = {
     // todo error on invitation  yourself
     // todo error on invitation an user that is already a participant
     // todo progmonster validate email
-
-    // todo if the user was not registered then create and send email with confirmation
-    // add to the email info about adding invitation to team after registration confirmation
-    // set password
-
-    // todo if the user already signed then add the invite to user model and send the email
-
-    // todo add the participant to the team.
+    // todo progmonster check actor permissions
 
     let personUser = Accounts.findUserByEmail(personEmail);
 
@@ -55,7 +49,7 @@ const teamService = {
 
       Accounts.sendEnrollmentEmail(createdUserId);
 
-      personUser = Accounts.findUserByEmail(personEmail);
+      personUser = Meteor.users.findOne(createdUserId);
     }
 
     const teamParticipant = TeamParticipant.createFromUser(personUser);

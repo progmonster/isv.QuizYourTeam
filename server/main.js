@@ -70,6 +70,7 @@ Accounts.config({
 });
 
 Meteor.methods({
+  // todo move to quizService
   'quizzes.update': function (quiz) {
     check(this.userId, String);
     check(quiz._id, String);
@@ -80,6 +81,7 @@ Meteor.methods({
     Quizzes.update(quiz._id, quiz);
   },
 
+  // todo move to quizService
   'quizzes.insert': function (quiz) {
     check(this.userId, String);
     check(quiz._id, undefined);
@@ -96,6 +98,7 @@ Meteor.methods({
     return quizId;
   },
 
+  // todo move to quizService
   'quizzes.remove': function (quizId) {
     check(this.userId, String);
     check(quizId, String);
@@ -117,6 +120,7 @@ Meteor.methods({
     }, Meteor.user());
   },
 
+  // todo move to teamService
   'teams.updateTeamSettings': function ({ _id, title, description }) {
     check(this.userId, String);
     check(_id, String);
@@ -134,6 +138,7 @@ Meteor.methods({
     });
   },
 
+  // todo move to teamService
   'teams.removeTeam': function (teamId) {
     check(this.userId, String);
     check(teamId, String);
