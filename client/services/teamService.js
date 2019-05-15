@@ -1,15 +1,15 @@
 import { Meteor } from 'meteor/meteor';
 
 const teamService = {
-  create: teamSettings => Meteor.callAsync('teamMethods.createTeam', teamSettings),
+  create: teamSettings => Meteor.callAsync('teamMethods.create', teamSettings),
 
   updateTeamSettings: teamSettings => Meteor
     .callAsync('teamMethods.updateTeamSettings', teamSettings),
 
-  remove: teamId => Meteor.callAsync('teamMethods.removeTeam', teamId),
+  remove: teamId => Meteor.callAsync('teamMethods.remove', teamId),
 
-  invitePersonByEmailAsync: (teamId, personEmail) => Meteor
-    .callAsync('teamMethods.invitePersonByEmailAsync', teamId, personEmail),
+  invitePersonByEmail: (teamId, personEmail) => Meteor
+    .callAsync('teamMethods.invitePersonByEmail', teamId, personEmail),
 };
 
 export default teamService;

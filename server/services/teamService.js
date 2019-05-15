@@ -6,9 +6,10 @@ import TeamCreator from '../../model/teamCreator';
 import TeamParticipant from '../../model/teamParticipant';
 import { ACTIVE, INVITED } from '../../model/participantStates';
 import Team from '../../model/team';
+import { Roles } from 'meteor/alanning:roles';
 
 const teamService = {
-  createTeam({ title, description }, creator) {
+  create({ title, description }, creator) {
     check(title, String);
     check(description, String);
     check(creator, Object);
@@ -30,6 +31,28 @@ const teamService = {
     });
 
     return Teams.insert(team);
+  },
+
+  updateTeamSettings({ _id, title, description }, actor) {
+    check(_id, String);
+    check(title, String);
+    check(description, String);
+    check(actor, Object);
+
+    Teams.update(_id, {
+      $set: {
+        title,
+        description,
+        updatedAt: new Date(),
+      },
+    });
+  },
+
+  remove(teamId, actor) {
+    check(teamId, String);
+    check(actor, Object);
+
+    Teams.remove(teamId);
   },
 
   invitePersonByEmail(teamId, personEmail, actor) {

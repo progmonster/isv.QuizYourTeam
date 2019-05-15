@@ -254,7 +254,7 @@ TeamParticipants.defaultProps = {
 const mapDispatchToProps = (dispatch, { team }) => ({
   async onPersonInvite(personEmail) {
     try {
-      await teamService.invitePersonByEmailAsync(team._id, personEmail);
+      await teamService.invitePersonByEmail(team._id, personEmail);
 
       dispatch(snackbar.show({ message: 'The invitation has been sent' }));
     } catch (error) {

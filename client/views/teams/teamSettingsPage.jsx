@@ -258,11 +258,11 @@ const mapDispatchToProps = (dispatch, { history, isNewTeam, teamId }) => ({
   async onTeamSave(teamSettings) {
     if (isNewTeam) {
       try {
-        await teamService.create(teamSettings);
+        const createdTeamId = await teamService.create(teamSettings);
+
+        history.replace(`/team-settings/${createdTeamId}`);
 
         dispatch(snackbar.show({ message: 'The team has been successfully created' }));
-
-        history.push('/teams');
       } catch (error) {
         console.log(error);
 
