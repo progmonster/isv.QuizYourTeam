@@ -2,10 +2,10 @@ import { Meteor } from 'meteor/meteor';
 import { check } from 'meteor/check';
 import { Accounts } from 'meteor/accounts-base';
 import { Roles } from 'meteor/alanning:roles';
-import '../model/collections';
 import { Quizzes, Teams } from '../model/collections';
 import { getUserFullName } from '../users/userUtils';
 import { ACTIVE } from '../model/participantStates';
+import Participant from '../model/participant';
 
 Meteor.publish('quizzes', function () {
   if (!this.userId) {
@@ -125,13 +125,13 @@ Meteor.methods({
       },
 
       participants: {
-        [this.userId]: {
+        [this.userId]: new Participant({
           userId: this.userId,
           joinedAt: createdAt,
           email: creatorEmail,
           fullName: creatorFullName,
           state: ACTIVE,
-        },
+        }),
       },
     });
 

@@ -8,7 +8,7 @@ import RadioGroup from '@material-ui/core/RadioGroup';
 import { connect } from 'react-redux';
 import FormGroup from '@material-ui/core/FormGroup';
 import Grid from '@material-ui/core/Grid';
-import ANSWER_TYPES from '../../../model/answerTypes';
+import { MULTIPLE_CHOICE, SINGLE_CHOICE } from '../../../model/answerTypes';
 import { addAnswerToEditingQuiz, changeAnswerTypeInEditingQuiz } from '../../actions';
 import SingleChoiceAnswer from './singleChoiceAnswer';
 import MultipleChoiceAnswer from './multipleChoiceAnswer';
@@ -33,16 +33,16 @@ class QuizAnswersEditor extends React.PureComponent {
       <Grid container>
         <Grid item xs={12} sm={12} md={8}>
           <Tabs
-            value={answerType === ANSWER_TYPES.SINGLE_CHOICE ? 0 : 1}
+            value={answerType === SINGLE_CHOICE ? 0 : 1}
 
-            onChange={(event, value) => onAnswerTypeChange(value === 0 ? ANSWER_TYPES.SINGLE_CHOICE : ANSWER_TYPES.MULTIPLE_CHOICE)
+            onChange={(event, value) => onAnswerTypeChange(value === 0 ? SINGLE_CHOICE : MULTIPLE_CHOICE)
             }
           >
             <Tab label="Single choice" />
             <Tab label="Multiple choice" />
           </Tabs>
 
-          {answerType === ANSWER_TYPES.SINGLE_CHOICE
+          {answerType === SINGLE_CHOICE
             ? this._renderSingleChoiceAnswerBlock()
             : this._renderMultipleChoiceAnswerBlock()}
         </Grid>

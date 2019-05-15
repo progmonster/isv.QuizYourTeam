@@ -27,7 +27,7 @@ const styles = {
   },
 };
 
-function GeneralParticipant(props) {
+function RegularParticipant(props) {
   const {
     participant,
     onParticipantRemove,
@@ -162,7 +162,7 @@ class TeamParticipants extends React.Component {
     }
 
     return (
-      <GeneralParticipant
+      <RegularParticipant
         key={participantId}
         participant={participant}
         {...this.props}

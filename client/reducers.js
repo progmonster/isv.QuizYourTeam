@@ -4,7 +4,7 @@ import pull from 'lodash/pull';
 import max from 'lodash/max';
 import reduce from 'lodash/reduce';
 import { combineReducers } from 'redux';
-import ANSWER_TYPES from '../model/answerTypes';
+import { SINGLE_CHOICE } from '../model/answerTypes';
 import {
   ADD_ANSWER_TO_EDITING_QUIZ,
   ADD_PARAGRAPH_TO_EDITING_QUIZ,
@@ -128,7 +128,7 @@ function editingQuizAnswerReducer(state = {
 
           if (Number(answerId) === action.answerId) {
             acc[answerId].checked = action.checked;
-          } else if (answerType === ANSWER_TYPES.SINGLE_CHOICE && action.checked) {
+          } else if (answerType === SINGLE_CHOICE && action.checked) {
             acc[answerId].checked = false;
           }
 
@@ -173,7 +173,7 @@ function editingQuizQuestionReducer(state = {
 
           [newQuestionId]: {
             editorState: EditorState.createEmpty(),
-            answerType: ANSWER_TYPES.SINGLE_CHOICE,
+            answerType: SINGLE_CHOICE,
             answers: {
               allIds: [],
               byId: {},
