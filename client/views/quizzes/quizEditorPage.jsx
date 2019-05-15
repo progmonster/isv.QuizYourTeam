@@ -23,7 +23,7 @@ import {
   clearEditingQuiz,
   saveEditingQuiz,
   setEditingQuiz,
-} from '../../actions';
+} from '../../services/actions';
 
 const styles = {
   quizEditorCardHeaderRoot: {

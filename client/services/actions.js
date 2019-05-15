@@ -1,8 +1,8 @@
 import { all, put, select, takeEvery } from 'redux-saga/effects';
 import { convertFromRaw, convertToRaw, EditorState } from 'draft-js';
 import range from 'lodash/range';
-import { snackbarActions as snackbar } from './components/snackbar';
-import quizService from './services/quizService';
+import { snackbarActions as snackbar } from '../components/snackbar';
+import quizService from './quizService';
 
 export const CLEAR_EDITING_QUIZ = 'CLEAR_EDITING_QUIZ';
 

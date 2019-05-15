@@ -4,7 +4,7 @@ import pull from 'lodash/pull';
 import max from 'lodash/max';
 import reduce from 'lodash/reduce';
 import { combineReducers } from 'redux';
-import { SINGLE_CHOICE } from '../model/answerTypes';
+import { SINGLE_CHOICE } from '../../model/answerTypes';
 import {
   ADD_ANSWER_TO_EDITING_QUIZ,
   ADD_PARAGRAPH_TO_EDITING_QUIZ,
@@ -24,7 +24,7 @@ import {
   SAVE_EDITING_QUIZ,
   SET_EDITING_QUIZ,
 } from './actions';
-import { snackbarReducer } from './components/snackbar';
+import { snackbarReducer } from '../components/snackbar';
 
 function editingQuizParagraphReducer(state = {
   byId: {},

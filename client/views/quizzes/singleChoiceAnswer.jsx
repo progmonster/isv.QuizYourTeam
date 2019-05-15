@@ -11,7 +11,7 @@ import {
   changeAnswerCheckStateInEditingQuiz,
   changeAnswerTitleInEditingQuiz,
   removeAnswerFromEditingQuiz,
-} from '../../actions';
+} from '../../services/actions';
 
 const styles = theme => ({});
 

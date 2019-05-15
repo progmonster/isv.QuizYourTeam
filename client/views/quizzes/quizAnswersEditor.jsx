@@ -9,7 +9,7 @@ import { connect } from 'react-redux';
 import FormGroup from '@material-ui/core/FormGroup';
 import Grid from '@material-ui/core/Grid';
 import { MULTIPLE_CHOICE, SINGLE_CHOICE } from '../../../model/answerTypes';
-import { addAnswerToEditingQuiz, changeAnswerTypeInEditingQuiz } from '../../actions';
+import { addAnswerToEditingQuiz, changeAnswerTypeInEditingQuiz } from '../../services/actions';
 import SingleChoiceAnswer from './singleChoiceAnswer';
 import MultipleChoiceAnswer from './multipleChoiceAnswer';
 

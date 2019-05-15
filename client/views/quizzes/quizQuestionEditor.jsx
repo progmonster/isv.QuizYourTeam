@@ -12,7 +12,7 @@ import QuizAnswersEditor from './quizAnswersEditor';
 import {
   changeQuestionEditorStateInEditingQuiz,
   removeQuestionFromEditingQuiz,
-} from '../../actions';
+} from '../../services/actions';
 
 const styles = theme => ({
   quizQuestionEditor: {

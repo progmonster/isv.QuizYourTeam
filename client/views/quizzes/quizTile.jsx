@@ -16,7 +16,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import Card from '@material-ui/core/Card';
 import { Roles } from 'meteor/alanning:roles';
-import { removeQuiz } from '../../actions';
+import { removeQuiz } from '../../services/actions';
 import AlertDialog from '../../components/alertDialog';
 import { Quizzes } from '../../../model/collections';
 

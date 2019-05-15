@@ -6,10 +6,10 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import * as PropTypes from 'prop-types';
-import { changeParagraphEditorStateInEditingQuiz } from '/client/actions';
+import { changeParagraphEditorStateInEditingQuiz } from '/client/services/actions';
 import { connect } from 'react-redux';
 import Grid from '@material-ui/core/Grid';
-import { removeParagraphFromEditingQuiz } from '../../actions';
+import { removeParagraphFromEditingQuiz } from '../../services/actions';
 
 const styles = theme => ({
   cardCategoryWhite: {/* todo remove? */
