@@ -3,11 +3,7 @@ import { check } from 'meteor/check';
 import { Accounts } from 'meteor/accounts-base';
 import { Roles } from 'meteor/alanning:roles';
 import { Quizzes, Teams } from '../model/collections';
-import { ACTIVE } from '../model/participantStates';
-import TeamParticipant from '../model/teamParticipant';
-import teamService from '../server/services/teamService';
-import TeamCreator from '../model/teamCreator';
-import Team from '../model/team';
+import teamService from './services/teamService';
 
 Meteor.publish('quizzes', function () {
   if (!this.userId) {
@@ -113,35 +109,12 @@ Meteor.methods({
   },
 
   'teams.createTeam': function ({ title, description }) {
-    check(this.userId, String);
-    check(title, String);
-    check(description, String);
-
     this.unblock();
 
-    const currentUser = Meteor.user();
-
-    const creator = TeamCreator.createFromUser(currentUser);
-
-    const creatorAsParticipant = TeamParticipant.createFromUser(currentUser);
-
-    const createdAt = new Date();
-
-    creatorAsParticipant.joinedAt = createdAt;
-    creatorAsParticipant.state = ACTIVE;
-
-    const team = new Team({
+    return teamService.createTeam({
       title,
       description,
-      createdAt,
-      updatedAt: createdAt,
-      creator,
-      participants: [creatorAsParticipant],
-    });
-
-    const teamId = Teams.insert(team);
-
-    return teamId;
+    }, Meteor.user());
   },
 
   'teams.updateTeamSettings': function ({ _id, title, description }) {
@@ -168,35 +141,10 @@ Meteor.methods({
     Teams.remove(teamId);
   },
 
-  'teams.inviteNewUserAsync': function (teamId, newUserEmail) {
-    check(this.userId, String);
-    check(teamId, String);
-    check(newUserEmail, String);
-
+  'teams.invitePersonByEmailAsync': function (teamId, personEmail) {
     this.unblock();
 
-    // todo error on invitation  yourself
-    // todo progmonster validate email
-
-    // todo if the user was not registered then create and send email with confirmation
-    // add to the email info about adding invitation to team after registration confirmation
-    // set password
-
-    // todo if the user already signed then add the invite to user model and send the email
-
-    // todo add the participant to the team.
-
-    const foundUser = Accounts.findUserByEmail(newUserEmail);
-
-    if (foundUser) {
-      // todo progmonster
-    } else {
-      const createdUserId = Accounts.createUser({ email: newUserEmail });
-
-      Accounts.sendEnrollmentEmail(createdUserId);
-
-      teamService.inviteUser(teamId, foundUser);
-    }
+    teamService.invitePersonByEmail(teamId, personEmail, Meteor.user());
   },
 });
 

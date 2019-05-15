@@ -20,7 +20,7 @@ export default {
 
     removeTeamAsync: teamId => Meteor.callAsync('teams.removeTeam', teamId),
 
-    inviteNewUserAsync: (teamId, newUserEmail) => Meteor
-      .callAsync('teams.inviteNewUserAsync', teamId, newUserEmail),
+    invitePersonByEmailAsync: (teamId, personEmail) => Meteor
+      .callAsync('teams.invitePersonByEmailAsync', teamId, personEmail),
   },
 };

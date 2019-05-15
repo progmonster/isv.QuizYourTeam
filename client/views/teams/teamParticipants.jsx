@@ -110,7 +110,7 @@ class TeamParticipants extends React.Component {
     this.state = {
       participantToBeRemoved: null,
       removeParticipantConfirmationOpened: false,
-      newUserEmail: '',
+      personEmail: '',
     };
   }
 
@@ -138,8 +138,8 @@ class TeamParticipants extends React.Component {
     }
   };
 
-  onNewUserEmailChange = (newUserEmail) => {
-    this.setState({ newUserEmail });
+  onPersonEmailChange = (personEmail) => {
+    this.setState({ personEmail });
   };
 
   renderParticipantRow = (participant) => {
@@ -175,12 +175,12 @@ class TeamParticipants extends React.Component {
       classes,
       team,
       currentUserId,
-      onNewUserInvite,
+      onNewPersonInvite,
     } = this.props;
 
     const {
       removeParticipantConfirmationOpened,
-      newUserEmail,
+      personEmail,
     } = this.state;
 
     return (
@@ -213,15 +213,15 @@ class TeamParticipants extends React.Component {
         <Grid item xs={12} sm={12} md={8}>
           <TextField
             label="User Email"
-            value={newUserEmail}
-            onChange={event => this.onNewUserEmailChange(event.target.value)}
+            value={personEmail}
+            onChange={event => this.onPersonEmailChange(event.target.value)}
             margin="normal"
           />
 
           <Button
             variant="contained"
             color="primary"
-            onClick={() => onNewUserInvite(newUserEmail.trim())}
+            onClick={() => onNewPersonInvite(personEmail.trim())}
           >
             Invite an user
           </Button>
@@ -252,9 +252,9 @@ TeamParticipants.defaultProps = {
 };
 
 const mapDispatchToProps = (dispatch, { team }) => ({
-  async onNewUserInvite(newUserEmail) {
+  async onNewPersonInvite(personEmail) {
     try {
-      await Methods.teams.inviteNewUserAsync(team._id, newUserEmail);
+      await Methods.teams.invitePersonByEmailAsync(team._id, personEmail);
 
       dispatch(snackbar.show({ message: 'The invitation has been sent' }));
     } catch (error) {
