@@ -1,25 +1,26 @@
 import mapValues from 'lodash/mapValues';
 import reduce from 'lodash/reduce';
-import Participant from './participant';
+import TeamParticipant from './teamParticipant';
 import { ACTIVE } from './participantStates';
+import TeamCreator from './teamCreator';
 
 export default class Team {
   title;
 
   description;
 
+  creator;
+
   participants;
 
   constructor(doc) {
-    Object.assign(
-      this,
-      doc,
-      {
-        participants: mapValues(
-          doc.participants,
-          participant => new Participant(participant),
-        ),
-      },
+    this.title = doc.title;
+    this.description = doc.description;
+    this.creator = new TeamCreator(doc.creator);
+
+    this.participants = mapValues(
+      doc.participants,
+      participant => new TeamParticipant(participant),
     );
   }
 

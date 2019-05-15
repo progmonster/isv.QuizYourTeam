@@ -13,7 +13,6 @@ const styles = theme => ({
   },
 });
 
-
 class EmailVerificationPage extends React.Component {
   constructor(props, context) {
     super(props, context);
@@ -44,7 +43,7 @@ class EmailVerificationPage extends React.Component {
         <Grid item xs={12} sm={8} md={4}>
           <h2>
             {!this.state.confirmed && !this.state.error
-              ? 'Confirmation in progress...'
+              ? 'Confirmation is in progress...'
               : (this.state.confirmed ? 'Confirmed!' : 'Error!')}
           </h2>
 

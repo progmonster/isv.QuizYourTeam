@@ -143,11 +143,11 @@ class TeamParticipants extends React.Component {
   };
 
   renderParticipantRow = (participant) => {
-    const participantId = participant.userId;
+    const participantId = participant._id;
 
     const { currentUserId } = this.props;
 
-    if (participant.userId === currentUserId) {
+    if (participant._id === currentUserId) {
       return <YouAsParticipant key={participantId} participant={participant} {...this.props} />;
     }
 

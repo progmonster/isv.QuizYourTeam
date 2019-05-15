@@ -13,6 +13,7 @@ import SignInPage from './views/auth/signInPage';
 import SignUpPage from './views/auth/signUpPage';
 import SignUpConfirmationNotePage from './views/auth/signUpConfirmationNotePage';
 import EmailVerificationPage from './views/auth/emailVerificationPage';
+import SetInitialPasswordPage from './views/auth/setInitialPasswordPage';
 import { routes } from './routes';
 import MainLayoutRoute from './layouts/mainLayoutRoute';
 import LoginLayoutRoute from './layouts/loginLayoutRoute';
@@ -58,9 +59,14 @@ Meteor.startup(() => {
 
               <LoginLayoutRoute path="/login" component={SignInPage} />
               <LoginLayoutRoute path="/signup" component={SignUpPage} />
-              <LoginLayoutRoute path="/signup-confirmation-note"
-                                component={SignUpConfirmationNotePage} />
+
+              <LoginLayoutRoute
+                path="/signup-confirmation-note"
+                component={SignUpConfirmationNotePage}
+              />
+
               <LoginLayoutRoute path="/verify-email" component={EmailVerificationPage} />
+              <LoginLayoutRoute path="/set-initial-password" component={SetInitialPasswordPage} />
 
               {mainLayoutRoutes}
             </Switch>

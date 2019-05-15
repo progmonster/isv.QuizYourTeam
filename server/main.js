@@ -3,9 +3,11 @@ import { check } from 'meteor/check';
 import { Accounts } from 'meteor/accounts-base';
 import { Roles } from 'meteor/alanning:roles';
 import { Quizzes, Teams } from '../model/collections';
-import { getUserFullName } from '../users/userUtils';
 import { ACTIVE } from '../model/participantStates';
-import Participant from '../model/participant';
+import TeamParticipant from '../model/teamParticipant';
+import teamService from '../server/services/teamService';
+import TeamCreator from '../model/teamCreator';
+import Team from '../model/team';
 
 Meteor.publish('quizzes', function () {
   if (!this.userId) {
@@ -61,6 +63,10 @@ Accounts.urls.verifyEmail = function (token) {
   return Meteor.absoluteUrl(`verify-email?token=${token}`);
 };
 
+Accounts.urls.enrollAccount = function (token) {
+  return Meteor.absoluteUrl(`set-initial-password?token=${token}`);
+};
+
 Accounts.emailTemplates.from = 'akatorgin@yandex.ru';// todo progmonster
 
 Accounts.config({
@@ -73,12 +79,16 @@ Meteor.methods({
     check(quiz._id, String);
     check(Roles.userIsInRole(this.userId, 'editQuiz', `quizzes/${quiz._id}`), true);
 
+    this.unblock();
+
     Quizzes.update(quiz._id, quiz);
   },
 
   'quizzes.insert': function (quiz) {
     check(this.userId, String);
     check(quiz._id, undefined);
+
+    this.unblock();
 
     const quizId = Quizzes.insert(quiz);
 
@@ -95,6 +105,8 @@ Meteor.methods({
     check(quizId, String);
     check(Roles.userIsInRole(this.userId, 'removeQuiz', `quizzes/${quizId}`), true);
 
+    this.unblock();
+
     Quizzes.remove(quizId);
 
     Meteor.users.update({}, { $unset: { [`roles.quizzes/${quizId}`]: '' } }, { multi: true });
@@ -105,35 +117,32 @@ Meteor.methods({
     check(title, String);
     check(description, String);
 
-    const creator = Meteor.user();
+    this.unblock();
 
-    const creatorEmail = creator.emails[0].address;
+    const currentUser = Meteor.user();
 
-    const creatorFullName = getUserFullName(creator);
+    const creator = TeamCreator.createFromUser(currentUser);
+
+    const creatorAsParticipant = TeamParticipant.createFromUser(currentUser);
 
     const createdAt = new Date();
 
-    const teamId = Teams.insert({
+    creatorAsParticipant.joinedAt = createdAt;
+    creatorAsParticipant.state = ACTIVE;
+
+    const team = new Team({
       title,
       description,
       createdAt,
       updatedAt: createdAt,
-      creator: {
-        userId: this.userId,
-        email: creatorEmail,
-        fullName: creatorFullName,
-      },
+      creator,
 
       participants: {
-        [this.userId]: new Participant({
-          userId: this.userId,
-          joinedAt: createdAt,
-          email: creatorEmail,
-          fullName: creatorFullName,
-          state: ACTIVE,
-        }),
+        [this.userId]: creatorAsParticipant,
       },
     });
+
+    const teamId = Teams.insert(team);
 
     return teamId;
   },
@@ -143,6 +152,8 @@ Meteor.methods({
     check(_id, String);
     check(title, String);
     check(description, String);
+
+    this.unblock();
 
     Teams.update(_id, {
       $set: {
@@ -165,6 +176,8 @@ Meteor.methods({
     check(teamId, String);
     check(newUserEmail, String);
 
+    this.unblock();
+
     // todo error on invitation  yourself
     // todo progmonster validate email
 
@@ -175,8 +188,19 @@ Meteor.methods({
     // todo if the user already signed then add the invite to user model and send the email
 
     // todo add the participant to the team.
-  },
 
+    const foundUser = Accounts.findUserByEmail(newUserEmail);
+
+    if (foundUser) {
+      // todo progmonster
+    } else {
+      const createdUserId = Accounts.createUser({ email: newUserEmail });
+
+      Accounts.sendEnrollmentEmail(createdUserId);
+
+      teamService.inviteUser(teamId, foundUser);
+    }
+  },
 });
 
 Meteor.startup(() => {
