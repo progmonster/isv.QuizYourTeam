@@ -17,7 +17,7 @@ class TeamsPage extends React.PureComponent {
 
     return (
       <div>
-        <Grid container>
+        <Grid container spacing={24}>
           {teams.map(({ _id: teamId }) => (
             <Grid item key={teamId} xs={12} sm={6} md={3}>
               <TeamTile teamId={teamId} />

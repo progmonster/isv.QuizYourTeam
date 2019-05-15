@@ -16,7 +16,7 @@ class DashboardPage extends React.PureComponent {
 
     return (
       <div>
-        <Grid container>
+        <Grid container spacing={24}>
           {quizzes.map(({ _id: quizId }) => (
             <Grid item key={quizId} xs={12} sm={6} md={3}>
               <QuizTileContainer quizId={quizId} />
