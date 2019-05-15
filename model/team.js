@@ -1,5 +1,4 @@
-import mapValues from 'lodash/mapValues';
-import reduce from 'lodash/reduce';
+import sumBy from 'lodash/sumBy';
 import TeamParticipant from './teamParticipant';
 import { ACTIVE } from './participantStates';
 import TeamCreator from './teamCreator';
@@ -18,17 +17,12 @@ export default class Team {
     this.description = doc.description;
     this.creator = new TeamCreator(doc.creator);
 
-    this.participants = mapValues(
-      doc.participants,
+    this.participants = doc.participants.map(
       participant => new TeamParticipant(participant),
     );
   }
 
   getActiveParticipantCount() {
-    return reduce(
-      this.participants,
-      (count, participant) => count + (participant.state === ACTIVE ? 1 : 0),
-      0,
-    );
+    return sumBy(this.participants, ({ state }) => (state === ACTIVE ? 1 : 0));
   }
 }

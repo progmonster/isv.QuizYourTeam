@@ -136,10 +136,7 @@ Meteor.methods({
       createdAt,
       updatedAt: createdAt,
       creator,
-
-      participants: {
-        [this.userId]: creatorAsParticipant,
-      },
+      participants: [creatorAsParticipant],
     });
 
     const teamId = Teams.insert(team);
