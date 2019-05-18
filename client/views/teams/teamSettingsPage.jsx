@@ -183,15 +183,17 @@ class TeamSettingsPage extends React.Component {
                   />
                 </Grid>
 
-                <Grid item xs={12} sm={12} md={12}>
-                  <TextField
-                    label="Creator"
-                    value={this.getCreatorFormatted()}
-                    margin="normal"
-                    disabled
-                    fullWidth
-                  />
-                </Grid>
+                {!isNewTeam && (
+                  <Grid item xs={12} sm={12} md={12}>
+                    <TextField
+                      label="Creator"
+                      value={this.getCreatorFormatted()}
+                      margin="normal"
+                      disabled
+                      fullWidth
+                    />
+                  </Grid>
+                )}
               </Grid>
             </CardContent>
           </Card>
@@ -202,18 +204,6 @@ class TeamSettingsPage extends React.Component {
             {isNewTeam ? 'Create Team' : 'Save Team Settings'}
           </Button>
         </Grid>
-
-        {!isNewTeam && (
-          <Grid item xs={12} sm={12} md={8}>
-            <Button
-              variant="contained"
-              color="secondary"
-              onClick={() => this.setState({ removeConfirmationOpened: true })}
-            >
-              Remove team
-            </Button>
-          </Grid>
-        )}
 
         <AlertDialog
           open={removeConfirmationOpened}
@@ -229,6 +219,18 @@ class TeamSettingsPage extends React.Component {
             <TeamParticipants
               team={team}
             />
+          </Grid>
+        )}
+
+        {!isNewTeam && (
+          <Grid item xs={12} sm={12} md={8}>
+            <Button
+              variant="contained"
+              color="secondary"
+              onClick={() => this.setState({ removeConfirmationOpened: true })}
+            >
+              Remove team
+            </Button>
           </Grid>
         )}
       </Grid>
