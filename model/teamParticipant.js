@@ -13,6 +13,8 @@ export default class TeamParticipant {
 
   state;
 
+  role;
+
   constructor(doc) {
     this._id = doc._id;
     this.invitedAt = doc.invitedAt;
@@ -20,6 +22,7 @@ export default class TeamParticipant {
     this.email = doc.email;
     this.fullName = doc.fullName;
     this.state = doc.state;
+    this.role = doc.role;
   }
 
   static createFromUser(user) {

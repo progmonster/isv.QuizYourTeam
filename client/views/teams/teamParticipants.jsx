@@ -1,5 +1,6 @@
 import React from 'react';
 import withStyles from '@material-ui/core/styles/withStyles';
+import { Roles } from 'meteor/alanning:roles';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import Paper from '@material-ui/core/Paper';
@@ -17,6 +18,8 @@ import { INVITED } from '../../../model/participantStates';
 import { snackbarActions as snackbar, snackbarUtils } from '../../components/snackbar';
 import teamService from '../../services/teamService';
 import blue from '@material-ui/core/colors/blue';
+import { Meteor } from "meteor/meteor";
+import { TeamRoles } from '../../../model/roles';
 
 const styles = {
   participantTableRowRoot_currentUser: {
@@ -384,8 +387,9 @@ const mapDispatchToProps = (dispatch, { team: { _id: teamId } }) => ({
 });
 
 export default compose(
-  withTracker(() => ({
+  withTracker(({ team: { _id: teamId } }) => ({
     currentUserId: Meteor.userId(),
+    isCurrentUserAdmin: Roles.userIsInRole(Meteor.userId(), TeamRoles.roleAdmin, `teams/${teamId}`),
   })),
 
   withStyles(styles),

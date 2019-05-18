@@ -1,5 +1,6 @@
 import React from 'react';
 import withStyles from '@material-ui/core/styles/withStyles';
+import { Roles } from 'meteor/alanning:roles';
 import * as PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { orange } from '@material-ui/core/colors';
@@ -17,6 +18,8 @@ import { snackbarActions as snackbar } from '../../components/snackbar';
 import Team from '../../../model/team';
 import TeamParticipants from './teamParticipants';
 import teamService from '../../services/teamService';
+import { Meteor } from 'meteor/meteor';
+import { TeamRoles } from '../../../model/roles';
 
 const styles = {
   teamSettingsCardHeaderRoot: {
@@ -122,12 +125,45 @@ class TeamSettingsPage extends React.Component {
     });
   }
 
+  getTitle() {
+    const {
+      isNewTeam,
+      isCurrentUserAdmin,
+    } = this.props;
+
+    if (isNewTeam) {
+      return 'New Team';
+    }
+
+    return isCurrentUserAdmin ? 'Edit Team Settings' : 'View Team Settings';
+  }
+
+  getSubheader() {
+    const {
+      isNewTeam,
+      isCurrentUserAdmin,
+    } = this.props;
+
+    const {
+      originalTitle,
+    } = this.state;
+
+    if (isNewTeam || !originalTitle) {
+      return null;
+    }
+
+    return isCurrentUserAdmin
+      ? `You are editing '${originalTitle}' team settings`
+      : `You are viewing '${originalTitle}' team settings`;
+  }
+
   render() {
     const {
       classes,
       isNewTeam,
       teamLoaded,
       team,
+      isCurrentUserAdmin,
     } = this.props;
 
     const {
@@ -152,13 +188,9 @@ class TeamSettingsPage extends React.Component {
                 subheader: classes.teamSettingsCardSubheaderTitle,
               }}
 
-              title={isNewTeam ? 'New Team' : 'Edit Team Settings'}
+              title={this.getTitle()}
 
-              subheader={
-                !isNewTeam && originalTitle
-                  ? `You are editing '${originalTitle}' team settings`
-                  : null
-              }
+              subheader={this.getSubheader()}
             />
 
             <CardContent>
@@ -169,6 +201,7 @@ class TeamSettingsPage extends React.Component {
                     value={title}
                     onChange={event => this.onTitleChange(event.target.value)}
                     margin="normal"
+                    disabled={!isCurrentUserAdmin}
                   />
                 </Grid>
 
@@ -180,6 +213,7 @@ class TeamSettingsPage extends React.Component {
                     value={description}
                     onChange={event => this.onDescriptionChange(event.target.value)}
                     margin="normal"
+                    disabled={!isCurrentUserAdmin}
                   />
                 </Grid>
 
@@ -199,11 +233,13 @@ class TeamSettingsPage extends React.Component {
           </Card>
         </Grid>
 
-        <Grid item xs={12} sm={12} md={8}>
-          <Button variant="contained" color="primary" onClick={this.onTeamSave}>
-            {isNewTeam ? 'Create Team' : 'Save Team Settings'}
-          </Button>
-        </Grid>
+        {isCurrentUserAdmin && (
+          <Grid item xs={12} sm={12} md={8}>
+            <Button variant="contained" color="primary" onClick={this.onTeamSave}>
+              {isNewTeam ? 'Create Team' : 'Save Team Settings'}
+            </Button>
+          </Grid>
+        )}
 
         <AlertDialog
           open={removeConfirmationOpened}
@@ -222,7 +258,7 @@ class TeamSettingsPage extends React.Component {
           </Grid>
         )}
 
-        {!isNewTeam && (
+        {!isNewTeam && isCurrentUserAdmin && (
           <Grid item xs={12} sm={12} md={8}>
             <Button
               variant="contained"
@@ -317,6 +353,12 @@ export default compose(
       teamId,
       team: teamId && Teams.findOne(teamId),
       teamLoaded: isNewTeam || teamSubscription.ready(),
+
+      isCurrentUserAdmin: Roles.userIsInRole(
+        Meteor.userId(),
+        TeamRoles.roleAdmin,
+        `teams/${teamId}`,
+      ),
     };
   }),
 
