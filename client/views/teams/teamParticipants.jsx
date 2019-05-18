@@ -14,8 +14,9 @@ import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import { INVITED } from '../../../model/participantStates';
-import { snackbarActions as snackbar } from '../../components/snackbar';
+import { snackbarActions as snackbar, snackbarUtils } from '../../components/snackbar';
 import teamService from '../../services/teamService';
+import blue from '@material-ui/core/colors/blue';
 
 const styles = {
   participantTableRowRoot_currentUser: {
@@ -23,7 +24,7 @@ const styles = {
   },
 
   participantTableRowRoot_invitedUser: {
-    color: 'lightblue',
+    color: blue[700],
   },
 };
 
@@ -44,7 +45,7 @@ function RegularParticipant(props) {
           size="small"
           variant="contained"
           color="secondary"
-          onClick={() => onParticipantRemove(participant)}
+          onClick={onParticipantRemove}
         >
           Remove
         </Button>
@@ -53,12 +54,12 @@ function RegularParticipant(props) {
   );
 }
 
-
 function InvitedParticipant(props) {
   const {
     classes,
     participant,
-    onParticipantInvitationCancel,
+    onInvitationCancel,
+    onInvitationResend,
   } = props;
 
   return (
@@ -74,8 +75,17 @@ function InvitedParticipant(props) {
         <Button
           size="small"
           variant="contained"
+          color="primary"
+          onClick={onInvitationResend}
+        >
+          Resend invitation
+        </Button>
+
+        <Button
+          size="small"
+          variant="contained"
           color="secondary"
-          onClick={() => onParticipantInvitationCancel(participant)}
+          onClick={onInvitationCancel}
         >
           Cancel invitation
         </Button>
@@ -110,18 +120,25 @@ class TeamParticipants extends React.Component {
     this.state = {
       participantToBeRemoved: null,
       removeParticipantConfirmationOpened: false,
+
+      invitationToBeResend: null,
+      resendInvitationConfirmationOpened: false,
+
+      invitationToBeCanceled: null,
+      cancelInvitationConfirmationOpened: false,
+
       personEmail: '',
     };
   }
 
-  onParticipantRemove = (participant) => {
+  onRemoveParticipantConfirmationOpen = (participant) => {
     this.setState({
       participantToBeRemoved: participant,
       removeParticipantConfirmationOpened: true,
     });
   };
 
-  onRemoveParticipantConfirmationClosed = (confirmed) => {
+  onRemoveParticipantConfirmationClose = (confirmed) => {
     const participant = this.state.participantToBeRemoved;
 
     this.setState({
@@ -138,6 +155,54 @@ class TeamParticipants extends React.Component {
     }
   };
 
+  onResendInvitationConfirmationOpen = (participant) => {
+    this.setState({
+      invitationToBeResend: participant,
+      resendInvitationConfirmationOpened: true,
+    });
+  };
+
+  onResendInvitationConfirmationClose = (confirmed) => {
+    const participant = this.state.invitationToBeResend;
+
+    this.setState({
+      invitationToBeResend: null,
+      resendInvitationConfirmationOpened: false,
+    });
+
+    const {
+      onInvitationResend,
+    } = this.props;
+
+    if (confirmed) {
+      onInvitationResend(participant);
+    }
+  };
+
+  onCancelInvitationConfirmationOpen = (participant) => {
+    this.setState({
+      invitationToBeCanceled: participant,
+      cancelInvitationConfirmationOpened: true,
+    });
+  };
+
+  onCancelInvitationConfirmationClose = (confirmed) => {
+    const participant = this.state.invitationToBeCanceled;
+
+    this.setState({
+      invitationToBeCanceled: null,
+      cancelInvitationConfirmationOpened: false,
+    });
+
+    const {
+      onInvitationCancel,
+    } = this.props;
+
+    if (confirmed) {
+      onInvitationCancel(participant);
+    }
+  };
+
   onPersonEmailChange = (personEmail) => {
     this.setState({ personEmail });
   };
@@ -145,10 +210,16 @@ class TeamParticipants extends React.Component {
   renderParticipantRow = (participant) => {
     const participantId = participant._id;
 
-    const { currentUserId } = this.props;
+    const { currentUserId, classes } = this.props;
 
     if (participant._id === currentUserId) {
-      return <YouAsParticipant key={participantId} participant={participant} {...this.props} />;
+      return (
+        <YouAsParticipant
+          key={participantId}
+          participant={participant}
+          classes={classes}
+        />
+      );
     }
 
     if (participant.state === INVITED) {
@@ -156,7 +227,9 @@ class TeamParticipants extends React.Component {
         <InvitedParticipant
           key={participantId}
           participant={participant}
-          {...this.props}
+          classes={classes}
+          onInvitationResend={() => this.onResendInvitationConfirmationOpen(participant)}
+          onInvitationCancel={() => this.onCancelInvitationConfirmationOpen(participant)}
         />
       );
     }
@@ -165,7 +238,8 @@ class TeamParticipants extends React.Component {
       <RegularParticipant
         key={participantId}
         participant={participant}
-        {...this.props}
+        classes={classes}
+        onParticipantRemove={() => this.onRemoveParticipantConfirmationOpen(participant)}
       />
     );
   };
@@ -180,6 +254,8 @@ class TeamParticipants extends React.Component {
 
     const {
       removeParticipantConfirmationOpened,
+      resendInvitationConfirmationOpened,
+      cancelInvitationConfirmationOpened,
       personEmail,
     } = this.state;
 
@@ -207,7 +283,25 @@ class TeamParticipants extends React.Component {
           contentText=""
           okText="Remove"
           cancelText="Cancel"
-          handleClose={this.onRemoveParticipantConfirmationClosed}
+          handleClose={this.onRemoveParticipantConfirmationClose}
+        />
+
+        <AlertDialog
+          open={resendInvitationConfirmationOpened}
+          title="Resend the invitation?"
+          contentText=""
+          okText="Resend"
+          cancelText="Close"
+          handleClose={this.onResendInvitationConfirmationClose}
+        />
+
+        <AlertDialog
+          open={cancelInvitationConfirmationOpened}
+          title="Cancel participant invitation?"
+          contentText=""
+          okText="Cancel invitation"
+          cancelText="Close"
+          handleClose={this.onCancelInvitationConfirmationClose}
         />
 
         <Grid item xs={12} sm={12} md={8}>
@@ -251,10 +345,10 @@ TeamParticipants.defaultProps = {
 //  team: null,
 };
 
-const mapDispatchToProps = (dispatch, { team }) => ({
+const mapDispatchToProps = (dispatch, { team: { _id: teamId } }) => ({
   async onPersonInvite(personEmail) {
     try {
-      await teamService.invitePersonByEmail(team._id, personEmail);
+      await teamService.invitePersonByEmail(teamId, personEmail);
 
       dispatch(snackbar.show({ message: 'The invitation has been sent' }));
     } catch (error) {
@@ -262,8 +356,31 @@ const mapDispatchToProps = (dispatch, { team }) => ({
     }
   },
 
-  async onParticipantRemove(participant) {
-    console.log(participant);
+  onParticipantRemove(participant) {
+    snackbarUtils.runAsyncWithNotification(
+      dispatch,
+      'The has been removed',
+      error => `Error removal the participant: ${error.message}`,
+      () => teamService.removeParticipant(teamId, participant._id),
+    );
+  },
+
+  onInvitationCancel(participant) {
+    snackbarUtils.runAsyncWithNotification(
+      dispatch,
+      'The invitation has been canceled',
+      error => `Error cancelling the invitation: ${error.message}`,
+      () => teamService.cancelInvitation(teamId, participant._id),
+    );
+  },
+
+  onInvitationResend(participant) {
+    snackbarUtils.runAsyncWithNotification(
+      dispatch,
+      'The invitation has been resend',
+      error => `Error resending the invitation: ${error.message}`,
+      () => teamService.resendInvitation(teamId, participant._id),
+    );
   },
 });
 
