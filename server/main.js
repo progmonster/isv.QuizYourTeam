@@ -2,6 +2,7 @@ import { Meteor } from 'meteor/meteor';
 import { Accounts } from 'meteor/accounts-base';
 import './methods';
 import './publications';
+import '../model/roles';
 
 Accounts.urls.verifyEmail = function (token) {
   return Meteor.absoluteUrl(`verify-email?token=${token}`);

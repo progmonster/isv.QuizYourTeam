@@ -1,7 +1,7 @@
 import { snackbarActions as snackbar } from './index';
 
 export default {
-  async runAsyncWithNotification(
+  async runAsyncWithNotificationAndErrorLog(
     dispatch,
     successMessage,
     errorMessageCb,
@@ -18,7 +18,7 @@ export default {
 
       dispatch(snackbar.show({ message: errorMessageCb(error) }));
 
-      throw error;
+      return undefined;
     }
   },
 };

@@ -21,6 +21,7 @@ import { rootSaga } from './services/actions';
 import SnackbarProvider from './components/snackbar/snackbarProvider';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { promisify } from 'util';
+import '../model/roles';
 
 Meteor.callAsync = promisify(Meteor.call);
 

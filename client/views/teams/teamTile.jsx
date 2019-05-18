@@ -141,7 +141,7 @@ TeamTile.propTypes = {
 
 const mapDispatchToProps = (dispatch, { team: { _id: teamId } }) => ({
   onInvitationAccept() {
-    snackbarUtils.runAsyncWithNotification(
+    snackbarUtils.runAsyncWithNotificationAndErrorLog(
       dispatch,
       'The invitation has been accepted',
       error => `Error accepting the invitation: ${error.message}`,
@@ -150,7 +150,7 @@ const mapDispatchToProps = (dispatch, { team: { _id: teamId } }) => ({
   },
 
   onInvitationReject() {
-    snackbarUtils.runAsyncWithNotification(
+    snackbarUtils.runAsyncWithNotificationAndErrorLog(
       dispatch,
       'The invitation has been rejected',
       error => `Error rejecting the invitation: ${error.message}`,

@@ -1,8 +1,10 @@
 import React from 'react';
+import { Meteor } from 'meteor/meteor';
 import withStyles from '@material-ui/core/styles/withStyles';
 import { Roles } from 'meteor/alanning:roles';
 import * as PropTypes from 'prop-types';
 import { compose } from 'redux';
+import { isEqual } from 'lodash';
 import { orange } from '@material-ui/core/colors';
 import Grid from '@material-ui/core/Grid';
 import Card from '@material-ui/core/Card';
@@ -18,8 +20,6 @@ import { snackbarActions as snackbar } from '../../components/snackbar';
 import Team from '../../../model/team';
 import TeamParticipants from './teamParticipants';
 import teamService from '../../services/teamService';
-import { Meteor } from 'meteor/meteor';
-import { TeamRoles } from '../../../model/roles';
 
 const styles = {
   teamSettingsCardHeaderRoot: {
@@ -53,10 +53,10 @@ class TeamSettingsPage extends React.Component {
 
   componentDidUpdate(prevProps) {
     const {
-      teamLoaded,
+      team,
     } = this.props;
 
-    if (!prevProps.teamLoaded && teamLoaded) {
+    if (!isEqual(prevProps.team, team)) {
       this.updateStateFromProps();
     }
   }
@@ -201,7 +201,7 @@ class TeamSettingsPage extends React.Component {
                     value={title}
                     onChange={event => this.onTitleChange(event.target.value)}
                     margin="normal"
-                    disabled={!isCurrentUserAdmin}
+                    disabled={!isNewTeam && !isCurrentUserAdmin}
                   />
                 </Grid>
 
@@ -213,7 +213,7 @@ class TeamSettingsPage extends React.Component {
                     value={description}
                     onChange={event => this.onDescriptionChange(event.target.value)}
                     margin="normal"
-                    disabled={!isCurrentUserAdmin}
+                    disabled={!isNewTeam && !isCurrentUserAdmin}
                   />
                 </Grid>
 
@@ -233,7 +233,7 @@ class TeamSettingsPage extends React.Component {
           </Card>
         </Grid>
 
-        {isCurrentUserAdmin && (
+        {(isNewTeam || isCurrentUserAdmin) && (
           <Grid item xs={12} sm={12} md={8}>
             <Button variant="contained" color="primary" onClick={this.onTeamSave}>
               {isNewTeam ? 'Create Team' : 'Save Team Settings'}
@@ -337,6 +337,8 @@ const mapDispatchToProps = (dispatch, { history, isNewTeam, teamId }) => ({
 });
 
 export default compose(
+  withStyles(styles),
+
   withTracker((props) => {
     const { teamId } = props.match.params;
 
@@ -348,20 +350,20 @@ export default compose(
       Meteor.subscribe('team', teamId);
     }
 
+    const team = teamId && Teams.findOne(teamId);
+
+    const teamLoaded = isNewTeam || teamSubscription.ready();
+
+    const isCurrentUserAdmin = Roles.isTeamAdmin(Meteor.userId(), teamId);
+
     return {
       isNewTeam,
       teamId,
-      team: teamId && Teams.findOne(teamId),
-      teamLoaded: isNewTeam || teamSubscription.ready(),
-
-      isCurrentUserAdmin: Roles.userIsInRole(
-        Meteor.userId(),
-        TeamRoles.roleAdmin,
-        `teams/${teamId}`,
-      ),
+      team,
+      teamLoaded,
+      isCurrentUserAdmin,
     };
   }),
 
-  withStyles(styles),
   connect(null, mapDispatchToProps),
 )(TeamSettingsPage);

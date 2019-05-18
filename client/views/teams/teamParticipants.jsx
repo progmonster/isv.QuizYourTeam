@@ -14,11 +14,11 @@ import { withTracker } from 'meteor/react-meteor-data';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
-import { INVITED } from '../../../model/participantStates';
-import { snackbarActions as snackbar, snackbarUtils } from '../../components/snackbar';
+import { ACTIVE, INVITED } from '../../../model/participantStates';
+import { snackbarUtils } from '../../components/snackbar';
 import teamService from '../../services/teamService';
 import blue from '@material-ui/core/colors/blue';
-import { Meteor } from "meteor/meteor";
+import { Meteor } from 'meteor/meteor';
 import { TeamRoles } from '../../../model/roles';
 
 const styles = {
@@ -31,27 +31,57 @@ const styles = {
   },
 };
 
+function formatParticipantRole({ role }) {
+  switch (role) {
+    case TeamRoles.roleAdmin:
+      return 'Admin';
+
+    case TeamRoles.regularParticipantRole:
+      return 'Quizzer';
+
+    default:
+      return role;
+  }
+}
+
+function formatParticipantState({ state }) {
+  switch (state) {
+    case ACTIVE:
+      return 'Active';
+
+    case INVITED:
+      return 'Invited';
+
+    default:
+      return state;
+  }
+}
+
 function RegularParticipant(props) {
   const {
     participant,
     onParticipantRemove,
+    isCurrentUserAdmin,
   } = props;
 
   return (
     <TableRow>
       <TableCell>{participant.email}</TableCell>
       <TableCell>{participant.fullName}</TableCell>
-      <TableCell>Active</TableCell>
+      <TableCell>{formatParticipantRole(participant)}</TableCell>
+      <TableCell>{formatParticipantState(participant)}</TableCell>
 
       <TableCell align="right">
-        <Button
-          size="small"
-          variant="contained"
-          color="secondary"
-          onClick={onParticipantRemove}
-        >
-          Remove
-        </Button>
+        {isCurrentUserAdmin && (
+          <Button
+            size="small"
+            variant="contained"
+            color="secondary"
+            onClick={onParticipantRemove}
+          >
+            Remove
+          </Button>
+        )}
       </TableCell>
     </TableRow>
   );
@@ -63,6 +93,7 @@ function InvitedParticipant(props) {
     participant,
     onInvitationCancel,
     onInvitationResend,
+    isCurrentUserAdmin,
   } = props;
 
   return (
@@ -72,26 +103,31 @@ function InvitedParticipant(props) {
       </TableCell>
 
       <TableCell>{participant.fullName}</TableCell>
-      <TableCell>Invited</TableCell>
+      <TableCell>{formatParticipantRole(participant)}</TableCell>
+      <TableCell>{formatParticipantState(participant)}</TableCell>
 
       <TableCell align="right">
-        <Button
-          size="small"
-          variant="contained"
-          color="primary"
-          onClick={onInvitationResend}
-        >
-          Resend invitation
-        </Button>
+        {isCurrentUserAdmin && (
+          <Button
+            size="small"
+            variant="contained"
+            color="primary"
+            onClick={onInvitationResend}
+          >
+            Resend invitation
+          </Button>
+        )}
 
-        <Button
-          size="small"
-          variant="contained"
-          color="secondary"
-          onClick={onInvitationCancel}
-        >
-          Cancel invitation
-        </Button>
+        {isCurrentUserAdmin && (
+          <Button
+            size="small"
+            variant="contained"
+            color="secondary"
+            onClick={onInvitationCancel}
+          >
+            Cancel invitation
+          </Button>
+        )}
       </TableCell>
     </TableRow>
   );
@@ -110,7 +146,8 @@ function YouAsParticipant(props) {
       </TableCell>
 
       <TableCell>{participant.fullName}</TableCell>
-      <TableCell>Active</TableCell>
+      <TableCell>{formatParticipantRole(participant)}</TableCell>
+      <TableCell>{formatParticipantState(participant)}</TableCell>
       <TableCell align="right" />
     </TableRow>
   );
@@ -253,6 +290,7 @@ class TeamParticipants extends React.Component {
       team,
       currentUserId,
       onPersonInvite,
+      isCurrentUserAdmin,
     } = this.props;
 
     const {
@@ -269,6 +307,7 @@ class TeamParticipants extends React.Component {
             <TableRow>
               <TableCell>Email</TableCell>
               <TableCell>Name</TableCell>
+              <TableCell>Role</TableCell>
               <TableCell>State</TableCell>
               <TableCell align="right" />
             </TableRow>
@@ -307,22 +346,24 @@ class TeamParticipants extends React.Component {
           handleClose={this.onCancelInvitationConfirmationClose}
         />
 
-        <Grid item xs={12} sm={12} md={8}>
-          <TextField
-            label="User Email"
-            value={personEmail}
-            onChange={event => this.onPersonEmailChange(event.target.value)}
-            margin="normal"
-          />
+        {isCurrentUserAdmin && (
+          <Grid item xs={12} sm={12} md={8}>
+            <TextField
+              label="User Email"
+              value={personEmail}
+              onChange={event => this.onPersonEmailChange(event.target.value)}
+              margin="normal"
+            />
 
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={() => onPersonInvite(personEmail.trim())}
-          >
-            Invite an user
-          </Button>
-        </Grid>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => onPersonInvite(personEmail.trim())}
+            >
+              Invite an user
+            </Button>
+          </Grid>
+        )}
       </Paper>
     );
   }
@@ -350,7 +391,7 @@ TeamParticipants.defaultProps = {
 
 const mapDispatchToProps = (dispatch, { team: { _id: teamId } }) => ({
   onPersonInvite(personEmail) {
-    snackbarUtils.runAsyncWithNotification(
+    snackbarUtils.runAsyncWithNotificationAndErrorLog(
       dispatch,
       'The invitation has been sent',
       error => `Error sending the invitation: ${error.message}`,
@@ -359,7 +400,7 @@ const mapDispatchToProps = (dispatch, { team: { _id: teamId } }) => ({
   },
 
   onParticipantRemove(participant) {
-    snackbarUtils.runAsyncWithNotification(
+    snackbarUtils.runAsyncWithNotificationAndErrorLog(
       dispatch,
       'The participant has been removed',
       error => `Error removal the participant: ${error.message}`,
@@ -368,7 +409,7 @@ const mapDispatchToProps = (dispatch, { team: { _id: teamId } }) => ({
   },
 
   onInvitationCancel(participant) {
-    snackbarUtils.runAsyncWithNotification(
+    snackbarUtils.runAsyncWithNotificationAndErrorLog(
       dispatch,
       'The invitation has been canceled',
       error => `Error cancelling the invitation: ${error.message}`,
@@ -377,7 +418,7 @@ const mapDispatchToProps = (dispatch, { team: { _id: teamId } }) => ({
   },
 
   onInvitationResend(participant) {
-    snackbarUtils.runAsyncWithNotification(
+    snackbarUtils.runAsyncWithNotificationAndErrorLog(
       dispatch,
       'The invitation has been resend',
       error => `Error resending the invitation: ${error.message}`,

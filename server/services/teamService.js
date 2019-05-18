@@ -34,7 +34,7 @@ const teamService = {
 
     const teamId = Teams.insert(team);
 
-    Roles.addUsersToRoles(creator._id, TeamRoles.roleAdmin, `teams/${teamId}`);
+    Roles.addTeamAdminRoleForUser(creator._id, teamId);
 
     return teamId;
   },
@@ -44,7 +44,7 @@ const teamService = {
     check(title, String);
     check(description, String);
     check(actor, Object);
-    check(Roles.userIsInRole(actor._id, TeamRoles.roleAdmin, `teams/${_id}`), true);
+    check(Roles.isTeamAdmin(actor._id, _id), true);
 
     Teams.update(_id, {
       $set: {
@@ -58,44 +58,62 @@ const teamService = {
   remove(teamId, actor) {
     check(teamId, String);
     check(actor, Object);
-    check(Roles.userIsInRole(actor._id, TeamRoles.roleAdmin, `teams/${teamId}`), true);
+    check(Roles.isTeamAdmin(actor._id, teamId), true);
 
     Teams.remove(teamId);
+
+    Roles.removeTeamRolesForAllUsers(teamId);
   },
 
   invitePersonByEmail(teamId, personEmail, actor) {
+    // todo progmonster todo do not allow to invite the same person more than 1 per 24 hours
+    // show note in UI
+
     check(teamId, String);
     check(personEmail, String);
+
+    // todo improve error messages (especially for errors displayed for user)
+    check(/^.+@.+\..+$/.test(personEmail.trim()), true);
+
     check(actor, Object);
+    check(Roles.isTeamAdmin(actor._id, teamId), true);
 
-    // todo error on invitation  yourself
-    // todo error on invitation an user that is already a participant
-    // todo progmonster validate email
-    // todo progmonster check actor permissions
-
-    let personUser = Accounts.findUserByEmail(personEmail);
+    let personUser = Accounts.findUserByEmail(personEmail.trim());
 
     if (!personUser) {
-      const createdUserId = Accounts.createUser({ email: personEmail });
+      const createdUserId = Accounts.createUser({ email: personEmail.trim() });
 
       Accounts.sendEnrollmentEmail(createdUserId);
 
       personUser = Meteor.users.findOne(createdUserId);
     }
 
+    if (teamService.isUserInTeam(teamId, personUser._id)) {
+      throw new Meteor.Error('The invitation was already made');
+    }
+
     const teamParticipant = TeamParticipant.createFromUser(personUser);
 
     teamParticipant.invitedAt = new Date();
     teamParticipant.state = INVITED;
-    teamParticipant.role = TeamRoles.regularParticipant;
+    teamParticipant.role = TeamRoles.regularParticipantRole;
 
-    Teams.update(teamId, { $push: { participants: teamParticipant } });
+    const updated = Teams.update({
+      _id: teamId,
+      participants: { $not: { $elemMatch: { _id: personUser._id } } },
+    }, { $push: { participants: teamParticipant } });
+
+    if (!updated) {
+      throw new Meteor.Error('Error adding invited user to the team');
+    }
   },
 
   removeParticipant(teamId, participantId, actor) {
     check(teamId, String);
     check(participantId, String);
     check(actor, Object);
+    check(Roles.isTeamAdmin(actor._id, teamId), true);
+    check(actor._id === participantId, false);
 
     Teams.update(teamId, { $pull: { participants: { _id: participantId } } });
     // todo progmonster update permissions
@@ -105,14 +123,20 @@ const teamService = {
     check(teamId, String);
     check(userId, String);
     check(actor, Object);
+    check(Roles.isTeamAdmin(actor._id, teamId), true);
 
     Teams.update(teamId, { $pull: { participants: { _id: userId } } });
   },
 
   resendInvitation(teamId, userId, actor) {
+    // todo progmonster todo do not allow to invite the same person more than 1 per 24 hours
+    // consider that you could delete and recreate the invitation.
+    // show note in UI
+
     check(teamId, String);
     check(userId, String);
     check(actor, Object);
+    check(Roles.isTeamAdmin(actor._id, teamId), true);
     // todo progmonster if user doesn't exist then create acc and send invitation
     // todo progmonster if user exists then send regular email with notification about invitation to team
   },
@@ -149,6 +173,15 @@ const teamService = {
         },
       },
     }, { $pull: { participants: { _id: user._id } } });
+  },
+
+  isUserInTeam(teamId, userId) {
+    return Teams
+      .find({
+        _id: teamId,
+        'participants._id': userId,
+      }, { limit: 1 })
+      .count(false) > 0;
   },
 };
 
