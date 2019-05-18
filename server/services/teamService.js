@@ -126,6 +126,7 @@ const teamService = {
     check(Roles.isTeamAdmin(actor._id, teamId), true);
 
     Teams.update(teamId, { $pull: { participants: { _id: userId } } });
+    // todo progmonster update permissions
   },
 
   resendInvitation(teamId, userId, actor) {
@@ -155,8 +156,6 @@ const teamService = {
         },
       },
     }, { $set: { 'participants.$.state': ACTIVE } });
-
-    // todo progmonster add privileges
   },
 
   rejectInvitation(teamId, user) {
