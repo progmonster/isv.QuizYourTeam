@@ -50,4 +50,16 @@ Meteor.methods({
 
     teamService.resendInvitation(teamId, userId, Meteor.user());
   },
+
+  'teamMethods.acceptInvitation': function (teamId) {
+    this.unblock();
+
+    teamService.acceptInvitation(teamId, Meteor.user());
+  },
+
+  'teamMethods.rejectInvitation': function (teamId) {
+    this.unblock();
+
+    teamService.rejectInvitation(teamId, Meteor.user());
+  },
 });

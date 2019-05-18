@@ -110,6 +110,18 @@ const teamService = {
 
 
   },
+
+  acceptInvitation(teamId, user) {
+    check(teamId, String);
+    check(user, Object);
+    console.log("accept", teamId, user);
+  },
+
+  rejectInvitation(teamId, user) {
+    check(teamId, String);
+    check(user, Object);
+    console.log("reject", teamId, user);
+  },
 };
 
 export default teamService;

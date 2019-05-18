@@ -6,13 +6,9 @@ Meteor.publish('teams', function () {
     return [];
   }
 
-  this.autorun(() =>
-  // todo progmonster  check permissions
-    /*
-            const grantedQuizzes = Roles.getGroupsForUser(this.userId, "viewQuiz")
-              .map(grantedGroup => grantedGroup.replace(/^quizzes\//, ""));
-        */
-    Teams.find({}));
+  return Teams.find({
+    'participants._id': this.userId,
+  });
 });
 
 Meteor.publish('team', function (teamId) {

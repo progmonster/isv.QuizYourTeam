@@ -1,6 +1,7 @@
 import sumBy from 'lodash/sumBy';
+import some from 'lodash/some';
 import TeamParticipant from './teamParticipant';
-import { ACTIVE } from './participantStates';
+import { ACTIVE, INVITED } from './participantStates';
 import TeamCreator from './teamCreator';
 
 export default class Team {
@@ -24,5 +25,12 @@ export default class Team {
 
   getActiveParticipantCount() {
     return sumBy(this.participants, ({ state }) => (state === ACTIVE ? 1 : 0));
+  }
+
+  isUserInInvitedState(userId) {
+    return some(this.participants, {
+      _id: userId,
+      state: INVITED,
+    });
   }
 }

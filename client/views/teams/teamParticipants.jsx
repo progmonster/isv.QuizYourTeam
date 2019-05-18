@@ -346,14 +346,13 @@ TeamParticipants.defaultProps = {
 };
 
 const mapDispatchToProps = (dispatch, { team: { _id: teamId } }) => ({
-  async onPersonInvite(personEmail) {
-    try {
-      await teamService.invitePersonByEmail(teamId, personEmail);
-
-      dispatch(snackbar.show({ message: 'The invitation has been sent' }));
-    } catch (error) {
-      dispatch(snackbar.show({ message: `Error sending the invitation: ${error.message}` }));
-    }
+  onPersonInvite(personEmail) {
+    snackbarUtils.runAsyncWithNotification(
+      dispatch,
+      'The invitation has been sent',
+      error => `Error sending the invitation: ${error.message}`,
+      () => teamService.invitePersonByEmail(teamId, personEmail),
+    );
   },
 
   onParticipantRemove(participant) {
@@ -390,6 +389,5 @@ export default compose(
   })),
 
   withStyles(styles),
-
   connect(null, mapDispatchToProps),
 )(TeamParticipants);

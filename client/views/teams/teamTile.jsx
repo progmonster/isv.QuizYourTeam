@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { withTracker } from 'meteor/react-meteor-data';
 import IconButton from '@material-ui/core/IconButton';
@@ -12,9 +12,12 @@ import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import red from '@material-ui/core/colors/red';
 import SettingsIcon from '@material-ui/icons/Settings';
-import size from 'lodash/size';
 import { Link } from 'react-router-dom';
 import { Teams } from '../../../model/collections';
+import Button from '@material-ui/core/Button';
+import { connect } from 'react-redux';
+import teamService from '../../services/teamService';
+import { snackbarActions as snackbar, snackbarUtils } from '../../components/snackbar';
 
 const styles = theme => ({
   card: {
@@ -57,8 +60,14 @@ class TeamTile extends React.Component {
 
   render() {
     const {
-      classes, team, teamId, roles,
+      classes,
+      team,
+      teamId,
+      roles,
+      currentUserId,
     } = this.props;
+
+    const isUserInInvitedState = team.isUserInInvitedState(currentUserId);
 
     return (
       <Card className={classes.card}>
@@ -72,14 +81,56 @@ class TeamTile extends React.Component {
           <Typography component="p">
             {team.description}
           </Typography>
+
+          <Typography component="p">
+            You are invited to the team. Please accept or reject invitation.
+          </Typography>
         </CardContent>
 
         <CardActions className={classes.actions} disableActionSpacing>
-          <IconButton aria-label="Configure" component={Link} to={`/team-settings/${teamId}`}>
-            <SettingsIcon />
-          </IconButton>
+          {isUserInInvitedState ? this.renderInviteActions() : this.renderActiveTeamSettings()}
         </CardActions>
       </Card>
+    );
+  }
+
+  renderInviteActions() {
+    const {
+      classes,
+      onInvitationAccept,
+      onInvitationReject,
+    } = this.props;
+
+    return (
+      <Fragment>
+        <Button
+          variant="contained"
+          color="secondary"
+          onClick={onInvitationReject}
+        >
+          Reject
+        </Button>
+
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={onInvitationAccept}
+        >
+          Accept
+        </Button>
+      </Fragment>
+    );
+  }
+
+  renderActiveTeamSettings() {
+    const {
+      classes, team, teamId, roles,
+    } = this.props;
+
+    return (
+      <IconButton aria-label="Configure" component={Link} to={`/team-settings/${teamId}`}>
+        <SettingsIcon />
+      </IconButton>
     );
   }
 }
@@ -88,18 +139,44 @@ TeamTile.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default compose(
-  withTracker(({ teamId }) => ({
-    team: Teams.findOne(teamId),
+const mapDispatchToProps = (dispatch, { team: { _id: teamId } }) => ({
+  onInvitationAccept() {
+    snackbarUtils.runAsyncWithNotification(
+      dispatch,
+      'The invitation has been accepted',
+      error => `Error accepting the invitation: ${error.message}`,
+      () => teamService.acceptInvitation(teamId),
+    );
+  },
 
-    roles: {
-      /*
-                editQuiz: Roles.userIsInRole(Meteor.userId(), "editQuiz", `quizzes/${quizId}`),
-                removeQuiz: Roles.userIsInRole(Meteor.userId(), "removeQuiz", `quizzes/${quizId}`),
-                passQuiz: Roles.userIsInRole(Meteor.userId(), "passQuiz", `quizzes/${quizId}`),
-        */
-    },
-  })),
+  onInvitationReject() {
+    snackbarUtils.runAsyncWithNotification(
+      dispatch,
+      'The invitation has been rejected',
+      error => `Error rejecting the invitation: ${error.message}`,
+      () => teamService.rejectInvitation(teamId),
+    );
+  },
+});
+
+export default compose(
+  withTracker(({ teamId }) => {
+    const team = Teams.findOne(teamId);
+
+    return ({
+      team,
+      currentUserId: Meteor.userId(),
+
+      roles: {
+        /*
+                  editQuiz: Roles.userIsInRole(Meteor.userId(), "editQuiz", `quizzes/${quizId}`),
+                  removeQuiz: Roles.userIsInRole(Meteor.userId(), "removeQuiz", `quizzes/${quizId}`),
+                  passQuiz: Roles.userIsInRole(Meteor.userId(), "passQuiz", `quizzes/${quizId}`),
+          */
+      },
+    });
+  }),
 
   withStyles(styles),
+  connect(null, mapDispatchToProps),
 )(TeamTile);

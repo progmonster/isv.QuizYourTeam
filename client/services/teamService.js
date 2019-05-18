@@ -19,6 +19,12 @@ const teamService = {
 
   resendInvitation: (teamId, userId) => Meteor
     .callAsync('teamMethods.resendInvitation', teamId, userId),
+
+  acceptInvitation: teamId => Meteor
+    .callAsync('teamMethods.acceptInvitation', teamId),
+
+  rejectInvitation: teamId => Meteor
+    .callAsync('teamMethods.rejectInvitation', teamId),
 };
 
 export default teamService;
