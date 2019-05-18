@@ -65,6 +65,7 @@ class TeamTile extends React.Component {
         <CardHeader
           title={team.title}
           subheader={`Participants: ${team.getActiveParticipantCount()}`}
+          // todo show quiz count
         />
 
         <CardContent>

@@ -10,6 +10,15 @@ const teamService = {
 
   invitePersonByEmail: (teamId, personEmail) => Meteor
     .callAsync('teamMethods.invitePersonByEmail', teamId, personEmail),
+
+  removeParticipant: (teamId, participantId) => Meteor
+    .callAsync('teamMethods.removeParticipant', teamId, participantId),
+
+  cancelInvitation: (teamId, userId) => Meteor
+    .callAsync('teamMethods.cancelInvitation', teamId, userId),
+
+  resendInvitation: (teamId, userId) => Meteor
+    .callAsync('teamMethods.resendInvitation', teamId, userId),
 };
 
 export default teamService;

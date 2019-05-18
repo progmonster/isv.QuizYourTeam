@@ -1,12 +1,12 @@
 import { Meteor } from 'meteor/meteor';
 import { Accounts } from 'meteor/accounts-base';
 import { check } from 'meteor/check';
+import { Roles } from 'meteor/alanning:roles';
 import { Teams } from '../../model/collections';
 import TeamCreator from '../../model/teamCreator';
 import TeamParticipant from '../../model/teamParticipant';
 import { ACTIVE, INVITED } from '../../model/participantStates';
 import Team from '../../model/team';
-import { Roles } from 'meteor/alanning:roles';
 
 const teamService = {
   create({ title, description }, creator) {
@@ -81,6 +81,34 @@ const teamService = {
     teamParticipant.state = INVITED;
 
     Teams.update(teamId, { $push: { participants: teamParticipant } });
+  },
+
+  removeParticipant(teamId, participantId, actor) {
+    check(teamId, String);
+    check(participantId, String);
+    check(actor, Object);
+
+    Teams.update(teamId, { $pull: { participants: { _id: participantId } } });
+    // todo progmonster update permissions
+  },
+
+  cancelInvitation(teamId, userId, actor) {
+    check(teamId, String);
+    check(userId, String);
+    check(actor, Object);
+
+    Teams.update(teamId, { $pull: { participants: { _id: userId } } });
+    // todo progmonster update permissions (to be sure)
+  },
+
+  resendInvitation(teamId, userId, actor) {
+    check(teamId, String);
+    check(userId, String);
+    check(actor, Object);
+    // todo progmonster if user doesn't exist then create acc and send invitation
+    // todo progmonster if user exists then send regular email with notification about invitaiton to team
+
+
   },
 };
 

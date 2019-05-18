@@ -359,7 +359,7 @@ const mapDispatchToProps = (dispatch, { team: { _id: teamId } }) => ({
   onParticipantRemove(participant) {
     snackbarUtils.runAsyncWithNotification(
       dispatch,
-      'The has been removed',
+      'The participant has been removed',
       error => `Error removal the participant: ${error.message}`,
       () => teamService.removeParticipant(teamId, participant._id),
     );

@@ -32,4 +32,22 @@ Meteor.methods({
 
     teamService.invitePersonByEmail(teamId, personEmail, Meteor.user());
   },
+
+  'teamMethods.removeParticipant': function (teamId, participantId) {
+    this.unblock();
+
+    teamService.removeParticipant(teamId, participantId, Meteor.user());
+  },
+
+  'teamMethods.cancelInvitation': function (teamId, userId) {
+    this.unblock();
+
+    teamService.cancelInvitation(teamId, userId, Meteor.user());
+  },
+
+  'teamMethods.resendInvitation': function (teamId, userId) {
+    this.unblock();
+
+    teamService.resendInvitation(teamId, userId, Meteor.user());
+  },
 });
