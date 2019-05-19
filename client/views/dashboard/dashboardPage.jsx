@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { compose } from 'redux';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
 import withStyles from '@material-ui/core/styles/withStyles';
@@ -8,14 +9,23 @@ import { withTracker } from 'meteor/react-meteor-data';
 import Grid from '@material-ui/core/Grid';
 import dashboardStyle from './dashboardStyle';
 import QuizTileContainer from '../quizzes/quizTile';
-import { Quizzes } from '../../../model/collections';
+import { Quizzes, Teams } from '../../../model/collections';
+import TeamTile from '../teams/teamTile';
 
 class DashboardPage extends React.PureComponent {
   render() {
-    const { classes, quizzes } = this.props;
+    const { classes, quizzes, invitedTeams } = this.props;
 
     return (
       <div>
+        <Grid container spacing={24}>
+          {invitedTeams.map(({ _id: teamId }) => (
+            <Grid item key={teamId} xs={12} sm={6} md={3}>
+              <TeamTile teamId={teamId} />
+            </Grid>
+          ))}
+        </Grid>
+
         <Grid container spacing={24}>
           {quizzes.map(({ _id: quizId }) => (
             <Grid item key={quizId} xs={12} sm={6} md={3}>
@@ -36,10 +46,14 @@ DashboardPage.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-const DashboardContainer = withTracker(() => ({
-  quizzes: Quizzes.find()
-    .fetch(),
-}))(withStyles(dashboardStyle)(DashboardPage));
+export default compose(
+  withTracker(() => ({
+    quizzes: Quizzes.find()
+      .fetch(),
 
+    invitedTeams: Teams.findWithInvitedUser(Meteor.userId())
+      .fetch(),
+  })),
 
-export default DashboardContainer;
+  withStyles(dashboardStyle),
+)(DashboardPage);
