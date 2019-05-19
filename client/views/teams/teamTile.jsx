@@ -17,7 +17,7 @@ import { Teams } from '../../../model/collections';
 import Button from '@material-ui/core/Button';
 import { connect } from 'react-redux';
 import teamService from '../../services/teamService';
-import { snackbarActions as snackbar, snackbarUtils } from '../../components/snackbar';
+import { snackbarUtils } from '../../components/snackbar';
 
 const styles = theme => ({
   card: {
@@ -82,9 +82,11 @@ class TeamTile extends React.Component {
             {team.description}
           </Typography>
 
-          <Typography component="p">
-            You are invited to the team. Please accept or reject invitation.
-          </Typography>
+          {isUserInInvitedState && (
+            <Typography component="p">
+              You are invited to the team. Please accept or reject the invitation.
+            </Typography>
+          )}
         </CardContent>
 
         <CardActions className={classes.actions} disableActionSpacing>

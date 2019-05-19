@@ -33,7 +33,7 @@ const styles = {
 
 function formatParticipantRole({ role }) {
   switch (role) {
-    case TeamRoles.roleAdmin:
+    case TeamRoles.adminRole:
       return 'Admin';
 
     case TeamRoles.regularParticipantRole:
@@ -255,6 +255,7 @@ class TeamParticipants extends React.Component {
     if (participant._id === currentUserId) {
       return (
         <YouAsParticipant
+          {...this.props}
           key={participantId}
           participant={participant}
           classes={classes}
@@ -265,6 +266,7 @@ class TeamParticipants extends React.Component {
     if (participant.state === INVITED) {
       return (
         <InvitedParticipant
+          {...this.props}
           key={participantId}
           participant={participant}
           classes={classes}
@@ -276,6 +278,7 @@ class TeamParticipants extends React.Component {
 
     return (
       <RegularParticipant
+        {...this.props}
         key={participantId}
         participant={participant}
         classes={classes}
@@ -430,7 +433,7 @@ const mapDispatchToProps = (dispatch, { team: { _id: teamId } }) => ({
 export default compose(
   withTracker(({ team: { _id: teamId } }) => ({
     currentUserId: Meteor.userId(),
-    isCurrentUserAdmin: Roles.userIsInRole(Meteor.userId(), TeamRoles.roleAdmin, `teams/${teamId}`),
+    isCurrentUserAdmin: Roles.userIsInRole(Meteor.userId(), TeamRoles.adminRole, `teams/${teamId}`),
   })),
 
   withStyles(styles),

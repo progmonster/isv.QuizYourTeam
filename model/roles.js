@@ -2,17 +2,17 @@ import { Roles } from 'meteor/alanning:roles';
 import { Meteor } from 'meteor/meteor';
 
 export const TeamRoles = {
-  roleAdmin: 'roleAdmin',// todo rename
+  adminRole: 'adminRole',
   regularParticipantRole: 'regularParticipantRole',
 };
 
 export const QuizRoles = {};
 
 Roles.isTeamAdmin = (userId, teamId) => Roles
-  .userIsInRole(userId, TeamRoles.roleAdmin, `teams/${teamId}`);
+  .userIsInRole(userId, TeamRoles.adminRole, `teams/${teamId}`);
 
 Roles.addTeamAdminRoleForUser = (userId, teamId) => Roles
-  .addUsersToRoles(userId, TeamRoles.roleAdmin, `teams/${teamId}`);
+  .addUsersToRoles(userId, TeamRoles.adminRole, `teams/${teamId}`);
 
 Roles.addRegularTeamParticipantRoleForUser = (userId, teamId) => Roles
   .addUsersToRoles(userId, TeamRoles.regularParticipantRole, `teams/${teamId}`);
@@ -22,5 +22,12 @@ Roles.removeTeamRolesForAllUsers = (teamId) => {
     {},
     { $unset: { [`roles.teams/${teamId}`]: '' } },
     { multi: true },
+  );
+};
+
+Roles.removeTeamRolesForUser = (userId, teamId) => {
+  Meteor.users.update(
+    userId,
+    { $unset: { [`roles.teams/${teamId}`]: '' } },
   );
 };

@@ -21,7 +21,7 @@ const teamService = {
 
     creatorAsParticipant.joinedAt = createdAt;
     creatorAsParticipant.state = ACTIVE;
-    creatorAsParticipant.role = TeamRoles.roleAdmin;
+    creatorAsParticipant.role = TeamRoles.adminRole;
 
     const team = new Team({
       title,
@@ -46,12 +46,11 @@ const teamService = {
     check(actor, Object);
     check(Roles.isTeamAdmin(actor._id, _id), true);
 
-    Teams.update(_id, {
-      $set: {
-        title,
-        description,
-        updatedAt: new Date(),
-      },
+    return Teams.updateTeamSettings({
+      _id,
+      title,
+      description,
+      updatedAt: new Date(),
     });
   },
 
@@ -88,7 +87,7 @@ const teamService = {
       personUser = Meteor.users.findOne(createdUserId);
     }
 
-    if (teamService.isUserInTeam(teamId, personUser._id)) {
+    if (Teams.isUserInTeam(teamId, personUser._id)) {
       throw new Meteor.Error('The invitation was already made');
     }
 
@@ -98,14 +97,13 @@ const teamService = {
     teamParticipant.state = INVITED;
     teamParticipant.role = TeamRoles.regularParticipantRole;
 
-    const updated = Teams.update({
-      _id: teamId,
-      participants: { $not: { $elemMatch: { _id: personUser._id } } },
-    }, { $push: { participants: teamParticipant } });
+    const updated = Teams.addParticipant(teamId, teamParticipant);
 
     if (!updated) {
       throw new Meteor.Error('Error adding invited user to the team');
     }
+
+    Roles.addRegularTeamParticipantRoleForUser(teamParticipant._id, teamId);
   },
 
   removeParticipant(teamId, participantId, actor) {
@@ -115,8 +113,13 @@ const teamService = {
     check(Roles.isTeamAdmin(actor._id, teamId), true);
     check(actor._id === participantId, false);
 
-    Teams.update(teamId, { $pull: { participants: { _id: participantId } } });
-    // todo progmonster update permissions
+    const updated = Teams.removeParticipant(teamId, participantId);
+
+    if (!updated) {
+      throw new Meteor.Error('Error participant removal');
+    }
+
+    Roles.removeTeamRolesForUser(participantId, teamId);
   },
 
   cancelInvitation(teamId, userId, actor) {
@@ -125,8 +128,13 @@ const teamService = {
     check(actor, Object);
     check(Roles.isTeamAdmin(actor._id, teamId), true);
 
-    Teams.update(teamId, { $pull: { participants: { _id: userId } } });
-    // todo progmonster update permissions
+    const updated = Teams.removeParticipant(teamId, userId);
+
+    if (!updated) {
+      throw new Meteor.Error('Error cancelling the invitation');
+    }
+
+    Roles.removeTeamRolesForUser(userId, teamId);
   },
 
   resendInvitation(teamId, userId, actor) {
@@ -146,41 +154,24 @@ const teamService = {
     check(teamId, String);
     check(user, Object);
 
-    Teams.update({
-      _id: teamId,
+    const updated = Teams.updateParticipantState(teamId, user._id, INVITED, ACTIVE);
 
-      participants: {
-        $elemMatch: {
-          _id: user._id,
-          state: INVITED,
-        },
-      },
-    }, { $set: { 'participants.$.state': ACTIVE } });
+    if (!updated) {
+      throw new Meteor.Error('Error accepting the invitation');
+    }
   },
 
   rejectInvitation(teamId, user) {
     check(teamId, String);
     check(user, Object);
 
-    Teams.update({
-      _id: teamId,
+    const updated = Teams.removeParticipantWithState(teamId, user._id, INVITED);
 
-      participants: {
-        $elemMatch: {
-          _id: user._id,
-          state: INVITED,
-        },
-      },
-    }, { $pull: { participants: { _id: user._id } } });
-  },
+    if (!updated) {
+      throw new Meteor.Error('Error rejecting the invitation');
+    }
 
-  isUserInTeam(teamId, userId) {
-    return Teams
-      .find({
-        _id: teamId,
-        'participants._id': userId,
-      }, { limit: 1 })
-      .count(false) > 0;
+    Roles.removeTeamRolesForUser(user._id, teamId);
   },
 };
 
