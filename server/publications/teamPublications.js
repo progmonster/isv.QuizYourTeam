@@ -15,11 +15,9 @@ Meteor.publish('team', function (teamId) {
   if (!this.userId) {
     return [];
   }
-  // todo progmonster  check permissions
-  return Teams.find(teamId);
 
-/*
-  this.autorun(() =>
-    Teams.find(teamId));
-*/
+  return Teams.find({
+    teamId,
+    'participants._id': this.userId,
+  });
 });
