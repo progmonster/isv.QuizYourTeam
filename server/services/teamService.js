@@ -8,6 +8,7 @@ import TeamParticipant from '../../model/teamParticipant';
 import { ACTIVE, INVITED } from '../../model/participantStates';
 import Team from '../../model/team';
 import { TeamRoles } from '../../model/roles';
+import { getUserEmail } from '../../users/userUtils';
 
 const teamService = {
   create({ title, description }, creator) {
@@ -146,8 +147,18 @@ const teamService = {
     check(userId, String);
     check(actor, Object);
     check(Roles.isTeamAdmin(actor._id, teamId), true);
-    // todo progmonster if user doesn't exist then create acc and send invitation
-    // todo progmonster if user exists then send regular email with notification about invitation to team
+
+    const personUser = Meteor.users.findOne(userId);
+
+    if (!personUser) {
+      throw new Meteor.Error('The user is not found');
+    }
+
+    Email.send({
+      from: Accounts.emailTemplates.from,
+      to: getUserEmail(personUser),
+      text: 'You are invited to a new team. Please check your dashboard.',
+    });
   },
 
   acceptInvitation(teamId, user) {
