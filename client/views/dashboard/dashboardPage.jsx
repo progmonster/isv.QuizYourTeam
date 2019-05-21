@@ -37,7 +37,7 @@ class DashboardPage extends React.PureComponent {
                   </Grid>
 
                   <Grid item xs={12} container spacing={24}>
-                    {quizzes.filter(({ teamId }) => teamId === team._id)
+                    {quizzes
                       .map(({ _id: quizId }) => (
                         <Grid key={quizId} item xs={12} sm={6} md={3}>
                           <QuizTileContainer quizId={quizId} />
@@ -73,10 +73,10 @@ export default compose(
     quizzes: Quizzes.find()
       .fetch(),
 
-    invitedTeams: Teams.findWithInvitedState(Meteor.userId())
+    invitedTeams: Teams.findTeamsWithUserInvitedState(Meteor.userId())
       .fetch(),
 
-    activeTeams: Teams.findWithActiveState(Meteor.userId())
+    activeTeams: Teams.findTeamsWithUserActiveState(Meteor.userId())
       .fetch(),
   })),
 

@@ -1,8 +1,9 @@
-import { all, put, select, takeEvery } from 'redux-saga/effects';
+import { all, call, put, select, takeEvery } from 'redux-saga/effects';
 import { convertFromRaw, convertToRaw, EditorState } from 'draft-js';
 import range from 'lodash/range';
 import { snackbarActions as snackbar } from '../components/snackbar';
 import quizService from './quizService';
+import { history } from '../main';
 
 export const CLEAR_EDITING_QUIZ = 'CLEAR_EDITING_QUIZ';
 
@@ -137,10 +138,10 @@ export function changeAnswerTypeInEditingQuiz(questionId, answerType) {
   };
 }
 
-export function saveEditingQuiz(history) {
+export function saveEditingQuiz(teamId) {
   return {
     type: SAVE_EDITING_QUIZ,
-    history,
+    teamId,
   };
 }
 
@@ -252,21 +253,24 @@ function convertQuizAnswersForStore(answers = []) {
   };
 }
 
-function* saveEditingQuizAsync({ history }) {
+function* saveEditingQuizAsync({ teamId }) {
   const editingQuiz = yield select(getEditingQuizFromStore);
 
   try {
     if (editingQuiz._id) {
       yield quizService.update(editingQuiz);
     } else {
-      yield quizService.insert(editingQuiz);
+      yield quizService.insert({
+        ...editingQuiz,
+        teamId,
+      });
     }
 
     yield put(clearEditingQuiz());
 
     yield put(snackbar.show({ message: 'Your quiz has been successfully saved!' }));
 
-    history.push('/dashboard');
+    yield call(history.push, '/dashboard');
   } catch (error) {
     console.error(error);
 

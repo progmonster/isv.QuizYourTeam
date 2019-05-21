@@ -1,5 +1,6 @@
 import React from 'react';
 import withStyles from '@material-ui/core/styles/withStyles';
+import { parse as parseQueryString } from 'query-string';
 import { Editor } from 'react-draft-wysiwyg';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import Button from '@material-ui/core/Button';
@@ -54,6 +55,8 @@ class QuizEditorPage extends React.Component {
   }
 
   static getQuizId = props => props.match.params.quizId;
+
+  getTeamId = () => parseQueryString(this.props.location.search);
 
   componentDidMount() {
     const quizId = QuizEditorPage.getQuizId(this.props);
@@ -215,7 +218,7 @@ const mapStateToProps = state => ({
   questions: state.editingQuiz.questions,
 });
 
-const mapDispatchToProps = (dispatch, { history }) => ({
+const mapDispatchToProps = (dispatch, { location: { search } }) => ({
   onParagraphCreate: () => {
     dispatch(addParagraphToEditingQuiz());
   },
@@ -233,7 +236,9 @@ const mapDispatchToProps = (dispatch, { history }) => ({
   },
 
   onQuizSave: () => {
-    dispatch(saveEditingQuiz(history));
+    const teamId = parseQueryString(search).team;
+
+    dispatch(saveEditingQuiz(teamId));
   },
 
   dispatch,

@@ -7,7 +7,7 @@ import TeamCreator from '../../model/teamCreator';
 import TeamParticipant from '../../model/teamParticipant';
 import { ACTIVE, INVITED } from '../../model/participantStates';
 import Team from '../../model/team';
-import { TeamRoles } from '../../model/roles';
+import { QuizRoles, TeamRoles } from '../../model/roles';
 import { getUserEmail } from '../../users/userUtils';
 
 const teamService = {
@@ -120,7 +120,7 @@ const teamService = {
       throw new Meteor.Error('Error participant removal');
     }
 
-    Roles.removeTeamRolesForUser(participantId, teamId);
+    Roles.removeTeamQuizRolesForUser(participantId, teamId);
   },
 
   cancelInvitation(teamId, userId, actor) {
@@ -136,6 +136,7 @@ const teamService = {
     }
 
     Roles.removeTeamRolesForUser(userId, teamId);
+    Roles.removeTeamQuizRolesForUser(userId, teamId);
   },
 
   resendInvitation(teamId, userId, actor) {
@@ -170,6 +171,24 @@ const teamService = {
     if (!updated) {
       throw new Meteor.Error('Error accepting the invitation');
     }
+
+    const userRole = Teams.findOne(teamId)
+      .getParticipantRole(user._id);
+
+    // todo remove duplication with quizService.insert
+    if (userRole === TeamRoles.adminRole) {
+      Roles.addTeamQuizRolesForUser(
+        user,
+        [QuizRoles.viewQuiz, QuizRoles.passQuiz],
+        teamId,
+      );
+    } else if (userRole === TeamRoles.regularParticipantRole) {
+      Roles.addTeamQuizRolesForUser(
+        user,
+        [QuizRoles.viewQuiz, QuizRoles.passQuiz, QuizRoles.editQuiz, QuizRoles.removeQuiz],
+        teamId,
+      );
+    }
   },
 
   rejectInvitation(teamId, user) {
@@ -183,6 +202,7 @@ const teamService = {
     }
 
     Roles.removeTeamRolesForUser(user._id, teamId);
+    Roles.removeTeamQuizRolesForUser(user._id, teamId);
   },
 };
 

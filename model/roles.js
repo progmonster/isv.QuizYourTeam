@@ -1,12 +1,21 @@
+import size from 'lodash/size';
 import { Roles } from 'meteor/alanning:roles';
 import { Meteor } from 'meteor/meteor';
+import { Quizzes } from './collections';
 
 export const TeamRoles = {
-  adminRole: 'adminRole',
-  regularParticipantRole: 'regularParticipantRole',
+  adminRole: 'adminRole', // todo rename to admin
+  regularParticipantRole: 'regularParticipantRole', // todo rename to regularParticipant
 };
 
-export const QuizRoles = {};
+export const QuizRoles = {
+  viewQuiz: 'viewQuiz',
+  editQuiz: 'editQuiz',
+  removeQuiz: 'removeQuiz',
+  passQuiz: 'passQuiz',
+};
+
+// todo progmonster extract these methods to RoleService.
 
 Roles.isTeamAdmin = (userId, teamId) => Roles
   .userIsInRole(userId, TeamRoles.adminRole, `teams/${teamId}`);
@@ -30,4 +39,36 @@ Roles.removeTeamRolesForUser = (userId, teamId) => {
     userId,
     { $unset: { [`roles.teams/${teamId}`]: '' } },
   );
+};
+
+Roles.addQuizRolesForUsers = (users, roles, quizId) => Roles.addUsersToRoles(
+  users,
+  roles,
+  `quizzes/${quizId}`,
+);
+
+Roles.addTeamQuizRolesForUser = (user, roles, teamId) => {
+  const quizzes = Quizzes.find({ teamId }, { fields: { _id: 1 } });
+
+  quizzes.forEach(quizId => Roles.addQuizRolesForUsers(user, roles, quizId));
+};
+
+Roles.removeTeamQuizRolesForUser = (userId, teamId) => {
+  const unsetTeamQuizRoles = Quizzes
+    .find({ teamId }, { fields: { _id: 1 } })
+    .map(({ _id }) => _id)
+    .reduce((unsets, quizId) => ({
+      ...unsets,
+      [`roles.quizzes/${quizId}`]: '',
+    }), {});
+
+
+  console.log(unsetTeamQuizRoles);
+
+  if (size(unsetTeamQuizRoles)) {
+    Meteor.users.update(
+      userId,
+      { $unset: unsetTeamQuizRoles },
+    );
+  }
 };

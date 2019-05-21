@@ -23,14 +23,14 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import { promisify } from 'util';
 import '../model/roles';
 
+export const history = createBrowserHistory();
+
 Meteor.callAsync = promisify(Meteor.call);
 
 Meteor.subscribe('quizzes');
 Meteor.subscribe('teams');
 
 Meteor.startup(() => {
-  const hist = createBrowserHistory();
-
   const loggerMiddleware = createLogger();
 
   const sagaMiddleware = createSagaMiddleware();
@@ -54,7 +54,7 @@ Meteor.startup(() => {
     <CssBaseline>
       <Provider store={store}>
         <SnackbarProvider SnackbarProps={{ autoHideDuration: 3500 }}>
-          <Router history={hist}>
+          <Router history={history}>
             <Switch>
               <Route exact path="/">
                 <Redirect from="/" to="/dashboard" />

@@ -3,6 +3,7 @@ import some from 'lodash/some';
 import TeamParticipant from './teamParticipant';
 import { ACTIVE, INVITED } from './participantStates';
 import TeamCreator from './teamCreator';
+import { TeamRoles as Roles } from './roles';
 
 export default class Team {
   title;
@@ -33,4 +34,12 @@ export default class Team {
       state: INVITED,
     });
   }
+
+  getAdmins() {
+    return this.participants.filter(({ role }) => role === Roles.adminRole);
+  }
+
+  getParticipantRole = participantId => this.participants
+    .find(({ _id }) => _id === participantId)
+    .role;
 }

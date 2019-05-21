@@ -61,7 +61,7 @@ Teams.isUserInTeam = (teamId, userId) => Teams
   }, { limit: 1 })
   .count(false) > 0;
 
-Teams.findWithInvitedState = userId => Teams
+Teams.findTeamsWithUserInvitedState = userId => Teams
   .find({
     participants: {
       $elemMatch: {
@@ -71,7 +71,7 @@ Teams.findWithInvitedState = userId => Teams
     },
   });
 
-Teams.findWithActiveState = userId => Teams
+Teams.findTeamsWithUserActiveState = userId => Teams
   .find({
     participants: {
       $elemMatch: {
@@ -80,3 +80,4 @@ Teams.findWithActiveState = userId => Teams
       },
     },
   });
+
