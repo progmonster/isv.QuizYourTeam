@@ -1,5 +1,7 @@
 import { Meteor } from 'meteor/meteor';
+import { Roles } from 'meteor/alanning:roles';
 import { Quizzes } from '../../model/collections';
+import { QuizRoles } from '../../model/roles';
 
 Meteor.publish('quizzes', function () {
   if (!this.userId) {
@@ -7,8 +9,7 @@ Meteor.publish('quizzes', function () {
   }
 
   this.autorun(() => {
-    const grantedQuizzes = Roles.getGroupsForUser(this.userId, 'viewQuiz')
-      .map(grantedGroup => grantedGroup.replace(/^quizzes\//, ''));
+    const grantedQuizzes = Roles.getQuizzesForUserWithRoles(this.userId, QuizRoles.viewQuiz);
 
     return Quizzes.find({ _id: { $in: grantedQuizzes } });
   });
@@ -19,8 +20,11 @@ Meteor.publish('quiz', function (quizId) {
     return [];
   }
 
-  this.autorun(() =>
-    // todo progmonster  check permissions
+  this.autorun(() => {
+    if (Roles.hasUserQuizRoles(this.userId, QuizRoles.viewQuiz, quizId)) {
+      return Quizzes.find(quizId);
+    }
 
-    Quizzes.find(quizId));
+    return [];
+  });
 });

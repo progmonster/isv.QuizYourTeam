@@ -16,8 +16,13 @@ const quizService = {
 
     const creator = Meteor.user();
 
+    // todo progmonster copy only known quiz fields from a client
     const quizId = Quizzes.insert({
-      ...quiz,
+      title: quiz.title,
+      descriptionEditorState: quiz.descriptionEditorState,
+      paragraphs: quiz.paragraphs,
+      questions: quiz.questions,
+
       creator: {
         _id: creatorId,
         email: getUserEmail(creator),
@@ -46,28 +51,29 @@ const quizService = {
 
   update(quiz, actorId) {
     check(quiz._id, String);
-    check(quiz.teamId, undefined);
     check(actorId, String);
-    // todo progmonster move such instructions to Roles
-    check(Roles.userIsInRole(actorId, 'editQuiz', `quizzes/${quiz._id}`), true);
+    check(Roles.hasUserQuizRoles(actorId, QuizRoles.editQuiz, quiz._id, true));
 
-    console.log(JSON.stringify(quiz));
-    // todo progmonster update only certain fields
-   // Quizzes.update(quiz._id, quiz);
+    // todo progmonster copy only known quiz fields from a client
+    Quizzes.update(quiz._id, {
+      $set: {
+        title: quiz.title,
+        updatedAt: new Date(),
+        descriptionEditorState: quiz.descriptionEditorState,
+        paragraphs: quiz.paragraphs,
+        questions: quiz.questions,
+      },
+    });
   },
 
   remove(quizId, actorId) {
     check(quizId, String);
     check(actorId, String);
-    check(Roles.userIsInRole(actorId, 'removeQuiz', `quizzes/${quizId}`), true);
+    check(Roles.hasUserQuizRoles(actorId, QuizRoles.removeQuiz, quizId, true));
 
     Quizzes.remove(quizId);
 
-    Meteor.users.update(
-      {},
-      { $unset: { [`roles.quizzes/${quizId}`]: '' } },
-      { multi: true },
-    );
+    Roles.removeQuizRolesForAllUsers(quizId);
   },
 };
 

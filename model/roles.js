@@ -62,9 +62,6 @@ Roles.removeTeamQuizRolesForUser = (userId, teamId) => {
       [`roles.quizzes/${quizId}`]: '',
     }), {});
 
-
-  console.log(unsetTeamQuizRoles);
-
   if (size(unsetTeamQuizRoles)) {
     Meteor.users.update(
       userId,
@@ -72,3 +69,18 @@ Roles.removeTeamQuizRolesForUser = (userId, teamId) => {
     );
   }
 };
+
+Roles.hasUserQuizRoles = (user, roles, quizId) => Roles
+  .userIsInRole(user, roles, `quizzes/${quizId}`);
+
+Roles.removeQuizRolesForAllUsers = (quizId) => {
+  Meteor.users.update(
+    {},
+    { $unset: { [`roles.quizzes/${quizId}`]: '' } },
+    { multi: true },
+  );
+};
+
+Roles.getQuizzesForUserWithRoles = (user, roles) => Roles
+  .getGroupsForUser(user, roles)
+  .map(roleGroup => roleGroup.replace(/^quizzes\//, ''));
