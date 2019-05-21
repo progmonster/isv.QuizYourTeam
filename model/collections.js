@@ -1,6 +1,6 @@
 import { Mongo } from 'meteor/mongo';
 import Team from './team';
-import { INVITED } from './participantStates';
+import { ACTIVE, INVITED } from './participantStates';
 
 export const Quizzes = new Mongo.Collection('quizzes');
 
@@ -61,7 +61,7 @@ Teams.isUserInTeam = (teamId, userId) => Teams
   }, { limit: 1 })
   .count(false) > 0;
 
-Teams.findWithInvitedUser = userId => Teams
+Teams.findWithInvitedState = userId => Teams
   .find({
     participants: {
       $elemMatch: {
@@ -71,3 +71,12 @@ Teams.findWithInvitedUser = userId => Teams
     },
   });
 
+Teams.findWithActiveState = userId => Teams
+  .find({
+    participants: {
+      $elemMatch: {
+        _id: userId,
+        state: ACTIVE,
+      },
+    },
+  });

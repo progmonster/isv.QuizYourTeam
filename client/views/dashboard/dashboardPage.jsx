@@ -1,20 +1,21 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import { compose } from 'redux';
-import Fab from '@material-ui/core/Fab';
-import AddIcon from '@material-ui/icons/Add';
-import withStyles from '@material-ui/core/styles/withStyles';
+import * as PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { withTracker } from 'meteor/react-meteor-data';
 import Grid from '@material-ui/core/Grid';
+import Paper from '@material-ui/core/Paper';
+import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
+import { compose } from 'redux';
+import { withTracker } from 'meteor/react-meteor-data';
+import { withStyles } from '@material-ui/core';
 import dashboardStyle from './dashboardStyle';
-import QuizTileContainer from '../quizzes/quizTile';
 import { Quizzes, Teams } from '../../../model/collections';
+import QuizTileContainer from '../quizzes/quizTile';
 import TeamTile from '../teams/teamTile';
 
 class DashboardPage extends React.PureComponent {
   render() {
-    const { classes, quizzes, invitedTeams } = this.props;
+    const { classes, quizzes, invitedTeams, activeTeams } = this.props;
 
     return (
       <div>
@@ -26,17 +27,38 @@ class DashboardPage extends React.PureComponent {
           ))}
         </Grid>
 
-        <Grid container spacing={24}>
-          {quizzes.map(({ _id: quizId }) => (
-            <Grid item key={quizId} xs={12} sm={6} md={3}>
-              <QuizTileContainer quizId={quizId} />
+        {activeTeams.map(team => (
+          <Grid key={team._id} container spacing={24}>
+            <Grid item xs={12}>
+              <Paper>
+                <Grid container spacing={24}>
+                  <Grid item xs={12}>
+                    <Typography variant="h5" gutterBottom>{team.title}</Typography>
+                  </Grid>
+
+                  <Grid item xs={12} container spacing={24}>
+                    {quizzes.filter(({ teamId }) => teamId === team._id)
+                      .map(({ _id: quizId }) => (
+                        <Grid key={quizId} item xs={12} sm={6} md={3}>
+                          <QuizTileContainer quizId={quizId} />
+                        </Grid>
+                      ))}
+                  </Grid>
+
+                  <Grid item xs={12}>
+                    <Button
+                      color="primary"
+                      component={Link}
+                      to={`/quiz-edit?team=${team._id}`}
+                    >
+                      Add new quiz
+                    </Button>
+                  </Grid>
+                </Grid>
+              </Paper>
             </Grid>
-          ))}
-        </Grid>
-        {/* todo replace url with something like "/quizzes/new". Use /quizzes/:id/edit for edit exists */}
-        <Fab color="primary" className={classes.addCardFab} component={Link} to="/quiz-edit">
-          <AddIcon />
-        </Fab>
+          </Grid>
+        ))}
       </div>
     );
   }
@@ -51,7 +73,10 @@ export default compose(
     quizzes: Quizzes.find()
       .fetch(),
 
-    invitedTeams: Teams.findWithInvitedUser(Meteor.userId())
+    invitedTeams: Teams.findWithInvitedState(Meteor.userId())
+      .fetch(),
+
+    activeTeams: Teams.findWithActiveState(Meteor.userId())
       .fetch(),
   })),
 
