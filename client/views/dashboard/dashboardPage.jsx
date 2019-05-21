@@ -38,6 +38,7 @@ class DashboardPage extends React.PureComponent {
 
                   <Grid item xs={12} container spacing={24}>
                     {quizzes
+                      .filter(({ teamId }) => teamId === team._id)
                       .map(({ _id: quizId }) => (
                         <Grid key={quizId} item xs={12} sm={6} md={3}>
                           <QuizTileContainer quizId={quizId} />

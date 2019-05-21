@@ -30,6 +30,7 @@ const quizService = {
       },
       createdAt,
       updatedAt: createdAt,
+      teamId: quiz.teamId,
     });
 
     const team = Teams.findOne(quiz.teamId);
@@ -52,7 +53,7 @@ const quizService = {
   update(quiz, actorId) {
     check(quiz._id, String);
     check(actorId, String);
-    check(Roles.hasUserQuizRoles(actorId, QuizRoles.editQuiz, quiz._id, true));
+    check(Roles.hasUserQuizRoles(actorId, QuizRoles.editQuiz, quiz._id), true);
 
     // todo progmonster copy only known quiz fields from a client
     Quizzes.update(quiz._id, {
@@ -69,7 +70,7 @@ const quizService = {
   remove(quizId, actorId) {
     check(quizId, String);
     check(actorId, String);
-    check(Roles.hasUserQuizRoles(actorId, QuizRoles.removeQuiz, quizId, true));
+    check(Roles.hasUserQuizRoles(actorId, QuizRoles.removeQuiz, quizId), true);
 
     Quizzes.remove(quizId);
 
