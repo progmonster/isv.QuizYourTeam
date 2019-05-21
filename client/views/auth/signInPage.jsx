@@ -26,6 +26,12 @@ class SignInPage extends React.Component {
     password: '',
   };
 
+  componentDidMount() {
+    if (Meteor.userId()) {
+      this.props.history.replace('/dashboard');
+    }
+  }
+
   onTextFieldChange = name => (event) => {
     this.setState({ [name]: event.target.value });
   };

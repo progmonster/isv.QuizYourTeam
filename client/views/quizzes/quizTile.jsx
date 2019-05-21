@@ -51,6 +51,10 @@ class QuizTile extends React.Component {
   render() {
     const { classes, quiz, roles } = this.props;
 
+    if (!quiz) {
+      return <div />;
+    }
+
     const quizDescriptionHtml = stateToHTML(convertFromRaw(quiz.descriptionEditorState));
 
     return (
