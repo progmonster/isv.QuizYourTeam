@@ -4,6 +4,7 @@ import TextField from '@material-ui/core/TextField';
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
+import { Meteor } from "meteor/meteor";
 
 const styles = theme => ({
   container: {
@@ -23,6 +24,12 @@ class SignUpPage extends React.Component {
     email: '',
     password: '',
   };
+
+  componentDidMount() {
+    if (Meteor.userId()) {
+      this.props.history.replace('/dashboard');
+    }
+  }
 
   onTextFieldChange = name => (event) => {
     this.setState({ [name]: event.target.value });
