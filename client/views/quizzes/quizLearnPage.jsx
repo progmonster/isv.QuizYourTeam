@@ -1,9 +1,7 @@
 import React from 'react';
 import size from 'lodash/size';
 import withStyles from '@material-ui/core/styles/withStyles';
-import { Editor } from 'react-draft-wysiwyg';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
-import { connect } from 'react-redux';
 import * as PropTypes from 'prop-types';
 import { compose } from 'redux';
 import Card from '@material-ui/core/Card';
@@ -11,12 +9,12 @@ import CardHeader from '@material-ui/core/CardHeader';
 import CardContent from '@material-ui/core/CardContent';
 import { orange } from '@material-ui/core/colors';
 import Grid from '@material-ui/core/Grid';
-import { Quizzes } from '../../../model/collections';
 import { withTracker } from 'meteor/react-meteor-data';
 import { stateToHTML } from 'draft-js-export-html';
 import { convertFromRaw } from 'draft-js';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
+import { Quizzes } from '../../../model/collections';
 
 const styles = {
   cardHeaderRoot: {
@@ -50,6 +48,11 @@ function Intro({ quiz, onLearningStart }) {
   );
 }
 
+Intro.propTypes = {
+  quiz: PropTypes.object.isRequired,
+  onLearningStart: PropTypes.func.isRequired,
+};
+
 function Congratulation({ onPreviousStepGo, onLearningClose }) {
   return (
     <Grid container>
@@ -70,6 +73,11 @@ function Congratulation({ onPreviousStepGo, onLearningClose }) {
   );
 }
 
+Congratulation.propTypes = {
+  onPreviousStepGo: PropTypes.func.isRequired,
+  onLearningClose: PropTypes.func.isRequired,
+};
+
 function ParagraphStepTitle({ currentStep, stepCount }) {
   return (
     <Typography variant="h5">
@@ -77,6 +85,11 @@ function ParagraphStepTitle({ currentStep, stepCount }) {
     </Typography>
   );
 }
+
+ParagraphStepTitle.propTypes = {
+  currentStep: PropTypes.number.isRequired,
+  stepCount: PropTypes.number.isRequired,
+};
 
 function Paragraph({ paragraph, currentStep, stepCount, onPreviousStepGo, onNextStepGo }) {
   const paragraphContentHtml = stateToHTML(convertFromRaw(paragraph.editorState));
@@ -108,9 +121,17 @@ function Paragraph({ paragraph, currentStep, stepCount, onPreviousStepGo, onNext
   );
 }
 
+Paragraph.propTypes = {
+  paragraph: PropTypes.object.isRequired,
+  currentStep: PropTypes.number.isRequired,
+  stepCount: PropTypes.number.isRequired,
+  onPreviousStepGo: PropTypes.func.isRequired,
+  onNextStepGo: PropTypes.func.isRequired,
+};
+
 class QuizLearnPage extends React.Component {
-  constructor(props, context) {
-    super(props, context);
+  constructor(props) {
+    super(props);
 
     this.state = {
       currentStep: 0,
@@ -205,17 +226,13 @@ class QuizLearnPage extends React.Component {
 }
 
 QuizLearnPage.propTypes = {
-  classes: PropTypes.any,
-  quiz: PropTypes.object,
+  classes: PropTypes.object.isRequired,
+  history: PropTypes.object.isRequired,
+  quiz: PropTypes.any.isRequired,
 };
-
-const mapStateToProps = state => ({});
-
-const mapDispatchToProps = (dispatch, { location: { search } }) => ({});
 
 export default compose(
   withStyles(styles),
-  connect(mapStateToProps, mapDispatchToProps),
 
   withTracker(({ match: { params: { quizId } } }) => {
     Meteor.subscribe('quiz', quizId);
