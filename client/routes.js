@@ -4,6 +4,7 @@ import DashboardPage from '/client/views/dashboard/dashboardPage.jsx';
 import TeamsPage from '/client/views/teams/teamsPage';
 import QuizEditor from './views/quizzes/quizEditorPage';
 import TeamSettings from './views/teams/teamSettingsPage';
+import QuizLearnPage from './views/quizzes/quizLearnPage';
 
 export const routes = [
   {
@@ -19,6 +20,14 @@ export const routes = [
     name: 'Edit Quiz',
     icon: Dashboard,
     component: QuizEditor,
+    showInDrawer: false,
+  },
+
+  {
+    path: '/quiz-learn/:quizId?',
+    name: 'Learn Quiz',
+    icon: Dashboard,
+    component: QuizLearnPage,
     showInDrawer: false,
   },
 

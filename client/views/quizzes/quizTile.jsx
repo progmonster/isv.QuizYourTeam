@@ -70,7 +70,7 @@ class QuizTile extends React.Component {
         <CardContent dangerouslySetInnerHTML={{ __html: quizDescriptionHtml }} />
 
         <CardActions>
-          <Button size="small" color="primary">
+          <Button size="small" color="primary" component={Link} to={`/quiz-learn/${quiz._id}`}>
             Learn
           </Button>
 
