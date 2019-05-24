@@ -5,6 +5,7 @@ import TeamsPage from '/client/views/teams/teamsPage';
 import QuizEditor from './views/quizzes/quizEditorPage';
 import TeamSettings from './views/teams/teamSettingsPage';
 import QuizLearnPage from './views/quizzes/quizLearnPage';
+import QuizPassPage from './views/quizzes/pass/quizPassPage';
 
 export const routes = [
   {
@@ -28,6 +29,14 @@ export const routes = [
     name: 'Learn Quiz',
     icon: Dashboard,
     component: QuizLearnPage,
+    showInDrawer: false,
+  },
+
+  {
+    path: '/quiz-pass/:quizId?',
+    name: 'Pass Quiz',
+    icon: Dashboard,
+    component: QuizPassPage,
     showInDrawer: false,
   },
 

@@ -75,7 +75,7 @@ class QuizTile extends React.Component {
           </Button>
 
           {roles.passQuiz && (
-            <Button size="small" color="primary">
+            <Button size="small" color="primary" component={Link} to={`/quiz-pass/${quiz._id}`}>
               Quiz
             </Button>
           )}

@@ -22,6 +22,7 @@
     "no-underscore-dangle": "off",
     "react/forbid-prop-types": "off",
     "object-curly-newline": "off",
-    "react/no-danger": "off"
+    "react/no-danger": "off",
+    "no-param-reassign": ["error", { "props": false }]
   }
 }

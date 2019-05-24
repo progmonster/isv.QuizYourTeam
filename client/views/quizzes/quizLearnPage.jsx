@@ -228,7 +228,11 @@ class QuizLearnPage extends React.Component {
 QuizLearnPage.propTypes = {
   classes: PropTypes.object.isRequired,
   history: PropTypes.object.isRequired,
-  quiz: PropTypes.any.isRequired,
+  quiz: PropTypes.object,
+};
+
+QuizLearnPage.defaultProps = {
+  quiz: null,
 };
 
 export default compose(
