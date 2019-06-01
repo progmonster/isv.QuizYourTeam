@@ -1,37 +1,35 @@
 import { check } from 'meteor/check';
 import { Roles } from 'meteor/alanning:roles';
-import { Meteor } from 'meteor/meteor';
 import { Quizzes, Teams } from '../../model/collections';
-import { getUserEmail, getUserFullName } from '../../users/userUtils';
 import { QuizRoles } from '../../model/roles';
+import Quiz from '../../model/quiz';
+import QuizCreator from '../../model/quizCreator';
 
 const quizService = {
-  insert(quiz, creatorId) {
+  insert(quiz, creator) {
     check(quiz._id, undefined);
     check(quiz.teamId, String);
-    check(creatorId, String);
-    check(Teams.isUserInTeam(quiz.teamId, creatorId), true);
+    check(creator, Object);
+    check(Teams.isUserInTeam(quiz.teamId, creator._id), true);
 
     const createdAt = new Date();
 
-    const creator = Meteor.user();
-
-    // todo progmonster copy only known quiz fields from a client
-    const quizId = Quizzes.insert({
+    const sanitizedQuiz = new Quiz({
       title: quiz.title,
       descriptionEditorState: quiz.descriptionEditorState,
-      paragraphs: quiz.paragraphs,
-      questions: quiz.questions,
-
-      creator: {
-        _id: creatorId,
-        email: getUserEmail(creator),
-        fullName: getUserFullName(creator),
-      },
+      paragraphs: quiz.paragraphs || [],
+      questions: quiz.questions || [], // todo validate question with answers
+      creator: new QuizCreator(creator),
       createdAt,
       updatedAt: createdAt,
       teamId: quiz.teamId,
+      passed: [],
     });
+
+    console.log(JSON.stringify(quiz, null, 2));
+    console.log(JSON.stringify(sanitizedQuiz, null, 2));
+
+    const quizId = Quizzes.insert(sanitizedQuiz);
 
     const team = Teams.findOne(quiz.teamId);
 
@@ -42,7 +40,7 @@ const quizService = {
     );
 
     Roles.addQuizRolesForUsers(
-      [...team.getAdmins(), creatorId],
+      [...team.getAdmins(), creator._id],
       [QuizRoles.editQuiz, QuizRoles.removeQuiz],
       quizId,
     );

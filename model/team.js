@@ -6,6 +6,8 @@ import TeamCreator from './teamCreator';
 import { TeamRoles as Roles } from './roles';
 
 export default class Team {
+  _id;
+
   title;
 
   description;
@@ -15,6 +17,10 @@ export default class Team {
   participants;
 
   constructor(doc) {
+    if (doc._id) {
+      this._id = doc._id;
+    }
+
     this.title = doc.title;
     this.description = doc.description;
     this.creator = new TeamCreator(doc.creator);

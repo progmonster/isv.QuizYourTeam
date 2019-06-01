@@ -11,7 +11,7 @@ Meteor.methods({
   'quizMethods.insert': function (quiz) {
     this.unblock();
 
-    return quizService.insert(quiz, this.userId);
+    return quizService.insert(quiz, Meteor.user());
   },
 
   'quizMethods.remove': function (quizId) {
