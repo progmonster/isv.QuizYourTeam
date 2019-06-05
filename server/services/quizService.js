@@ -4,6 +4,9 @@ import { Quizzes, Teams } from '../../model/collections';
 import { QuizRoles } from '../../model/roles';
 import Quiz from '../../model/quiz';
 import QuizCreator from '../../model/quizCreator';
+import QuizPassResult from '../../model/quizPassResult';
+
+const MAX_POSSIBLE_RESULT = 10;
 
 const quizService = {
   insert(quiz, creator) {
@@ -23,11 +26,9 @@ const quizService = {
       createdAt,
       updatedAt: createdAt,
       teamId: quiz.teamId,
+      maxPossibleResult: MAX_POSSIBLE_RESULT,
       passed: [],
     });
-
-    console.log(JSON.stringify(quiz, null, 2));
-    console.log(JSON.stringify(sanitizedQuiz, null, 2));
 
     const quizId = Quizzes.insert(sanitizedQuiz);
 
@@ -73,6 +74,38 @@ const quizService = {
     Quizzes.remove(quizId);
 
     Roles.removeQuizRolesForAllUsers(quizId);
+  },
+
+  checkAndSetUserAnswers(quizId, user, quizUpdatedAt, answers) {
+    // todo progmonster check quiz quizUpdatedAt
+    // todo progmonster check args
+    // todo progmonster check permissions
+
+    console.log(JSON.stringify(answers, null, 2));
+
+    // todo progmonster
+    const quizPassResult = QuizPassResult.createForUser(
+      user,
+      9.1,
+      MAX_POSSIBLE_RESULT,
+      10,
+      9,
+      new Date(),
+    );
+
+    Quizzes.update(quizId, {
+      $pull: {
+        passed: { 'user._id': user._id },
+      },
+    });
+
+    Quizzes.update(quizId, {
+      $push: {
+        passed: quizPassResult,
+      },
+    });
+
+    return quizPassResult;
   },
 };
 

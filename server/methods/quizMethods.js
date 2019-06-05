@@ -19,4 +19,10 @@ Meteor.methods({
 
     quizService.remove(quizId, this.userId);
   },
+
+  'quizMethods.sendAnswers': function (quizId, quizUpdatedAt, answers) {
+    this.unblock();
+
+    return quizService.checkAndSetUserAnswers(quizId, Meteor.user(), quizUpdatedAt, answers);
+  },
 });

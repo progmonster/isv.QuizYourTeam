@@ -6,6 +6,13 @@ const quizService = {
   insert: quiz => Meteor.callAsync('quizMethods.insert', quiz),
 
   remove: quizId => Meteor.callAsync('quizMethods.remove', quizId),
+
+  sendAnswers: (quizId, quizUpdatedAt, answers) => Meteor.callAsync(
+    'quizMethods.sendAnswers',
+    quizId,
+    quizUpdatedAt,
+    answers,
+  ),
 };
 
 export default quizService;

@@ -7,9 +7,9 @@ export default class QuizQuestion {
 
   answers;
 
-  constructor(doc) {
+  constructor(doc = {}) {
     this.editorState = doc.editorState;
     this.answerType = doc.answerType;
-    this.answers = doc.answers.map(answer => new QuizAnswer(answer));
+    this.answers = (doc.answers || []).map(answer => new QuizAnswer(answer));
   }
 }

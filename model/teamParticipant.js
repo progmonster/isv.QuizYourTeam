@@ -15,7 +15,7 @@ export default class TeamParticipant {
 
   role;
 
-  constructor(doc) {
+  constructor(doc = {}) {
     this._id = doc._id;
     this.invitedAt = doc.invitedAt;
     this.joinedAt = doc.joinedAt;

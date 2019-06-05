@@ -16,7 +16,7 @@ export default class Team {
 
   participants;
 
-  constructor(doc) {
+  constructor(doc = {}) {
     if (doc._id) {
       this._id = doc._id;
     }
@@ -25,7 +25,7 @@ export default class Team {
     this.description = doc.description;
     this.creator = new TeamCreator(doc.creator);
 
-    this.participants = doc.participants.map(
+    this.participants = (doc.participants || []).map(
       participant => new TeamParticipant(participant),
     );
   }
@@ -45,7 +45,6 @@ export default class Team {
     return this.participants.filter(({ role }) => role === Roles.adminRole);
   }
 
-  getParticipantRole = participantId => this.participants
-    .find(({ _id }) => _id === participantId)
-    .role;
+  getParticipantRole =
+    participantId => this.participants.find(({ _id }) => _id === participantId).role;
 }

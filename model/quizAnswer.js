@@ -3,8 +3,9 @@ export default class QuizAnswer {
 
   checked;
 
-  constructor(doc) {
+  constructor(doc = {}) {
     this.title = doc.title;
     this.checked = doc.checked;
+    this.checkedByUser = doc.checkedByUser; // todo progmonster get rid of it from the model
   }
 }

@@ -1,7 +1,7 @@
 export default class QuizParagraph {
   editorState;
 
-  constructor(doc) {
+  constructor(doc = {}) {
     this.editorState = doc.editorState;
   }
 }

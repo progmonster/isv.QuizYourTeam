@@ -24,19 +24,23 @@ export default class Quiz {
 
   passed;
 
-  constructor(doc) {
+  constructor(doc = {}) {
     if (doc._id) {
       this._id = doc._id;
     }
 
     this.title = doc.title;
     this.descriptionEditorState = doc.descriptionEditorState;
-    this.paragraphs = doc.paragraphs.map(paragraph => new QuizParagraph(paragraph));
-    this.questions = doc.questions.map(question => new QuizQuestion(question));
-    this.creator = new TeamParticipant(doc.creator);
+    this.paragraphs = (doc.paragraphs || []).map(paragraph => new QuizParagraph(paragraph));
+    this.questions = (doc.questions || []).map(question => new QuizQuestion(question));
+    this.creator = doc.creator && new TeamParticipant(doc.creator);
     this.createdAt = doc.createdAt;
     this.updatedAt = doc.updatedAt;
     this.teamId = doc.teamId;
-    this.passed = doc.passed.map(passResult => new QuizPassResult(passResult));
+    this.passed = (doc.passed || []).map(passResult => new QuizPassResult(passResult));
+  }
+
+  getPassInfoByUserId(userId) {
+    return this.passed.find(({ user: { _id } }) => _id === userId);
   }
 }

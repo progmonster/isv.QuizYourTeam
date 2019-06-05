@@ -51,14 +51,41 @@ class QuizPassPage extends React.Component {
     }));
   };
 
-  onNextStepGo = () => {
-    const { quiz } = this.props;
+  onSeeResults = () => {
+    this.setState({ currentStep: 1 });
+  };
+
+  onNextStepGo = async () => {
+    const {
+      quiz,
+      onQuizStart,
+      onQuizFinish,
+      justPassed,
+    } = this.props;
+
+    const { currentStep } = this.state;
 
     const questionCount = size(quiz.questions);
 
-    this.setState(prevState => ({
-      currentStep: Math.min(questionCount + 1, prevState.currentStep + 1),
-    }));
+    const nextStep = Math.min(questionCount + 1, currentStep + 1);
+
+    if (currentStep === questionCount) {
+      const successFinished = justPassed || await onQuizFinish();
+
+      if (successFinished) {
+        this.setState({
+          currentStep: nextStep,
+        });
+      }
+    } else {
+      if (currentStep === 0) {
+        onQuizStart();
+      }
+
+      this.setState({
+        currentStep: nextStep,
+      });
+    }
   };
 
   onLearningClose = () => {
@@ -77,7 +104,9 @@ class QuizPassPage extends React.Component {
 
   renderContent() {
     const {
+      currentUserId,
       quiz,
+      justPassed,
     } = this.props;
 
     if (!quiz) {
@@ -89,7 +118,15 @@ class QuizPassPage extends React.Component {
     const questionCount = size(quiz.questions);
 
     if (currentStep === 0) {
-      return <Intro quiz={quiz} onLearningStart={this.onNextStepGo} />;
+      return (
+        <Intro
+          currentUserId={currentUserId}
+          quiz={quiz}
+          onStart={this.onNextStepGo}
+          onSeeResults={this.onSeeResults}
+          justPassed={justPassed}
+        />
+      );
     }
 
     if (currentStep <= questionCount) {
@@ -101,14 +138,20 @@ class QuizPassPage extends React.Component {
           onPreviousStepGo={this.onPreviousStepGo}
           onNextStepGo={this.onNextStepGo}
           onAnswerChange={this.onAnswerChange}
+          readOnly={justPassed}
+          checkAnswer={justPassed}
         />
       );
     }
 
     return (
       <Congratulation
+        currentUserId={currentUserId}
+        quiz={quiz}
         onPreviousStepGo={this.onPreviousStepGo}
-        onLearningClose={this.onLearningClose}
+        onQuizClose={this.onLearningClose}
+        onSeeResults={this.onSeeResults}
+        justPassed={justPassed}
       />
     );
   }
@@ -153,8 +196,12 @@ class QuizPassPage extends React.Component {
 QuizPassPage.propTypes = {
   classes: PropTypes.object.isRequired,
   history: PropTypes.object.isRequired,
+  currentUserId: PropTypes.string.isRequired,
   quiz: PropTypes.object,
+  justPassed: PropTypes.bool.isRequired,
   onAnswerChange: PropTypes.func.isRequired,
+  onQuizStart: PropTypes.func.isRequired,
+  onQuizFinish: PropTypes.func.isRequired,
 };
 
 QuizPassPage.defaultProps = {

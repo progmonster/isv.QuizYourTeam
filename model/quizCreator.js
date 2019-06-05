@@ -7,7 +7,7 @@ export default class QuizCreator {
 
   fullName;
 
-  constructor(doc) {
+  constructor(doc = {}) {
     this._id = doc._id;
     this.email = doc.email;
     this.fullName = doc.fullName;

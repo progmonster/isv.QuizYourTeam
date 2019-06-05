@@ -11,7 +11,14 @@ import { SINGLE_CHOICE } from '../../../../model/answerTypes';
 
 export default function Question(
   {
-    question, currentStep, stepCount, onPreviousStepGo, onNextStepGo, onAnswerChange,
+    question,
+    currentStep,
+    stepCount,
+    onPreviousStepGo,
+    onNextStepGo,
+    onAnswerChange,
+    readOnly,
+    checkAnswer,
   },
 ) {
   const questionHtml = stateToHTML(convertFromRaw(question.editorState));
@@ -19,6 +26,24 @@ export default function Question(
   const firstStep = currentStep === 1;
 
   const lastStep = currentStep === stepCount;
+
+  const renderSingleChoiceAnswers = () => (
+    <SingleChoiceAnswers
+      answers={question.answers}
+      onAnswerChange={onAnswerChange}
+      readOnly={readOnly}
+      checkAnswer={checkAnswer}
+    />
+  );
+
+  const renderMultipleChoiceAnswers = () => (
+    <MultipleChoiceAnswers
+      answers={question.answers}
+      onAnswerChange={onAnswerChange}
+      readOnly={readOnly}
+      checkAnswer={checkAnswer}
+    />
+  );
 
   return (
     <Grid container>
@@ -32,8 +57,8 @@ export default function Question(
 
       <Grid item xs={12} sm={12} md={12}>
         {question.answerType === SINGLE_CHOICE
-          ? <SingleChoiceAnswers answers={question.answers} onAnswerChange={onAnswerChange} />
-          : <MultipleChoiceAnswers answers={question.answers} onAnswerChange={onAnswerChange} />}
+          ? renderSingleChoiceAnswers()
+          : renderMultipleChoiceAnswers()}
       </Grid>
 
       <Grid item xs={12} sm={12} md={8}>
@@ -56,4 +81,6 @@ Question.propTypes = {
   onPreviousStepGo: PropTypes.func.isRequired,
   onNextStepGo: PropTypes.func.isRequired,
   onAnswerChange: PropTypes.func.isRequired,
+  readOnly: PropTypes.bool.isRequired,
+  checkAnswer: PropTypes.bool.isRequired,
 };
