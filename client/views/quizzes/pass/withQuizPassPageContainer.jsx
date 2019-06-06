@@ -129,15 +129,16 @@ const withQuizPassPageContainer = WrappedComponent => class WithQuizPassPageCont
     } catch (error) {
       if (error.error === QuizErrors.QUIZ_YOU_JUST_PASSED_WAS_UPDATED) {
         dispatch(snackbar.show({
-          message: "The quiz you've just passed was updated! Please restart the quiz",
+          message: 'The quiz you\'ve just passed was updated! Please restart the quiz',
         }));
 
         return error;
-      } else {
-        console.log(error);
-
-        dispatch(snackbar.show({ message: `Error saving the quiz result: ${error.message}` }));
       }
+
+      console.log(error);
+
+      dispatch(snackbar.show({ message: `Error saving the quiz result: ${error.message}` }));
+
 
       return error;
     }
