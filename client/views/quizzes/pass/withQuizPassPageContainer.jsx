@@ -8,7 +8,7 @@ import { compose } from 'redux';
 import { Quizzes } from '../../../../model/collections';
 import { SINGLE_CHOICE } from '../../../../model/answerTypes';
 import quizService from '../../../services/quizService';
-import Quiz from '../../../../model/quiz';
+import Quiz, { QuizErrors } from '../../../../model/quiz';
 import { snackbarActions as snackbar } from '../../../components/snackbar';
 
 const withQuizPassPageContainer = WrappedComponent => class WithQuizPassPageContainer
@@ -88,8 +88,8 @@ const withQuizPassPageContainer = WrappedComponent => class WithQuizPassPageCont
 
     const newState = produce(
       quiz,
-      draftQuiz => draftQuiz.questions.flatMap(question => question.answers)
-        .forEach((answer) => {
+      draftQuiz => draftQuiz.questions.flatMap(question => question.answers).
+        forEach((answer) => {
           answer.checkedByUser = false;
         }),
     );
@@ -127,11 +127,19 @@ const withQuizPassPageContainer = WrappedComponent => class WithQuizPassPageCont
 
       return true;
     } catch (error) {
-      console.log(error);
+      if (error.error === QuizErrors.QUIZ_YOU_JUST_PASSED_WAS_UPDATED) {
+        dispatch(snackbar.show({
+          message: "The quiz you've just passed was updated! Please restart the quiz",
+        }));
 
-      dispatch(snackbar.show({ message: `Error saving the quiz result: ${error.message}` }));
+        return error;
+      } else {
+        console.log(error);
 
-      return false;
+        dispatch(snackbar.show({ message: `Error saving the quiz result: ${error.message}` }));
+      }
+
+      return error;
     }
   };
 

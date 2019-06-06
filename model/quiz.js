@@ -3,6 +3,10 @@ import QuizQuestion from './quizQuestion';
 import TeamParticipant from './teamParticipant';
 import QuizPassResult from './quizPassResult';
 
+export const QuizErrors = {
+  QUIZ_YOU_JUST_PASSED_WAS_UPDATED: 'QUIZ_YOU_JUST_PASSED_WAS_UPDATED',
+};
+
 export default class Quiz {
   _id;
 

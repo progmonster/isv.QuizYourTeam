@@ -19,6 +19,7 @@ export default function Question(
     onAnswerChange,
     readOnly,
     checkAnswer,
+    isIntroDisabled,
   },
 ) {
   const questionHtml = stateToHTML(convertFromRaw(question.editorState));
@@ -62,7 +63,12 @@ export default function Question(
       </Grid>
 
       <Grid item xs={12} sm={12} md={8}>
-        <Button variant="contained" color="primary" onClick={onPreviousStepGo}>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={onPreviousStepGo}
+          disabled={firstStep && isIntroDisabled}
+        >
           {firstStep ? 'Intro' : 'Previous step'}
         </Button>
 
@@ -83,4 +89,5 @@ Question.propTypes = {
   onAnswerChange: PropTypes.func.isRequired,
   readOnly: PropTypes.bool.isRequired,
   checkAnswer: PropTypes.bool.isRequired,
+  isIntroDisabled: PropTypes.bool.isRequired,
 };

@@ -2,7 +2,7 @@ import { check } from 'meteor/check';
 import { Roles } from 'meteor/alanning:roles';
 import { Quizzes, Teams } from '../../model/collections';
 import { QuizRoles } from '../../model/roles';
-import Quiz from '../../model/quiz';
+import Quiz, { QuizErrors } from '../../model/quiz';
 import QuizCreator from '../../model/quizCreator';
 import QuizPassResult from '../../model/quizPassResult';
 
@@ -77,9 +77,21 @@ const quizService = {
   },
 
   checkAndSetUserAnswers(quizId, user, quizUpdatedAt, answers) {
-    // todo progmonster check quiz quizUpdatedAt
-    // todo progmonster check args
-    // todo progmonster check permissions
+    check(quizId, String);
+    check(user, Object);
+    check(quizUpdatedAt, Date);
+    check(answers, Array);
+    check(Roles.hasUserQuizRoles(user._id, QuizRoles.passQuiz, quizId), true);
+
+    const quiz = Quizzes.findOne(quizId);
+
+    if (!quiz) {
+      throw new Meteor.Error('The quiz is not found');
+    }
+
+    if (quiz.updatedAt.getTime() !== quizUpdatedAt.getTime()) {
+      throw new Meteor.Error(QuizErrors.QUIZ_YOU_JUST_PASSED_WAS_UPDATED);
+    }
 
     console.log(JSON.stringify(answers, null, 2));
 

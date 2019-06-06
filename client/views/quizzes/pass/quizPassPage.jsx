@@ -13,6 +13,7 @@ import Intro from './intro';
 import Question from './question';
 import Congratulation from './congratulation';
 import withQuizPassPageContainer from './withQuizPassPageContainer';
+import { QuizErrors } from '../../../../model/quiz';
 
 const styles = {
   cardHeaderRoot: {
@@ -70,12 +71,18 @@ class QuizPassPage extends React.Component {
     const nextStep = Math.min(questionCount + 1, currentStep + 1);
 
     if (currentStep === questionCount) {
-      const successFinished = justPassed || await onQuizFinish();
+      const finishStatus = justPassed || await onQuizFinish();
 
-      if (successFinished) {
+      if (finishStatus === true) {
         this.setState({
           currentStep: nextStep,
         });
+      } else if (finishStatus.error === QuizErrors.QUIZ_YOU_JUST_PASSED_WAS_UPDATED) {
+        this.setState({
+          currentStep: 0,
+        });
+
+        onQuizStart();
       }
     } else {
       if (currentStep === 0) {
@@ -140,6 +147,7 @@ class QuizPassPage extends React.Component {
           onAnswerChange={this.onAnswerChange}
           readOnly={justPassed}
           checkAnswer={justPassed}
+          isIntroDisabled={!justPassed}
         />
       );
     }
