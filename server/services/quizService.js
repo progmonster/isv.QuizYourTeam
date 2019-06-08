@@ -5,9 +5,8 @@ import { QuizRoles } from '../../model/roles';
 import Quiz, { QuizErrors } from '../../model/quiz';
 import QuizCreator from '../../model/quizCreator';
 import QuizPassResult from '../../model/quizPassResult';
-import quizService from '../../client/services/quizService';
 
-const MAX_POSSIBLE_RESULT = 10;
+export const MAX_POSSIBLE_RESULT = 10;
 
 const quizService = {
   insert(quiz, creator) {
@@ -81,8 +80,6 @@ const quizService = {
     check(quiz, Quiz);
     check(answers, Array);
 
-    console.log(JSON.stringify(answers, null, 2));
-
     return {
       maxPossibleResult: MAX_POSSIBLE_RESULT,
       answeredCorrectlyQuestionNumber: 1,
@@ -117,7 +114,7 @@ const quizService = {
       user,
       result,
       maxPossibleResult,
-      quiz.questions.size(),
+      quiz.questions.length,
       answeredCorrectlyQuestionNumber,
       new Date(),
     );

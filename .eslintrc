@@ -3,7 +3,8 @@
     "es6": true,
     "browser": true,
     "node": true,
-    "meteor": true
+    "meteor": true,
+    "jest": true
   },
   "extends": "airbnb",
   "parser": "babel-eslint",
