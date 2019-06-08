@@ -1,10 +1,15 @@
 {
+  "plugins": [
+    "jest",
+    "redux-saga"
+  ],
+
   "env": {
     "es6": true,
     "browser": true,
     "node": true,
     "meteor": true,
-    "jest": true
+    "jest/globals": true
   },
   "extends": "airbnb",
   "parser": "babel-eslint",

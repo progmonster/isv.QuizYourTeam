@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "start": "meteor run",
-    "test": "jest",
+    "test": "jest --env=jsdom",
     "test-app": "TEST_WATCH=1 meteor test --full-app --driver-package meteortesting:mocha",
     "visualize": "meteor --production --extra-packages bundle-visualizer"
   },
@@ -33,7 +33,6 @@
     "react-google-maps": "9.4.5",
     "react-redux": "^7.0.2",
     "react-router-dom": "4.3.1",
-    "react-scripts": "2.1.5",
     "react-swipeable-views": "0.13.1",
     "redux": "^4.0.1",
     "redux-logger": "^3.0.6",
@@ -57,9 +56,12 @@
     "eslint-config-airbnb": "^17.1.0",
     "eslint-import-resolver-meteor": "^0.4.0",
     "eslint-plugin-import": "^2.17.2",
+    "eslint-plugin-jest": "^22.6.4",
     "eslint-plugin-react": "^7.13.0",
+    "eslint-plugin-redux-saga": "^1.0.0",
     "jest": "^24.8.0",
     "jest-meteor-stubs": "^1.5.1",
+    "react-addons-test-utils": "^15.6.2",
     "react-test-renderer": "^16.8.6"
   },
   "jest": {
