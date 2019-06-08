@@ -2,7 +2,7 @@ import { Meteor } from 'meteor/meteor';
 import { Accounts } from 'meteor/accounts-base';
 import { check } from 'meteor/check';
 import { Roles } from 'meteor/alanning:roles';
-import { Teams } from '../../model/collections';
+import { Teams, Quizzes } from '../../model/collections';
 import TeamCreator from '../../model/teamCreator';
 import TeamParticipant from '../../model/teamParticipant';
 import { ACTIVE, INVITED } from '../../model/participantStates';
@@ -121,8 +121,7 @@ const teamService = {
     }
 
     Roles.removeTeamQuizRolesForUser(participantId, teamId);
-
-    // todo progmonster  remove quizzes results for user
+    Quizzes.removePassResultsForParticipant(participantId);
   },
 
   cancelInvitation(teamId, userId, actor) {

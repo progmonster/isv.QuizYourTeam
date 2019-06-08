@@ -64,8 +64,8 @@ Teams.updateParticipantState = (teamId, participantId, oldStateToCheck, newState
 Teams.isUserInTeam = (teamId, userId) => Teams.find({
   _id: teamId,
   'participants._id': userId,
-}, { limit: 1 }).
-  count(false) > 0;
+}, { limit: 1 })
+  .count(false) > 0;
 
 Teams.findTeamsWithUserInvitedState = userId => Teams.find({
   participants: {
@@ -84,3 +84,9 @@ Teams.findTeamsWithUserActiveState = userId => Teams.find({
     },
   },
 });
+
+Quizzes.removePassResultsForParticipant = participantId => Quizzes.update(
+  {},
+  { $pull: { passed: { user: { _id: participantId } } } },
+  { multi: true },
+);
