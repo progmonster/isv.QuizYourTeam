@@ -1,5 +1,7 @@
 import { check } from 'meteor/check';
 import { Roles } from 'meteor/alanning:roles';
+import zip from 'lodash/zip';
+import sum from 'lodash/sum';
 import { Quizzes, Teams } from '../../model/collections';
 import { QuizRoles } from '../../model/roles';
 import Quiz, { QuizErrors } from '../../model/quiz';
@@ -76,14 +78,37 @@ const quizService = {
     Roles.removeQuizRolesForAllUsers(quizId);
   },
 
-  calculatePassScore(quiz, answers) {
+  calculatePassScore(quiz, userQuestionsAnswers) {
     check(quiz, Quiz);
-    check(answers, Array);
+    check(userQuestionsAnswers, Array);
+
+    const areQuestionAnswersValid = (validQuestionAnswers, userQuestionAnswers) => zip(
+      validQuestionAnswers,
+      userQuestionAnswers,
+    )
+      .every(
+        ([{ checked: validAnswer }, { checked: userAnswer }]) => !!validAnswer === !!userAnswer,
+      );
+
+    const validQuestionsAnswers = quiz.questions.map(({ answers }) => answers);
+
+    const answeredCorrectlyQuestionNumber = sum(
+      zip(validQuestionsAnswers, userQuestionsAnswers)
+        .map(([validQuestionAnswers, userQuestionAnswers]) => areQuestionAnswersValid(
+          validQuestionAnswers,
+          userQuestionAnswers,
+        ))
+        .map(isValidAnswer => (isValidAnswer ? 1 : 0)),
+    );
+
+    const result = Math.round(
+      quiz.questions.length * MAX_POSSIBLE_RESULT * 10 / answeredCorrectlyQuestionNumber,
+    ) / 10;
 
     return {
       maxPossibleResult: MAX_POSSIBLE_RESULT,
-      answeredCorrectlyQuestionNumber: 1,
-      result: 2,
+      answeredCorrectlyQuestionNumber,
+      result,
     };
   },
 

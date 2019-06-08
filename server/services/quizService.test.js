@@ -16,9 +16,11 @@ describe('quizService tests', () => {
       };
 
       const answers = [
-        {},
-        { checked: true },
-        { checked: false },
+        [
+          {},
+          { checked: true },
+          { checked: false },
+        ],
       ];
 
       expect(quizService.calculatePassScore(quiz, answers))
@@ -44,10 +46,12 @@ describe('quizService tests', () => {
       };
 
       const answers = [
-        { checked: false },
-        { checked: true },
-        {},
-        { checked: true },
+        [
+          { checked: false },
+          { checked: true },
+          {},
+          { checked: true },
+        ],
       ];
 
       expect(quizService.calculatePassScore(quiz, answers))
