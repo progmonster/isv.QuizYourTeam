@@ -20,12 +20,12 @@ import reducers from './services/reducers';
 import { rootSaga } from './services/actions';
 import SnackbarProvider from './components/snackbar/snackbarProvider';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import { promisify } from 'util';
+import Promise from 'bluebird';
 import '../model/roles';
 
 export const history = createBrowserHistory();
 
-Meteor.callAsync = promisify(Meteor.call);
+Meteor.callAsync = Promise.promisify(Meteor.call);
 
 Meteor.subscribe('quizzes');
 Meteor.subscribe('teams');

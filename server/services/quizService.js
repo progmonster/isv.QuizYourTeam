@@ -102,7 +102,7 @@ const quizService = {
     );
 
     const result = Math.round(
-      quiz.questions.length * MAX_POSSIBLE_RESULT * 10 / answeredCorrectlyQuestionNumber,
+      answeredCorrectlyQuestionNumber * MAX_POSSIBLE_RESULT * 10 / quiz.questions.length,
     ) / 10;
 
     return {

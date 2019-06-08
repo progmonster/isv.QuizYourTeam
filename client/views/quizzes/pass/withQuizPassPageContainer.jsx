@@ -88,8 +88,8 @@ const withQuizPassPageContainer = WrappedComponent => class WithQuizPassPageCont
 
     const newState = produce(
       quiz,
-      draftQuiz => draftQuiz.questions.flatMap(question => question.answers).
-        forEach((answer) => {
+      draftQuiz => draftQuiz.questions.flatMap(question => question.answers)
+        .forEach((answer) => {
           answer.checkedByUser = false;
         }),
     );
@@ -116,13 +116,19 @@ const withQuizPassPageContainer = WrappedComponent => class WithQuizPassPageCont
 
       dispatch(snackbar.show({ message: 'You result has been successfully saved!' }));
 
+      const updatedQuiz = new Quiz({
+        ...quiz,
+
+        passed: [
+          ...(quiz.passed || []).filter(({ user: { _id } }) => _id !== Meteor.userId()),
+          passResult,
+        ],
+      });
+
       this.setState({
         justPassed: true,
 
-        quiz: new Quiz({
-          ...quiz,
-          passed: [...quiz.passed || [], passResult],
-        }),
+        quiz: updatedQuiz,
       });
 
       return true;
