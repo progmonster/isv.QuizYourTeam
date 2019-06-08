@@ -5,6 +5,7 @@ import { QuizRoles } from '../../model/roles';
 import Quiz, { QuizErrors } from '../../model/quiz';
 import QuizCreator from '../../model/quizCreator';
 import QuizPassResult from '../../model/quizPassResult';
+import quizService from '../../client/services/quizService';
 
 const MAX_POSSIBLE_RESULT = 10;
 
@@ -76,6 +77,19 @@ const quizService = {
     Roles.removeQuizRolesForAllUsers(quizId);
   },
 
+  calculatePassScore(quiz, answers) {
+    check(quiz, Quiz);
+    check(answers, Array);
+
+    console.log(JSON.stringify(answers, null, 2));
+
+    return {
+      maxPossibleResult: MAX_POSSIBLE_RESULT,
+      answeredCorrectlyQuestionNumber: 1,
+      result: 2,
+    };
+  },
+
   checkAndSetUserAnswers(quizId, user, quizUpdatedAt, answers) {
     check(quizId, String);
     check(user, Object);
@@ -93,15 +107,18 @@ const quizService = {
       throw new Meteor.Error(QuizErrors.QUIZ_YOU_JUST_PASSED_WAS_UPDATED);
     }
 
-    console.log(JSON.stringify(answers, null, 2));
+    const {
+      maxPossibleResult,
+      answeredCorrectlyQuestionNumber,
+      result,
+    } = quizService.calculatePassScore(quiz, answers);
 
-    // todo progmonster
     const quizPassResult = QuizPassResult.createForUser(
       user,
-      9.1,
-      MAX_POSSIBLE_RESULT,
-      10,
-      9,
+      result,
+      maxPossibleResult,
+      quiz.questions.size(),
+      answeredCorrectlyQuestionNumber,
       new Date(),
     );
 
