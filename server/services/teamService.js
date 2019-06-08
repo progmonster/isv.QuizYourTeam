@@ -121,6 +121,8 @@ const teamService = {
     }
 
     Roles.removeTeamQuizRolesForUser(participantId, teamId);
+
+    // todo progmonster  remove quizzes results for user
   },
 
   cancelInvitation(teamId, userId, actor) {

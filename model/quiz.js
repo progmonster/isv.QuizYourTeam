@@ -1,7 +1,10 @@
+import sum from 'lodash/sum';
 import QuizParagraph from './quizParagraph';
 import QuizQuestion from './quizQuestion';
 import TeamParticipant from './teamParticipant';
 import QuizPassResult from './quizPassResult';
+
+export const MAX_POSSIBLE_RESULT = 10;
 
 export const QuizErrors = {
   QUIZ_YOU_JUST_PASSED_WAS_UPDATED: 'QUIZ_YOU_JUST_PASSED_WAS_UPDATED',
@@ -46,5 +49,17 @@ export default class Quiz {
 
   getPassInfoByUserId(userId) {
     return this.passed.find(({ user: { _id } }) => _id === userId);
+  }
+
+  getPassedUsersCount() {
+    return this.passed.length;
+  }
+
+  getAverageScore() {
+    const average = sum(
+      this.passed.map(({ result, maxPossibleResult }) => result / maxPossibleResult),
+    ) / this.passed.length;
+
+    return Math.round(average * MAX_POSSIBLE_RESULT * 10) / 10;
   }
 }

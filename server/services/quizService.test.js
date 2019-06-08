@@ -1,4 +1,5 @@
-import quizService, { MAX_POSSIBLE_RESULT } from './quizService';
+import quizService from './quizService';
+import { MAX_POSSIBLE_RESULT } from '../../model/quiz';
 
 describe('quizService tests', () => {
   describe('pass results', () => {

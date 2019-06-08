@@ -19,6 +19,7 @@ import { Roles } from 'meteor/alanning:roles';
 import { removeQuiz } from '../../services/actions';
 import AlertDialog from '../../components/alertDialog';
 import { Quizzes } from '../../../model/collections';
+import { MAX_POSSIBLE_RESULT } from '../../../model/quiz';
 
 const styles = theme => ({
   headerRoot: {
@@ -67,7 +68,23 @@ class QuizTile extends React.Component {
           title={quiz.title}
         />
 
-        <CardContent dangerouslySetInnerHTML={{ __html: quizDescriptionHtml }} />
+        <CardContent>
+          <p dangerouslySetInnerHTML={{ __html: quizDescriptionHtml }} />
+
+          <p>
+            Passed users:&nbsp;
+            <span>{quiz.getPassedUsersCount()}</span>
+          </p>
+
+          {quiz.getPassedUsersCount() > 0 && (
+            <p>
+              Average score:&nbsp;
+              <span>{quiz.getAverageScore()}</span>
+              &nbsp;from&nbsp;
+              <span>{MAX_POSSIBLE_RESULT}</span>
+            </p>
+          )}
+        </CardContent>
 
         <CardActions>
           <Button size="small" color="primary" component={Link} to={`/quiz-learn/${quiz._id}`}>
@@ -95,8 +112,8 @@ class QuizTile extends React.Component {
         </CardActions>
 
         {/*
-        todo optimize. Probably via single AlertDialog that controlled via redux actions.
-        */}
+         todo optimize. Probably via single AlertDialog that controlled via redux actions.
+         */}
         <AlertDialog
           open={this.state.removeConfirmationOpened}
           title="Remove the quiz?"

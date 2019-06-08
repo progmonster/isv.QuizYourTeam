@@ -4,11 +4,9 @@ import zip from 'lodash/zip';
 import sum from 'lodash/sum';
 import { Quizzes, Teams } from '../../model/collections';
 import { QuizRoles } from '../../model/roles';
-import Quiz, { QuizErrors } from '../../model/quiz';
+import Quiz, { MAX_POSSIBLE_RESULT, QuizErrors } from '../../model/quiz';
 import QuizCreator from '../../model/quizCreator';
 import QuizPassResult from '../../model/quizPassResult';
-
-export const MAX_POSSIBLE_RESULT = 10;
 
 const quizService = {
   insert(quiz, creator) {
