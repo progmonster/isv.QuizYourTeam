@@ -85,8 +85,8 @@ Teams.findTeamsWithUserActiveState = userId => Teams.find({
   },
 });
 
-Quizzes.removePassResultsForParticipant = participantId => Quizzes.update(
-  {},
-  { $pull: { passed: { user: { _id: participantId } } } },
+Quizzes.removeAllPassResultsInTeamForUser = (teamId, participantId) => Quizzes.update(
+  { teamId },
+  { $pull: { passed: { 'user._id': participantId } } },
   { multi: true },
 );

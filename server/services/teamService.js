@@ -121,7 +121,7 @@ const teamService = {
     }
 
     Roles.removeTeamQuizRolesForUser(participantId, teamId);
-    Quizzes.removePassResultsForParticipant(participantId);
+    Quizzes.removeAllPassResultsInTeamForUser(teamId, participantId);
   },
 
   cancelInvitation(teamId, userId, actor) {
