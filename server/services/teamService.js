@@ -158,13 +158,19 @@ const teamService = {
 
     if (!personUser) {
       throw new Meteor.Error('The user is not found');
-    }
+    } else {
+      const isUserVerified = personUser.emails[0].verified;
 
-    Email.send({
-      from: Accounts.emailTemplates.from,
-      to: getUserEmail(personUser),
-      text: 'You are invited to a new team. Please check your dashboard.',
-    });
+      if (isUserVerified) {
+        Email.send({
+          from: Accounts.emailTemplates.from,
+          to: getUserEmail(personUser),
+          text: 'You are invited to a new team. Please check your dashboard.',
+        });
+      } else {
+        Accounts.sendEnrollmentEmail(personUser._id);
+      }
+    }
   },
 
   acceptInvitation(teamId, user) {

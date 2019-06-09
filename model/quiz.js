@@ -34,6 +34,8 @@ export default class Quiz {
   constructor(doc = {}) {
     if (doc._id) {
       this._id = doc._id;
+    } else {
+      delete this._id;
     }
 
     this.title = doc.title;

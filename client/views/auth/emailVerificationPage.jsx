@@ -28,7 +28,7 @@ class EmailVerificationPage extends React.Component {
 
     Accounts.verifyEmail(token, (error) => {
       if (error) {
-        console.log(error);
+        console.error(error);
 
         this.setState({ error: true });
       } else {
