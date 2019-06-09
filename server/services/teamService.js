@@ -78,6 +78,10 @@ const teamService = {
     check(actor, Object);
     check(Roles.isTeamAdmin(actor._id, teamId), true);
 
+    if (getUserEmail(Meteor.user()).toLowerCase() === personEmail.trim().toLowerCase()) {
+      throw new Meteor.Error('Cannot invite yourself');
+    }
+
     let personUser = Accounts.findUserByEmail(personEmail.trim());
 
     if (!personUser) {
