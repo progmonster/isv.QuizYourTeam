@@ -352,7 +352,7 @@ export default compose(
 
     const team = teamId && Teams.findOne(teamId);
 
-    const teamLoaded = isNewTeam || teamSubscription.ready();
+    const teamLoaded = (isNewTeam || teamSubscription.ready()) && !!team;
 
     const isCurrentUserAdmin = Roles.isTeamAdmin(Meteor.userId(), teamId);
 
