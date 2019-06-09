@@ -22,13 +22,11 @@ import SnackbarProvider from './components/snackbar/snackbarProvider';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Promise from 'bluebird';
 import '../model/roles';
+import './subscriptions';
 
 export const history = createBrowserHistory();
 
 Meteor.callAsync = Promise.promisify(Meteor.call);
-
-Meteor.subscribe('quizzes');
-Meteor.subscribe('teams');
 
 Meteor.startup(() => {
   const loggerMiddleware = createLogger();

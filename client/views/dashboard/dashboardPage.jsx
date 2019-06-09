@@ -12,13 +12,47 @@ import dashboardStyle from './dashboardStyle';
 import { Quizzes, Teams } from '../../../model/collections';
 import QuizTileContainer from '../quizzes/quizTile';
 import TeamTile from '../teams/teamTile';
+import { quizzesSubscription, teamsSubscription } from '../../subscriptions';
+import EmptyState from '../../components/emptyState';
 
 class DashboardPage extends React.PureComponent {
   render() {
-    const { classes, quizzes, invitedTeams, activeTeams } = this.props;
+    const {
+      quizzes,
+      invitedTeams,
+      activeTeams,
+      quizzesSubscriptionReady,
+      teamsSubscriptionReady,
+    } = this.props;
+
+    if (!quizzesSubscriptionReady || !teamsSubscriptionReady) {
+      return <div />;
+    }
+
+    if (activeTeams.length === 0 && invitedTeams.length === 0) {
+      return (
+        <EmptyState
+          title="You have no any quizzes and teams yet."
+          description={'Ask another users to send an invitation to you or create your own team'
+          + ' to have ability to create or pass quizzes.'}
+        />
+      );
+    }
 
     return (
       <div>
+        {activeTeams.length === 0 && (
+          <Grid container spacing={24}>
+            <Grid item xs>
+              <EmptyState
+                title="You have no any quizzes yet."
+                description={'Accept an invitation or create your own team to have ability'
+                + ' to create or pass quizzes.'}
+              />
+            </Grid>
+          </Grid>
+        )}
+
         <Grid container spacing={24}>
           {invitedTeams.map(({ _id: teamId }) => (
             <Grid item key={teamId} xs={12} sm={6} md={3}>
@@ -67,19 +101,39 @@ class DashboardPage extends React.PureComponent {
 
 DashboardPage.propTypes = {
   classes: PropTypes.object.isRequired,
+  quizzesSubscriptionReady: PropTypes.bool.isRequired,
+  teamsSubscriptionReady: PropTypes.bool.isRequired,
+  quizzes: PropTypes.array.isRequired,
+  invitedTeams: PropTypes.array.isRequired,
+  activeTeams: PropTypes.array.isRequired,
 };
 
 export default compose(
-  withTracker(() => ({
-    quizzes: Quizzes.find()
-      .fetch(),
+  withTracker(() => {
+    const quizzesSubscriptionReady = quizzesSubscription.ready();
 
-    invitedTeams: Teams.findTeamsWithUserInvitedState(Meteor.userId())
-      .fetch(),
+    const teamsSubscriptionReady = teamsSubscription.ready();
 
-    activeTeams: Teams.findTeamsWithUserActiveState(Meteor.userId())
-      .fetch(),
-  })),
+    const quizzes = Quizzes
+      .find()
+      .fetch();
+
+    const invitedTeams = Teams
+      .findTeamsWithUserInvitedState(Meteor.userId())
+      .fetch();
+
+    const activeTeams = Teams
+      .findTeamsWithUserActiveState(Meteor.userId())
+      .fetch();
+
+    return {
+      quizzesSubscriptionReady,
+      teamsSubscriptionReady,
+      quizzes,
+      invitedTeams,
+      activeTeams,
+    };
+  }),
 
   withStyles(dashboardStyle),
 )(DashboardPage);
