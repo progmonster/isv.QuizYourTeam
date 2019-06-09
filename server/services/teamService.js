@@ -186,7 +186,7 @@ const teamService = {
     const userRole = Teams.findOne(teamId)
       .getParticipantRole(user._id);
 
-    // todo remove duplication with quizService.insert
+    // todo remove code duplication with quizService.insert
     if (userRole === TeamRoles.adminRole) {
       Roles.addTeamQuizRolesForUser(
         user,
