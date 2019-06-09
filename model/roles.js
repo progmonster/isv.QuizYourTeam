@@ -50,7 +50,7 @@ Roles.addQuizRolesForUsers = (users, roles, quizId) => Roles.addUsersToRoles(
 Roles.addTeamQuizRolesForUser = (user, roles, teamId) => {
   const quizzes = Quizzes.find({ teamId }, { fields: { _id: 1 } });
 
-  quizzes.forEach(quizId => Roles.addQuizRolesForUsers(user, roles, quizId));
+  quizzes.forEach(({ _id: quizId }) => Roles.addQuizRolesForUsers(user, roles, quizId));
 };
 
 Roles.removeTeamQuizRolesForUser = (userId, teamId) => {

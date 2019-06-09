@@ -180,13 +180,13 @@ const teamService = {
     if (userRole === TeamRoles.adminRole) {
       Roles.addTeamQuizRolesForUser(
         user,
-        [QuizRoles.viewQuiz, QuizRoles.passQuiz],
+        [QuizRoles.viewQuiz, QuizRoles.passQuiz, QuizRoles.editQuiz, QuizRoles.removeQuiz],
         teamId,
       );
     } else if (userRole === TeamRoles.regularParticipantRole) {
       Roles.addTeamQuizRolesForUser(
         user,
-        [QuizRoles.viewQuiz, QuizRoles.passQuiz, QuizRoles.editQuiz, QuizRoles.removeQuiz],
+        [QuizRoles.viewQuiz, QuizRoles.passQuiz],
         teamId,
       );
     }
