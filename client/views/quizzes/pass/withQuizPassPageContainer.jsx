@@ -29,18 +29,22 @@ const withQuizPassPageContainer = WrappedComponent => class WithQuizPassPageCont
       justPassed: false,
       currentUserId: Meteor.userId(),
     };
+
+    this.mounted = false;
   }
 
   componentDidMount() {
+    this.mounted = true;
+
     this.quizSubscription = Meteor.subscribe('quiz', this.getQuizId());
 
-    Tracker.autorun(() => {
+    this.userIdAutorun = Tracker.autorun(() => {
       this.setState({
         currentUserId: Meteor.userId(),
       });
     });
 
-    Tracker.autorun((computation) => {
+    this.quizAutorun = Tracker.autorun((computation) => {
       if (this.quizSubscription.ready()) {
         this.setState({
           quiz: Quizzes.findOne(this.getQuizId()),
@@ -52,7 +56,11 @@ const withQuizPassPageContainer = WrappedComponent => class WithQuizPassPageCont
   }
 
   componentWillUnmount() {
+    this.mounted = false;
+
     this.quizSubscription.stop();
+    this.userIdAutorun.stop();
+    this.quizAutorun.stop();
   }
 
   getQuizId = () => {
@@ -125,11 +133,13 @@ const withQuizPassPageContainer = WrappedComponent => class WithQuizPassPageCont
         ],
       });
 
-      this.setState({
-        justPassed: true,
+      if (this.mounted) {
+        this.setState({
+          justPassed: true,
 
-        quiz: updatedQuiz,
-      });
+          quiz: updatedQuiz,
+        });
+      }
 
       return true;
     } catch (error) {
@@ -144,7 +154,6 @@ const withQuizPassPageContainer = WrappedComponent => class WithQuizPassPageCont
       console.log(error);
 
       dispatch(snackbar.show({ message: `Error saving the quiz result: ${error.message}` }));
-
 
       return error;
     }
