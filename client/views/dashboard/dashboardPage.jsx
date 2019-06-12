@@ -1,6 +1,6 @@
 import React from 'react';
 import * as PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
@@ -14,6 +14,7 @@ import QuizTileContainer from '../quizzes/quizTile';
 import TeamTile from '../teams/teamTile';
 import { quizzesSubscription, teamsSubscription } from '../../subscriptions';
 import EmptyState from '../../components/emptyState';
+import Link from '@material-ui/core/Link';
 
 class DashboardPage extends React.PureComponent {
   renderActiveTeam(team) {
@@ -59,7 +60,7 @@ class DashboardPage extends React.PureComponent {
                   className={classes.newQuizButton}
                   pt={12}
                   color="primary"
-                  component={Link}
+                  component={RouterLink}
                   to={`/quiz-edit?team=${team._id}`}
                 >
                   Add a new quiz
@@ -69,6 +70,30 @@ class DashboardPage extends React.PureComponent {
           </Paper>
         </Grid>
       </Grid>
+    );
+  }
+
+  static renderNoTeamsDescription() {
+    return (
+      <span>
+        <span>Ask another users to send an invitation to you or </span>
+
+        <Link component={RouterLink} to="/team-settings">create</Link>
+
+        <span> your own team to have ability to create or pass quizzes.</span>
+      </span>
+    );
+  }
+
+  static haveOnlyTeamInvitationsDescription() {
+    return (
+      <span>
+        <span>Accept the invitation(s) or </span>
+
+        <Link component={RouterLink} to="/team-settings">create</Link>
+
+        <span> your own team to have ability to create or pass quizzes.</span>
+      </span>
     );
   }
 
@@ -90,8 +115,7 @@ class DashboardPage extends React.PureComponent {
       return (
         <EmptyState
           title="You have no any quizzes and teams yet."
-          description={'Ask another users to send an invitation to you or create your own team'
-          + ' to have ability to create or pass quizzes.'}
+          description={DashboardPage.renderNoTeamsDescription()}
         />
       );
     }
@@ -99,28 +123,29 @@ class DashboardPage extends React.PureComponent {
     return (
       <div>
         {activeTeams.length === 0 && (
-          <Grid container spacing={24}>
+          <Grid container spacing={24} className={classes.haveOnlyInvitedTeamsEmptyState}>
             <Grid item xs>
               <EmptyState
                 title="You have no any quizzes yet."
-                description={'Accept an invitation or create your own team to have ability'
-                + ' to create or pass quizzes.'}
+                description={DashboardPage.haveOnlyTeamInvitationsDescription()}
               />
             </Grid>
           </Grid>
         )}
 
-        <Grid container spacing={24} className={classes.invitedTeamsBlock}>
-          <Grid item xs>
-            <Grid container spacing={24}>
-              {invitedTeams.map(({ _id: teamId }) => (
-                <Grid item key={teamId} xs={12} sm={12} md={6} lg={4} xl={3}>
-                  <TeamTile teamId={teamId} />
-                </Grid>
-              ))}
+        {invitedTeams.length > 0 && (
+          <Grid container spacing={24} className={classes.invitedTeamsBlock}>
+            <Grid item xs>
+              <Grid container spacing={24}>
+                {invitedTeams.map(({ _id: teamId }) => (
+                  <Grid item key={teamId} xs={12} sm={12} md={6} lg={4} xl={3}>
+                    <TeamTile teamId={teamId} />
+                  </Grid>
+                ))}
+              </Grid>
             </Grid>
           </Grid>
-        </Grid>
+        )}
 
         {activeTeams.map(team => this.renderActiveTeam(team))}
       </div>

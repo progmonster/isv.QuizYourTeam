@@ -6,6 +6,10 @@ import {
 } from '/client/assets/jss/material-dashboard-react.jsx';
 
 const dashboardStyle = theme => ({
+  haveOnlyInvitedTeamsEmptyState: {
+    marginBottom: '2em',
+  },
+
   invitedTeamsBlock: {
     marginBottom: '4em',
   },
