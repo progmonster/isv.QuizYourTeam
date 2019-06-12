@@ -9,20 +9,30 @@ import Card from '@material-ui/core/Card';
 import { Roles } from 'meteor/alanning:roles';
 import { compose } from 'redux';
 import { withStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
 import red from '@material-ui/core/colors/red';
 import SettingsIcon from '@material-ui/icons/Settings';
 import { Link } from 'react-router-dom';
-import { Teams } from '../../../model/collections';
 import Button from '@material-ui/core/Button';
 import { connect } from 'react-redux';
+import { Teams } from '../../../model/collections';
 import teamService from '../../services/teamService';
 import { snackbarUtils } from '../../components/snackbar';
+import { blue } from '@material-ui/core/colors';
 
 const styles = theme => ({
+  teamInfo: {
+    wordWrap: 'break-word',
+    fontStyle: 'italic',
+  },
+
+  invitedNote: {
+    color: blue[500],
+  },
+
   card: {
     maxWidth: 400,
   },
+
   media: {
     height: 0,
     paddingTop: '56.25%', // 16:9
@@ -70,23 +80,35 @@ class TeamTile extends React.Component {
     const isUserInInvitedState = team.isUserInInvitedState(currentUserId);
 
     return (
-      <Card className={classes.card}>
+      <Card className={classes.card} elevation={1}>
         <CardHeader
           title={team.title}
-          subheader={`Participants: ${team.getActiveParticipantCount()}`}
-          // todo show quiz count
         />
 
-        <CardContent>
-          <Typography component="p">
-            {team.description}
-          </Typography>
+        {isUserInInvitedState && (
+          <CardContent className={classes.invitedNote}>
+            You are invited to the team. Please accept or reject the invitation.
+          </CardContent>
+        )}
 
-          {isUserInInvitedState && (
-            <Typography component="p">
-              You are invited to the team. Please accept or reject the invitation.
-            </Typography>
-          )}
+        {team.description && (
+          <CardContent>
+            {team.description}
+          </CardContent>
+        )}
+
+        <CardContent className={classes.teamInfo}>
+          <p>
+            Creator:&nbsp;
+            <span>{team.creator.fullName || team.creator.email}</span>
+          </p>
+
+          <p>
+            Participants:&nbsp;
+            <span>{team.getActiveParticipantCount()}</span>
+          </p>
+
+          {/* todo add quiz count */}
         </CardContent>
 
         <CardActions className={classes.actions} disableActionSpacing>
@@ -112,6 +134,8 @@ class TeamTile extends React.Component {
         >
           Reject
         </Button>
+
+        &nbsp;
 
         <Button
           variant="contained"
@@ -171,10 +195,10 @@ export default compose(
 
       roles: {
         /*
-                  editQuiz: Roles.userIsInRole(Meteor.userId(), "editQuiz", `quizzes/${quizId}`),
-                  removeQuiz: Roles.userIsInRole(Meteor.userId(), "removeQuiz", `quizzes/${quizId}`),
-                  passQuiz: Roles.userIsInRole(Meteor.userId(), "passQuiz", `quizzes/${quizId}`),
-          */
+         editQuiz: Roles.userIsInRole(Meteor.userId(), "editQuiz", `quizzes/${quizId}`),
+         removeQuiz: Roles.userIsInRole(Meteor.userId(), "removeQuiz", `quizzes/${quizId}`),
+         passQuiz: Roles.userIsInRole(Meteor.userId(), "passQuiz", `quizzes/${quizId}`),
+         */
       },
     });
   }),

@@ -110,12 +110,41 @@ class DashboardPage extends React.PureComponent {
           </Grid>
         )}
 
-        <Grid container spacing={24}>
-          {invitedTeams.map(({ _id: teamId }) => (
-            <Grid item key={teamId} xs={12} sm={6} md={3}>
-              <TeamTile teamId={teamId} />
+        <Grid container spacing={24} className={classes.invitedTeamsBlock}>
+          <Grid item xs>
+            <Grid container spacing={24}>
+              {invitedTeams.map(({ _id: teamId }) => (
+                <Grid item key={teamId} xs={12} sm={12} md={6} lg={4} xl={3}>
+                  <TeamTile teamId={teamId} />
+                </Grid>
+              ))}
+              {invitedTeams.map(({ _id: teamId }) => (
+                <Grid item key={teamId} xs={12} sm={12} md={6} lg={4} xl={3}>
+                  <TeamTile teamId={teamId} />
+                </Grid>
+              ))}
+              {invitedTeams.map(({ _id: teamId }) => (
+                <Grid item key={teamId} xs={12} sm={12} md={6} lg={4} xl={3}>
+                  <TeamTile teamId={teamId} />
+                </Grid>
+              ))}
+              {invitedTeams.map(({ _id: teamId }) => (
+                <Grid item key={teamId} xs={12} sm={12} md={6} lg={4} xl={3}>
+                  <TeamTile teamId={teamId} />
+                </Grid>
+              ))}
+              {invitedTeams.map(({ _id: teamId }) => (
+                <Grid item key={teamId} xs={12} sm={12} md={6} lg={4} xl={3}>
+                  <TeamTile teamId={teamId} />
+                </Grid>
+              ))}
+              {invitedTeams.map(({ _id: teamId }) => (
+                <Grid item key={teamId} xs={12} sm={12} md={6} lg={4} xl={3}>
+                  <TeamTile teamId={teamId} />
+                </Grid>
+              ))}
             </Grid>
-          ))}
+          </Grid>
         </Grid>
 
         {activeTeams.map(team => this.renderActiveTeam(team))}
