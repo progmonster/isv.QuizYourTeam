@@ -20,6 +20,7 @@ import { removeQuiz } from '../../services/actions';
 import AlertDialog from '../../components/alertDialog';
 import { Quizzes } from '../../../model/collections';
 import { MAX_POSSIBLE_RESULT } from '../../../model/quiz';
+import moment from 'moment';
 
 const styles = theme => ({
   headerRoot: {
@@ -101,6 +102,16 @@ class QuizTile extends React.Component {
         </CardContent>
 
         <CardContent className={classes.resultsBlock}>
+          <p>
+            Creator:&nbsp;
+            <span>{quiz.creator.fullName || quiz.creator.email}</span>
+          </p>
+
+          <p>
+            Updated:&nbsp;
+            <span>{moment(quiz.updatedAt).fromNow()}</span>
+          </p>
+
           <p>
             Passed users:&nbsp;
             <span>{quiz.getPassedUsersCount()}</span>

@@ -16,6 +16,62 @@ import { quizzesSubscription, teamsSubscription } from '../../subscriptions';
 import EmptyState from '../../components/emptyState';
 
 class DashboardPage extends React.PureComponent {
+  renderActiveTeam(team) {
+    const {
+      classes,
+      quizzes,
+    } = this.props;
+
+    const teamQuizzes = quizzes.filter(({ teamId }) => teamId === team._id);
+
+    return (
+      <Grid key={team._id} container spacing={24}>
+        <Grid item xs={12} className={classes.team}>
+          <Paper elevation={1}>
+            <Grid container spacing={24}>
+              <Grid item xs={12}>
+                <Typography
+                  variant="title"
+                  className={classes.teamTitle}
+                >
+                  {team.title}
+                </Typography>
+              </Grid>
+
+              <Grid item xs={12} container>
+                {teamQuizzes.map(({ _id: quizId }) => (
+                  <Grid key={quizId} item xs={12} sm={12} md={6} lg={4} xl={3}>
+                    <div className={classes.quizTile}>
+                      <QuizTileContainer
+                        quizId={quizId}
+                      />
+                    </div>
+                  </Grid>
+                ))}
+
+                {teamQuizzes.length === 0 && (
+                  <EmptyState title="There are no quizzes yet" />
+                )}
+              </Grid>
+
+              <Grid item xs={12}>
+                <Button
+                  className={classes.newQuizButton}
+                  pt={12}
+                  color="primary"
+                  component={Link}
+                  to={`/quiz-edit?team=${team._id}`}
+                >
+                  Add a new quiz
+                </Button>
+              </Grid>
+            </Grid>
+          </Paper>
+        </Grid>
+      </Grid>
+    );
+  }
+
   render() {
     const {
       classes,
@@ -62,50 +118,7 @@ class DashboardPage extends React.PureComponent {
           ))}
         </Grid>
 
-        {activeTeams.map(team => (
-          <Grid key={team._id} container spacing={24}>
-            <Grid item xs={12} className={classes.team}>
-              <Paper elevation={1}>
-                <Grid container spacing={24}>
-                  <Grid item xs={12}>
-                    <Typography
-                      variant="title"
-                      className={classes.teamTitle}
-                    >
-                      {team.title}
-                    </Typography>
-                  </Grid>
-
-                  <Grid item xs={12} container>
-                    {quizzes
-                      .filter(({ teamId }) => teamId === team._id)
-                      .map(({ _id: quizId }) => (
-                        <Grid key={quizId} item xs={12} sm={12} md={6} lg={4} xl={3}>
-                          <div className={classes.quizTile}>
-                            <QuizTileContainer
-                              quizId={quizId}
-                            />
-                          </div>
-                        </Grid>
-                      ))}
-                  </Grid>
-
-                  <Grid item xs={12}>
-                    <Button
-                      className={classes.newQuizButton}
-                      pt={12}
-                      color="primary"
-                      component={Link}
-                      to={`/quiz-edit?team=${team._id}`}
-                    >
-                      Add a new quiz
-                    </Button>
-                  </Grid>
-                </Grid>
-              </Paper>
-            </Grid>
-          </Grid>
-        ))}
+        {activeTeams.map(team => this.renderActiveTeam(team))}
       </div>
     );
   }
