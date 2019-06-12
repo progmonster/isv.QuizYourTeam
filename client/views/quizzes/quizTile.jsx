@@ -30,13 +30,27 @@ const styles = theme => ({
     backgroundColor: green[500],
   },
 
-  yourScoreNote: {
-    color: green[500],
-  },
-
   headerTitle: {
     color: 'white',
     fontSize: 16,
+  },
+
+  headerContent: {
+    wordWrap: 'break-word',
+    minWidth: 0,
+  },
+
+  content: {
+    wordWrap: 'break-word',
+  },
+
+  resultsBlock: {
+    wordWrap: 'break-word',
+    fontStyle: 'italic',
+  },
+
+  yourScoreNote: {
+    color: green[500],
   },
 });
 
@@ -69,18 +83,24 @@ class QuizTile extends React.Component {
     const currentUserPassResult = quiz.getPassInfoByUserId(currentUserId);
 
     return (
-      <Card {...this.props} elevation={1}>
+      <Card elevation={1}>
         <CardHeader
           classes={{
             root: currentUserPassResult ? classes.headerRoot_passedQuiz : classes.headerRoot,
             title: classes.headerTitle,
+            content: classes.headerContent,
           }}
           title={quiz.title}
         />
 
         <CardContent>
-          <p dangerouslySetInnerHTML={{ __html: quizDescriptionHtml }} />
+          <span
+            className={classes.content}
+            dangerouslySetInnerHTML={{ __html: quizDescriptionHtml }}
+          />
+        </CardContent>
 
+        <CardContent className={classes.resultsBlock}>
           <p>
             Passed users:&nbsp;
             <span>{quiz.getPassedUsersCount()}</span>

@@ -6,6 +6,10 @@ import {
 } from '/client/assets/jss/material-dashboard-react.jsx';
 
 const dashboardStyle = theme => ({
+  team: {
+    marginBottom: '4em',
+  },
+
   teamTitle: {
     padding: '1em',
   },
