@@ -11,7 +11,7 @@ import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import { Delete, Edit } from '@material-ui/icons';
 import CardHeader from '@material-ui/core/CardHeader';
-import { orange } from '@material-ui/core/colors';
+import { green, orange } from '@material-ui/core/colors';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import Card from '@material-ui/core/Card';
@@ -24,6 +24,14 @@ import { MAX_POSSIBLE_RESULT } from '../../../model/quiz';
 const styles = theme => ({
   headerRoot: {
     backgroundColor: orange[500],
+  },
+
+  headerRoot_passedQuiz: {
+    backgroundColor: green[500],
+  },
+
+  yourScoreNote: {
+    color: green[500],
   },
 
   headerTitle: {
@@ -50,7 +58,7 @@ class QuizTile extends React.Component {
   };
 
   render() {
-    const { classes, quiz, roles } = this.props;
+    const { classes, quiz, roles, currentUserId } = this.props;
 
     if (!quiz) {
       return <div />;
@@ -58,11 +66,13 @@ class QuizTile extends React.Component {
 
     const quizDescriptionHtml = stateToHTML(convertFromRaw(quiz.descriptionEditorState));
 
+    const currentUserPassResult = quiz.getPassInfoByUserId(currentUserId);
+
     return (
       <Card {...this.props} elevation={1}>
         <CardHeader
           classes={{
-            root: classes.headerRoot,
+            root: currentUserPassResult ? classes.headerRoot_passedQuiz : classes.headerRoot,
             title: classes.headerTitle,
           }}
           title={quiz.title}
@@ -80,6 +90,15 @@ class QuizTile extends React.Component {
             <p>
               Average score:&nbsp;
               <span>{quiz.getAverageScore()}</span>
+              &nbsp;from&nbsp;
+              <span>{MAX_POSSIBLE_RESULT}</span>
+            </p>
+          )}
+
+          {currentUserPassResult && (
+            <p className={classes.yourScoreNote}>
+              Your score:&nbsp;
+              <span>{currentUserPassResult.result}</span>
               &nbsp;from&nbsp;
               <span>{MAX_POSSIBLE_RESULT}</span>
             </p>
@@ -141,6 +160,8 @@ const mapDispatchToProps = (dispatch, { quizId }) => ({
 
 const QuizTileContainer = withTracker(({ quizId }) => ({
   quiz: Quizzes.findOne(quizId),
+
+  currentUserId: Meteor.user()._id,
 
   roles: {
     editQuiz: Roles.userIsInRole(Meteor.userId(), 'editQuiz', `quizzes/${quizId}`),
