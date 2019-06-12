@@ -22,7 +22,7 @@ const quizService = {
       descriptionEditorState: quiz.descriptionEditorState,
       paragraphs: quiz.paragraphs || [],
       questions: quiz.questions || [], // todo validate question with answers
-      creator: new QuizCreator(creator),
+      creator: QuizCreator.createFromUser(creator),
       createdAt,
       updatedAt: createdAt,
       teamId: quiz.teamId,

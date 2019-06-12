@@ -1,8 +1,8 @@
 import sum from 'lodash/sum';
 import QuizParagraph from './quizParagraph';
 import QuizQuestion from './quizQuestion';
-import TeamParticipant from './teamParticipant';
 import QuizPassResult from './quizPassResult';
+import QuizCreator from './quizCreator';
 
 export const MAX_POSSIBLE_RESULT = 10;
 
@@ -42,7 +42,7 @@ export default class Quiz {
     this.descriptionEditorState = doc.descriptionEditorState;
     this.paragraphs = (doc.paragraphs || []).map(paragraph => new QuizParagraph(paragraph));
     this.questions = (doc.questions || []).map(question => new QuizQuestion(question));
-    this.creator = doc.creator && new TeamParticipant(doc.creator);
+    this.creator = doc.creator && new QuizCreator(doc.creator);
     this.createdAt = doc.createdAt;
     this.updatedAt = doc.updatedAt;
     this.teamId = doc.teamId;
