@@ -6,6 +6,18 @@ import {
 } from '/client/assets/jss/material-dashboard-react.jsx';
 
 const dashboardStyle = theme => ({
+  teamTitle: {
+    padding: '1em',
+  },
+
+  newQuizButton: {
+    margin: '1em',
+  },
+
+  quizTile: {
+    margin: '1em',
+  },
+
   successText: {
     color: successColor[0],
   },

@@ -18,6 +18,7 @@ import EmptyState from '../../components/emptyState';
 class DashboardPage extends React.PureComponent {
   render() {
     const {
+      classes,
       quizzes,
       invitedTeams,
       activeTeams,
@@ -64,24 +65,34 @@ class DashboardPage extends React.PureComponent {
         {activeTeams.map(team => (
           <Grid key={team._id} container spacing={24}>
             <Grid item xs={12}>
-              <Paper>
+              <Paper elevation={1}>
                 <Grid container spacing={24}>
                   <Grid item xs={12}>
-                    <Typography variant="h5" gutterBottom>{team.title}</Typography>
+                    <Typography
+                      variant="title"
+                      className={classes.teamTitle}
+                    >
+                      {team.title}
+                    </Typography>
                   </Grid>
 
                   <Grid item xs={12} container spacing={24}>
                     {quizzes
                       .filter(({ teamId }) => teamId === team._id)
                       .map(({ _id: quizId }) => (
-                        <Grid key={quizId} item xs={12} sm={6} md={3}>
-                          <QuizTileContainer quizId={quizId} />
+                        <Grid key={quizId} item xs={12} sm={12} md={6} lg={4} xl={3}>
+                          <QuizTileContainer
+                            className={classes.quizTile}
+                            quizId={quizId}
+                          />
                         </Grid>
                       ))}
                   </Grid>
 
                   <Grid item xs={12}>
                     <Button
+                      className={classes.newQuizButton}
+                      pt={12}
                       color="primary"
                       component={Link}
                       to={`/quiz-edit?team=${team._id}`}
@@ -114,9 +125,17 @@ export default compose(
 
     const teamsSubscriptionReady = teamsSubscription.ready();
 
-    const quizzes = Quizzes
+    let quizzes = Quizzes
       .find()
       .fetch();
+
+    quizzes = [quizzes[0], quizzes[0], quizzes[0], quizzes[0], quizzes[0], quizzes[0], quizzes[0],
+      quizzes[0], quizzes[0], quizzes[0], quizzes[0], quizzes[0], quizzes[0],
+      quizzes[0], quizzes[0], quizzes[0], quizzes[0], quizzes[0], quizzes[0],
+      quizzes[0], quizzes[0], quizzes[0], quizzes[0], quizzes[0], quizzes[0],
+      quizzes[0], quizzes[0], quizzes[0], quizzes[0], quizzes[0], quizzes[0],
+      quizzes[0], quizzes[0], quizzes[0], quizzes[0], quizzes[0], quizzes[0],
+    ];
 
     const invitedTeams = Teams
       .findTeamsWithUserInvitedState(Meteor.userId())

@@ -59,7 +59,7 @@ class QuizTile extends React.Component {
     const quizDescriptionHtml = stateToHTML(convertFromRaw(quiz.descriptionEditorState));
 
     return (
-      <Card>
+      <Card {...this.props} elevation={1}>
         <CardHeader
           classes={{
             root: classes.headerRoot,
