@@ -27,11 +27,11 @@ const Sidebar = ({ ...props }) => {
   }
 
   const onSignOut = () => {
+    props.history.push("/login");
+
     Meteor.logout((error) => {
       if (error) {
         console.log(error);
-      } else {
-        props.history.push("/login");
       }
     });
   };

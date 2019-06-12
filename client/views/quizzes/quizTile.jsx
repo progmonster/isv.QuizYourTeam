@@ -161,7 +161,7 @@ const mapDispatchToProps = (dispatch, { quizId }) => ({
 const QuizTileContainer = withTracker(({ quizId }) => ({
   quiz: Quizzes.findOne(quizId),
 
-  currentUserId: Meteor.user()._id,
+  currentUserId: Meteor.userId(),
 
   roles: {
     editQuiz: Roles.userIsInRole(Meteor.userId(), 'editQuiz', `quizzes/${quizId}`),
