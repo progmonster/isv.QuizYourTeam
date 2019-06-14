@@ -36,35 +36,36 @@ class QuizQuestionEditor extends React.PureComponent {
     return (
       <Paper className={classes.quizQuestionEditor} elevation={1}>
         <Grid container>
-          <Grid item xs={12} sm={12} md={12}>
+          <Grid item xs={12}>
             <Typography variant="h5" component="h3">
               Question #
               {questionNumber}
             </Typography>
           </Grid>
 
-          <Grid item xs={12} sm={12} md={12}>
+          <Grid item xs={12}>
             <Editor
               editorState={editorState}
               wrapperClassName="demo-wrapper"/* todo remove these class */
               editorClassName="demo-editor"
               onEditorStateChange={onQuestionEditorStateChange}
+              placeholder={`Type your question #${questionNumber} here...`}
             />
           </Grid>
 
-          <Grid item xs={12} sm={12} md={12}>
+          <Grid item xs={12}>
             <Typography variant="h5" component="h3">
               Answers
             </Typography>
           </Grid>
 
-          <Grid item xs={12} sm={12} md={8}>
+          <Grid item xs={12}>
             <QuizAnswersEditor questionId={questionId} />
           </Grid>
 
-          <Grid item xs={12} sm={12} md={8}>
+          <Grid item xs={12} container justify="flex-end" alignItems="flex-start">
             <Button variant="contained" color="secondary" onClick={onQuestionRemove}>
-              Remove question
+              Remove
             </Button>
           </Grid>
         </Grid>

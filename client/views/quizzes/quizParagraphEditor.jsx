@@ -44,25 +44,26 @@ class QuizParagraphEditor extends React.PureComponent {
     return (
       <Paper className={classes.quizParagraphEditor} elevation={1}>
         <Grid container>
-          <Grid item xs={12} sm={12} md={12}>
+          <Grid item xs={12}>
             <Typography variant="h5" component="h3">
               Paragraph #
               {number}
             </Typography>
           </Grid>
 
-          <Grid item xs={12} sm={12} md={12}>
+          <Grid item xs={12}>
             <Editor
               editorState={editorState}
               wrapperClassName="demo-wrapper"
               editorClassName="demo-editor"
               onEditorStateChange={onParagraphEditorStateChange}
+              placeholder={`Type your learn material (paragraph #${number}) here...`}
             />
           </Grid>
 
-          <Grid item xs={12} sm={12} md={8}>
+          <Grid item xs={12} container alignItems="flex-start" justify="flex-end">
             <Button variant="contained" color="secondary" onClick={onParagraphRemove}>
-              Remove paragraph
+              Remove
             </Button>
           </Grid>
         </Grid>

@@ -38,6 +38,30 @@ const styles = {
   quizEditorCardSubheaderTitle: {
     color: 'white',
   },
+
+  paragraph: {
+    marginTop: '2em',
+  },
+
+  addNewParagraphBlock: {
+    marginTop: '0.5em',
+  },
+
+  questionsStartBlock: {
+    marginTop: '2em',
+  },
+
+  question: {
+    marginTop: '2em',
+  },
+
+  addNewQuestionBlock: {
+    marginTop: '0.5em',
+  },
+
+  saveQuizStartBlock: {
+    marginTop: '3em',
+  },
 };
 
 class QuizEditorPage extends React.Component {
@@ -125,7 +149,7 @@ class QuizEditorPage extends React.Component {
 
     return (
       <Grid container justify="space-around">
-        <Grid item xs={12} sm={12} md={8}>
+        <Grid item xs={12} md={8}>
           <Card>
             <CardHeader
               classes={{
@@ -145,19 +169,23 @@ class QuizEditorPage extends React.Component {
 
             <CardContent>
               <Grid container>
-                <Grid item xs={12} sm={12} md={12}>
+                <Grid item xs={12}>
                   <TextField
                     value={title}
                     onChange={event => onTitleChange(event.target.value)}
                     margin="normal"
+                    fullWidth
+                    placeholder="Type your quiz title here..."
                   />
                 </Grid>
-                <Grid item xs={12} sm={12} md={12}>
+                <Grid item xs={12}>
                   <Editor
+                    placeholder="Type your quiz description here..."
                     editorState={descriptionEditorState}
                     wrapperClassName="demo-wrapper"
                     editorClassName="demo-editor"
                     onEditorStateChange={onDescriptionEditorStateChange}
+
                   />
                 </Grid>
               </Grid>
@@ -166,30 +194,41 @@ class QuizEditorPage extends React.Component {
         </Grid>
 
         {paragraphs.allIds.map((id, idx) => (
-          <Grid item key={id} xs={12} sm={12} md={8}>
+          <Grid item key={id} xs={12} md={8} className={classes.paragraph}>
             <QuizParagraphEditor id={id} number={idx + 1} />
           </Grid>
         ))}
 
-        <Grid item xs={12} sm={12} md={8}>
+        <Grid item xs={12} md={8} className={classes.addNewParagraphBlock}>
           <Button variant="contained" color="primary" onClick={onParagraphCreate}>
-            Add new paragraph
+            Add a new paragraph
           </Button>
         </Grid>
 
+        <Grid item xs={12} className={classes.questionsStartBlock} />
+
         {questions.allIds.map((id, idx) => (
-          <Grid item key={idx} xs={12} sm={12} md={8}>
+          <Grid item key={id} xs={12} md={8} className={classes.question}>
             <QuizQuestionEditor id={id} number={idx + 1} />
           </Grid>
         ))}
 
-        <Grid item xs={12} sm={12} md={8}>
+        <Grid item xs={12} md={8} className={classes.addNewQuestionBlock}>
           <Button variant="contained" color="primary" onClick={onQuestionCreate}>
-            Add new question
+            Add a new question
           </Button>
         </Grid>
 
-        <Grid item xs={12} sm={12} md={8}>
+        <Grid
+          item
+          xs={12}
+          md={8}
+          className={classes.saveQuizStartBlock}
+          container
+          alignItems="flex-start"
+          justify="flex-end"
+          direction="row"
+        >
           <Button variant="contained" color="primary" onClick={onQuizSave}>
             Save Quiz
           </Button>
