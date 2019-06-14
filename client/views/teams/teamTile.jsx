@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { withTracker } from 'meteor/react-meteor-data';
+import People from '@material-ui/icons/People';
 import IconButton from '@material-ui/core/IconButton';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
@@ -82,6 +83,7 @@ class TeamTile extends React.Component {
     return (
       <Card className={classes.card} elevation={1}>
         <CardHeader
+          avatar={<People />}
           title={team.title}
         />
 

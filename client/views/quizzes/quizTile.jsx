@@ -1,5 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 import React from 'react';
+import FormatAlignLeft from '@material-ui/icons/FormatAlignLeft';
 import withStyles from '@material-ui/core/styles/withStyles';
 import PropTypes from 'prop-types';
 import { convertFromRaw } from 'draft-js';
@@ -34,6 +35,10 @@ const styles = theme => ({
   headerTitle: {
     color: 'white',
     fontSize: 16,
+  },
+
+  headerIcon: {
+    color: 'white',
   },
 
   headerContent: {
@@ -91,6 +96,7 @@ class QuizTile extends React.Component {
             title: classes.headerTitle,
             content: classes.headerContent,
           }}
+          avatar={<FormatAlignLeft className={classes.headerIcon} />}
           title={quiz.title}
         />
 
@@ -109,7 +115,8 @@ class QuizTile extends React.Component {
 
           <p>
             Updated:&nbsp;
-            <span>{moment(quiz.updatedAt).fromNow()}</span>
+            <span>{moment(quiz.updatedAt)
+              .fromNow()}</span>
           </p>
 
           <p>

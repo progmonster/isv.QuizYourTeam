@@ -1,4 +1,5 @@
 import Dashboard from '@material-ui/icons/Dashboard';
+import FormatAlignLeft from '@material-ui/icons/FormatAlignLeft';
 import People from '@material-ui/icons/People';
 import DashboardPage from '/client/views/dashboard/dashboardPage.jsx';
 import TeamsPage from '/client/views/teams/teamsPage';
@@ -11,7 +12,7 @@ export const routes = [
   {
     path: '/dashboard',
     name: 'Quizzes',
-    icon: Dashboard,
+    icon: FormatAlignLeft,
     component: DashboardPage,
     showInDrawer: true,
   },
