@@ -20,6 +20,10 @@ const styles = theme => ({
     paddingTop: theme.spacing.unit * 2, /* todo why? */
     paddingBottom: theme.spacing.unit * 2, /* todo why? */
   },
+
+  answersBlockStart: {
+    marginTop: '2em',
+  },
 });
 
 class QuizQuestionEditor extends React.PureComponent {
@@ -53,7 +57,7 @@ class QuizQuestionEditor extends React.PureComponent {
             />
           </Grid>
 
-          <Grid item xs={12}>
+          <Grid item xs={12} className={classes.answersBlockStart}>
             <Typography variant="h5" component="h3">
               Answers
             </Typography>

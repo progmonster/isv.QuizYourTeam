@@ -19,6 +19,14 @@ const styles = theme => ({
     paddingTop: theme.spacing.unit * 2, /* todo why? */
     paddingBottom: theme.spacing.unit * 2, /* todo why? */
   },
+
+  answersBlock: {
+    marginTop: '1em',
+  },
+
+  addAnswerBlock: {
+    marginTop: '1em',
+  },
 });
 
 class QuizAnswersEditor extends React.PureComponent {
@@ -27,27 +35,33 @@ class QuizAnswersEditor extends React.PureComponent {
       answerType,
       onAnswerAdd,
       onAnswerTypeChange,
+      classes,
     } = this.props;
 
     return (
       <Grid container>
-        <Grid item xs={12} sm={12} md={8}>
-          <Tabs
-            value={answerType === SINGLE_CHOICE ? 0 : 1}
+        <Grid item xs={12}>
+          <Tabs fullWidth
+                value={answerType === SINGLE_CHOICE ? 0 : 1}
 
-            onChange={(event, value) => onAnswerTypeChange(value === 0 ? SINGLE_CHOICE : MULTIPLE_CHOICE)
-            }
+                onChange={(
+                  event,
+                  value,
+                ) => onAnswerTypeChange(value === 0 ? SINGLE_CHOICE : MULTIPLE_CHOICE)
+                }
           >
             <Tab label="Single choice" />
             <Tab label="Multiple choice" />
           </Tabs>
 
-          {answerType === SINGLE_CHOICE
-            ? this._renderSingleChoiceAnswerBlock()
-            : this._renderMultipleChoiceAnswerBlock()}
+          <div className={classes.answersBlock}>
+            {answerType === SINGLE_CHOICE
+              ? this._renderSingleChoiceAnswerBlock()
+              : this._renderMultipleChoiceAnswerBlock()}
+          </div>
         </Grid>
 
-        <Grid item xs={12} sm={12} md={8}>
+        <Grid item xs={12} className={classes.addAnswerBlock}>
           <Button
             variant="contained"
             color="primary"
@@ -112,7 +126,10 @@ QuizAnswersEditor.propTypes = {
   onAnswerAdd: PropTypes.func,
 };
 
-const mapStateToProps = (state, { questionId }) => ({ ...state.editingQuiz.questions.byId[questionId] });
+const mapStateToProps = (
+  state,
+  { questionId },
+) => ({ ...state.editingQuiz.questions.byId[questionId] });
 
 const mapDispatchToProps = (dispatch, { questionId }) => ({
   onAnswerAdd: (title, checked) => {

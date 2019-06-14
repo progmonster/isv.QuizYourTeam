@@ -46,6 +46,8 @@ class MultipleChoiceAnswer extends React.PureComponent {
           value={title}
           onChange={event => onTitleChange(event.target.value)}
           margin="normal"
+          fullWidth
+          placeholder="Write an answer variant here. Select this answer if it is correct variant..."
         />
 
         <IconButton
