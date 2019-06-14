@@ -33,6 +33,10 @@ const styles = theme => ({
     paddingTop: theme.spacing.unit * 2, /* todo why? */
     paddingBottom: theme.spacing.unit * 2, /* todo why? */
   },
+
+  paragraphTitle: {
+    marginBottom: '2em',
+  },
 });
 
 class QuizParagraphEditor extends React.PureComponent {
@@ -45,7 +49,7 @@ class QuizParagraphEditor extends React.PureComponent {
       <Paper className={classes.quizParagraphEditor} elevation={1}>
         <Grid container>
           <Grid item xs={12}>
-            <Typography variant="h5" component="h3">
+            <Typography variant="h5" component="h3" className={classes.paragraphTitle}>
               Paragraph #
               {number}
             </Typography>

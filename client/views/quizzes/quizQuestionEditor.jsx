@@ -24,6 +24,10 @@ const styles = theme => ({
   answersBlockStart: {
     marginTop: '2em',
   },
+
+  questionTitle: {
+    marginBottom: '2em',
+  },
 });
 
 class QuizQuestionEditor extends React.PureComponent {
@@ -41,7 +45,7 @@ class QuizQuestionEditor extends React.PureComponent {
       <Paper className={classes.quizQuestionEditor} elevation={1}>
         <Grid container>
           <Grid item xs={12}>
-            <Typography variant="h5" component="h3">
+            <Typography variant="h5" component="h3" className={classes.questionTitle}>
               Question #
               {questionNumber}
             </Typography>
