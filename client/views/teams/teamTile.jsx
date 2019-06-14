@@ -15,10 +15,10 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import { Link } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import { connect } from 'react-redux';
+import { blue } from '@material-ui/core/colors';
 import { Teams } from '../../../model/collections';
 import teamService from '../../services/teamService';
 import { snackbarUtils } from '../../components/snackbar';
-import { blue } from '@material-ui/core/colors';
 
 const styles = theme => ({
   teamInfo: {
