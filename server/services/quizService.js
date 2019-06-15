@@ -1,7 +1,9 @@
+import { convertFromRaw } from 'draft-js';
 import { check } from 'meteor/check';
 import { Roles } from 'meteor/alanning:roles';
 import zip from 'lodash/zip';
 import sum from 'lodash/sum';
+import some from 'lodash/some';
 import { Quizzes, Teams } from '../../model/collections';
 import { QuizRoles } from '../../model/roles';
 import Quiz, { MAX_POSSIBLE_RESULT, QuizErrors } from '../../model/quiz';
@@ -18,7 +20,7 @@ const quizService = {
     const createdAt = new Date();
 
     const sanitizedQuiz = new Quiz({
-      title: quiz.title,
+      title: (quiz.title || '').trim(),
       descriptionEditorState: quiz.descriptionEditorState,
       paragraphs: quiz.paragraphs || [],
       questions: quiz.questions || [], // todo validate question with answers
@@ -29,6 +31,8 @@ const quizService = {
       maxPossibleResult: MAX_POSSIBLE_RESULT,
       passed: [],
     });
+
+    quizService.checkQuiz(sanitizedQuiz);
 
     const quizId = Quizzes.insert(sanitizedQuiz);
 
@@ -55,14 +59,18 @@ const quizService = {
     check(Roles.hasUserQuizRoles(actorId, QuizRoles.editQuiz, quiz._id), true);
 
     // todo progmonster copy only known quiz fields from a client
+    const updatedQuiz = {
+      title: (quiz.title || '').trim(),
+      updatedAt: new Date(),
+      descriptionEditorState: quiz.descriptionEditorState,
+      paragraphs: quiz.paragraphs,
+      questions: quiz.questions,
+    };
+
+    quizService.checkQuiz(updatedQuiz);
+
     Quizzes.update(quiz._id, {
-      $set: {
-        title: quiz.title,
-        updatedAt: new Date(),
-        descriptionEditorState: quiz.descriptionEditorState,
-        paragraphs: quiz.paragraphs,
-        questions: quiz.questions,
-      },
+      $set: updatedQuiz,
     });
   },
 
@@ -155,6 +163,89 @@ const quizService = {
     });
 
     return quizPassResult;
+  },
+
+  checkQuiz(quiz) {
+    check(quiz, Object);
+
+    const {
+      title,
+      descriptionEditorState,
+      paragraphs,
+      questions,
+    } = quiz;
+
+    if (!title.trim()) {
+      throw new Meteor.Error('The quiz title cannot be empty');
+    }
+
+    const description = convertFromRaw(descriptionEditorState).getPlainText().trim();
+
+    if (!description) {
+      throw new Meteor.Error('The quiz description cannot be empty');
+    }
+
+    (paragraphs || []).forEach(quizService.checkQuizParagraph);
+
+    if (!questions || questions.length === 0) {
+      throw new Meteor.Error('The quiz should contain at least one question');
+    }
+
+    questions.forEach(quizService.checkQuizQuestion);
+  },
+
+  checkQuizParagraph(paragraph) {
+    check(paragraph, Object);
+
+    const {
+      editorState,
+    } = paragraph;
+
+    const paragraphText = convertFromRaw(editorState).getPlainText().trim();
+
+    if (!paragraphText) {
+      throw new Meteor.Error('The quiz paragraph content cannot be empty');
+    }
+  },
+
+
+  checkQuizQuestion(question) {
+    check(question, Object);
+
+    const {
+      editorState,
+      answers,
+    } = question;
+
+    const questionText = convertFromRaw(editorState).getPlainText().trim();
+
+    if (!questionText) {
+      throw new Meteor.Error('The quiz question cannot be empty');
+    }
+
+    if (!answers || answers.length < 2) {
+      throw new Meteor.Error('The quiz question should contain at least two answers');
+    }
+
+    answers.forEach(quizService.checkQuizAnswer);
+
+    if (!some(answers, { checked: true })) {
+      throw new Meteor.Error(
+        'Please, mark at least one answer in the quiz question as a correct answer',
+      );
+    }
+  },
+
+  checkQuizAnswer(answer) {
+    check(answer, Object);
+
+    const {
+      title,
+    } = answer;
+
+    if (!(title || '').trim()) {
+      throw new Meteor.Error('The quiz answer cannot be empty');
+    }
   },
 };
 
