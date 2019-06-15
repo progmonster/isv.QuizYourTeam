@@ -4,6 +4,7 @@ import { Roles } from 'meteor/alanning:roles';
 import zip from 'lodash/zip';
 import sum from 'lodash/sum';
 import some from 'lodash/some';
+import pick from 'lodash/pick';
 import { Quizzes, Teams } from '../../model/collections';
 import { QuizRoles } from '../../model/roles';
 import Quiz, { MAX_POSSIBLE_RESULT, QuizErrors } from '../../model/quiz';
@@ -73,7 +74,13 @@ const quizService = {
     quizService.checkQuiz(updatedQuiz);
 
     Quizzes.update(quiz._id, {
-      $set: updatedQuiz,
+      $set: pick(updatedQuiz, [
+        'questions',
+        'paragraphs',
+        'descriptionEditorState',
+        'updatedAt',
+        'title',
+      ]),
     });
   },
 
@@ -182,7 +189,9 @@ const quizService = {
       throw new Meteor.Error('The quiz title cannot be empty');
     }
 
-    const description = convertFromRaw(descriptionEditorState).getPlainText().trim();
+    const description = convertFromRaw(descriptionEditorState)
+      .getPlainText()
+      .trim();
 
     if (!description) {
       throw new Meteor.Error('The quiz description cannot be empty');
@@ -204,7 +213,9 @@ const quizService = {
       editorState,
     } = paragraph;
 
-    const paragraphText = convertFromRaw(editorState).getPlainText().trim();
+    const paragraphText = convertFromRaw(editorState)
+      .getPlainText()
+      .trim();
 
     if (!paragraphText) {
       throw new Meteor.Error('The quiz paragraph content cannot be empty');
@@ -220,7 +231,9 @@ const quizService = {
       answers,
     } = question;
 
-    const questionText = convertFromRaw(editorState).getPlainText().trim();
+    const questionText = convertFromRaw(editorState)
+      .getPlainText()
+      .trim();
 
     if (!questionText) {
       throw new Meteor.Error('The quiz question cannot be empty');
