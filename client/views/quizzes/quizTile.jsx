@@ -22,6 +22,7 @@ import AlertDialog from '../../components/alertDialog';
 import { Quizzes } from '../../../model/collections';
 import { MAX_POSSIBLE_RESULT } from '../../../model/quiz';
 import moment from 'moment';
+import { compose } from 'redux';
 
 const styles = theme => ({
   headerRoot: {
@@ -196,17 +197,19 @@ const mapDispatchToProps = (dispatch, { quizId }) => ({
   },
 });
 
-const QuizTileContainer = withTracker(({ quizId }) => ({
-  quiz: Quizzes.findOne(quizId),
+export default compose(
+  withTracker(({ quizId }) => ({
+    quiz: Quizzes.findOne(quizId),
 
-  currentUserId: Meteor.userId(),
+    currentUserId: Meteor.userId(),
 
-  roles: {
-    editQuiz: Roles.userIsInRole(Meteor.userId(), 'editQuiz', `quizzes/${quizId}`),
-    removeQuiz: Roles.userIsInRole(Meteor.userId(), 'removeQuiz', `quizzes/${quizId}`),
-    passQuiz: Roles.userIsInRole(Meteor.userId(), 'passQuiz', `quizzes/${quizId}`),
-  },
-}))(withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(QuizTile)));
+    roles: {
+      editQuiz: Roles.userIsInRole(Meteor.userId(), 'editQuiz', `quizzes/${quizId}`),
+      removeQuiz: Roles.userIsInRole(Meteor.userId(), 'removeQuiz', `quizzes/${quizId}`),
+      passQuiz: Roles.userIsInRole(Meteor.userId(), 'passQuiz', `quizzes/${quizId}`),
+    },
+  })),
 
-
-export default QuizTileContainer;
+  withStyles(styles),
+  connect(mapStateToProps, mapDispatchToProps),
+)(QuizTile);
