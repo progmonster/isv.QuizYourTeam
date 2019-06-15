@@ -89,11 +89,16 @@ class QuizTile extends React.Component {
 
     const currentUserPassResult = quiz.getPassInfoByUserId(currentUserId);
 
+    const currentUserPassedQuiz = !!currentUserPassResult;
+
+    const quizUpdatedAfterCurrentUserPassed = currentUserPassedQuiz
+      && (currentUserPassResult.passedAt.getTime() < quiz.updatedAt.getTime());
+
     return (
       <Card elevation={1}>
         <CardHeader
           classes={{
-            root: currentUserPassResult ? classes.headerRoot_passedQuiz : classes.headerRoot,
+            root: currentUserPassedQuiz && !quizUpdatedAfterCurrentUserPassed ? classes.headerRoot_passedQuiz : classes.headerRoot,
             title: classes.headerTitle,
             content: classes.headerContent,
           }}
@@ -134,12 +139,24 @@ class QuizTile extends React.Component {
             </p>
           )}
 
-          {currentUserPassResult && (
+          {currentUserPassedQuiz && (
             <p className={classes.yourScoreNote}>
               Your score:&nbsp;
               <span>{currentUserPassResult.result}</span>
               &nbsp;from&nbsp;
               <span>{MAX_POSSIBLE_RESULT}</span>
+            </p>
+          )}
+
+          {currentUserPassedQuiz && (
+            <p className={classes.yourScoreNote}>
+              You passed:&nbsp;<span>{moment(currentUserPassResult.passedAt).fromNow()}</span>
+            </p>
+          )}
+
+          {quizUpdatedAfterCurrentUserPassed && (
+            <p className={classes.yourScoreNote}>
+              {'You doesn\'t pass updated version yet'}
             </p>
           )}
         </CardContent>
