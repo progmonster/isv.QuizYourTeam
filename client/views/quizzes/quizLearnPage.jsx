@@ -28,18 +28,22 @@ const styles = {
   cardSubheaderTitle: {
     color: 'white',
   },
+
+  actionsBlock: {
+    marginTop: '4em',
+  },
 };
 
-function Intro({ quiz, onLearningStart }) {
+function Intro({ classes, quiz, onLearningStart }) {
   const quizDescriptionHtml = stateToHTML(convertFromRaw(quiz.descriptionEditorState));
 
   return (
     <Grid container>
-      <Grid item xs={12} sm={12} md={12}>
+      <Grid item xs={12}>
         <p dangerouslySetInnerHTML={{ __html: quizDescriptionHtml }} />
       </Grid>
 
-      <Grid item xs={12} sm={12} md={8}>
+      <Grid item xs={12} className={classes.actionsBlock}>
         <Button variant="contained" color="primary" onClick={onLearningStart}>
           Start learning!
         </Button>
@@ -49,18 +53,19 @@ function Intro({ quiz, onLearningStart }) {
 }
 
 Intro.propTypes = {
+  classes: PropTypes.object.isRequired,
   quiz: PropTypes.object.isRequired,
   onLearningStart: PropTypes.func.isRequired,
 };
 
-function Congratulation({ onPreviousStepGo, onLearningClose }) {
+function Congratulation({ classes, onPreviousStepGo, onLearningClose }) {
   return (
     <Grid container>
-      <Grid item xs={12} sm={12} md={12}>
+      <Grid item xs={12}>
         {'Congratulation! You\'ve just finished learning!'}
       </Grid>
 
-      <Grid item xs={12} sm={12} md={8}>
+      <Grid item xs={12} className={classes.actionsBlock}>
         <Button variant="contained" color="primary" onClick={onPreviousStepGo}>
           Previous step
         </Button>
@@ -74,6 +79,7 @@ function Congratulation({ onPreviousStepGo, onLearningClose }) {
 }
 
 Congratulation.propTypes = {
+  classes: PropTypes.object.isRequired,
   onPreviousStepGo: PropTypes.func.isRequired,
   onLearningClose: PropTypes.func.isRequired,
 };
@@ -91,7 +97,7 @@ ParagraphStepTitle.propTypes = {
   stepCount: PropTypes.number.isRequired,
 };
 
-function Paragraph({ paragraph, currentStep, stepCount, onPreviousStepGo, onNextStepGo }) {
+function Paragraph({ classes, paragraph, currentStep, stepCount, onPreviousStepGo, onNextStepGo }) {
   const paragraphContentHtml = stateToHTML(convertFromRaw(paragraph.editorState));
 
   const firstStep = currentStep === 1;
@@ -100,15 +106,15 @@ function Paragraph({ paragraph, currentStep, stepCount, onPreviousStepGo, onNext
 
   return (
     <Grid container>
-      <Grid item xs={12} sm={12} md={12}>
+      <Grid item xs={12}>
         <ParagraphStepTitle currentStep={currentStep} stepCount={stepCount} />
       </Grid>
 
-      <Grid item xs={12} sm={12} md={12}>
+      <Grid item xs={12}>
         <p dangerouslySetInnerHTML={{ __html: paragraphContentHtml }} />
       </Grid>
 
-      <Grid item xs={12} sm={12} md={8}>
+      <Grid item xs={12} className={classes.actionsBlock}>
         <Button variant="contained" color="primary" onClick={onPreviousStepGo}>
           {firstStep ? 'Intro' : 'Previous step'}
         </Button>
@@ -122,6 +128,7 @@ function Paragraph({ paragraph, currentStep, stepCount, onPreviousStepGo, onNext
 }
 
 Paragraph.propTypes = {
+  classes: PropTypes.object.isRequired,
   paragraph: PropTypes.object.isRequired,
   currentStep: PropTypes.number.isRequired,
   stepCount: PropTypes.number.isRequired,
@@ -161,19 +168,20 @@ class QuizLearnPage extends React.Component {
   };
 
   renderContent() {
-    const { quiz } = this.props;
+    const { quiz, classes } = this.props;
 
     const { currentStep } = this.state;
 
     const paragraphCount = size(quiz.paragraphs);
 
     if (currentStep === 0) {
-      return <Intro quiz={quiz} onLearningStart={this.onNextStepGo} />;
+      return <Intro classes={classes} quiz={quiz} onLearningStart={this.onNextStepGo} />;
     }
 
     if (currentStep <= paragraphCount) {
       return (
         <Paragraph
+          classes={classes}
           paragraph={quiz.paragraphs[currentStep - 1]}
           currentStep={currentStep}
           stepCount={paragraphCount}
@@ -185,6 +193,7 @@ class QuizLearnPage extends React.Component {
 
     return (
       <Congratulation
+        classes={classes}
         onPreviousStepGo={this.onPreviousStepGo}
         onLearningClose={this.onLearningClose}
       />
@@ -203,7 +212,7 @@ class QuizLearnPage extends React.Component {
 
     return (
       <Grid container justify="space-around">
-        <Grid item xs={12} sm={12} md={8}>
+        <Grid item xs={12} xl={10}>
           <Card>
             <CardHeader
               classes={{

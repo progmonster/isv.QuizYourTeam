@@ -197,7 +197,11 @@ const quizService = {
       throw new Meteor.Error('The quiz description cannot be empty');
     }
 
-    (paragraphs || []).forEach(quizService.checkQuizParagraph);
+    if (!paragraphs || paragraphs.length === 0) {
+      throw new Meteor.Error('The quiz should contain at least one paragraph for learn');
+    }
+
+    paragraphs.forEach(quizService.checkQuizParagraph);
 
     if (!questions || questions.length === 0) {
       throw new Meteor.Error('The quiz should contain at least one question');
