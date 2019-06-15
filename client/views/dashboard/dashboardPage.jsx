@@ -2,6 +2,7 @@ import React from 'react';
 import * as PropTypes from 'prop-types';
 import { Link as RouterLink } from 'react-router-dom';
 import Grid from '@material-ui/core/Grid';
+import People from '@material-ui/icons/People';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
@@ -35,7 +36,9 @@ class DashboardPage extends React.PureComponent {
                   variant="title"
                   className={classes.teamTitle}
                 >
-                  {team.title}
+                  <Grid container alignItems={'center'}>
+                    <People />&nbsp;{team.title}
+                  </Grid>
                 </Typography>
               </Grid>
 
