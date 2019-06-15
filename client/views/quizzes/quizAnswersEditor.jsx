@@ -41,7 +41,7 @@ class QuizAnswersEditor extends React.PureComponent {
     return (
       <Grid container>
         <Grid item xs={12}>
-          <Tabs fullWidth
+          <Tabs variant="fullWidth"
                 value={answerType === SINGLE_CHOICE ? 0 : 1}
 
                 onChange={(
