@@ -121,8 +121,7 @@ class QuizTile extends React.Component {
 
           <p>
             Updated:&nbsp;
-            <span>{moment(quiz.updatedAt)
-              .fromNow()}</span>
+            <span>{moment(quiz.updatedAt).fromNow()}</span>
           </p>
 
           <p>
