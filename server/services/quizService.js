@@ -9,6 +9,9 @@ import { QuizRoles } from '../../model/roles';
 import Quiz, { MAX_POSSIBLE_RESULT, QuizErrors } from '../../model/quiz';
 import QuizCreator from '../../model/quizCreator';
 import QuizPassResult from '../../model/quizPassResult';
+import QuizQuestion from '../../model/quizQuestion';
+import QuizAnswer from '../../model/quizAnswer';
+import QuizParagraph from '../../model/quizParagraph';
 
 const quizService = {
   insert(quiz, creator) {
@@ -59,13 +62,13 @@ const quizService = {
     check(Roles.hasUserQuizRoles(actorId, QuizRoles.editQuiz, quiz._id), true);
 
     // todo progmonster copy only known quiz fields from a client
-    const updatedQuiz = {
+    const updatedQuiz = new Quiz({
       title: (quiz.title || '').trim(),
       updatedAt: new Date(),
       descriptionEditorState: quiz.descriptionEditorState,
       paragraphs: quiz.paragraphs,
       questions: quiz.questions,
-    };
+    });
 
     quizService.checkQuiz(updatedQuiz);
 
@@ -166,7 +169,7 @@ const quizService = {
   },
 
   checkQuiz(quiz) {
-    check(quiz, Object);
+    check(quiz, Quiz);
 
     const {
       title,
@@ -195,7 +198,7 @@ const quizService = {
   },
 
   checkQuizParagraph(paragraph) {
-    check(paragraph, Object);
+    check(paragraph, QuizParagraph);
 
     const {
       editorState,
@@ -210,7 +213,7 @@ const quizService = {
 
 
   checkQuizQuestion(question) {
-    check(question, Object);
+    check(question, QuizQuestion);
 
     const {
       editorState,
@@ -237,7 +240,7 @@ const quizService = {
   },
 
   checkQuizAnswer(answer) {
-    check(answer, Object);
+    check(answer, QuizAnswer);
 
     const {
       title,
