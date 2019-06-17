@@ -39,6 +39,12 @@ const styles = {
   yourPassOutdatedNote: {
     color: yellow[800],
   },
+
+  congratulationText: {
+    marginTop: '3em',
+    marginBottom: '3em',
+    color: green[500],
+  },
 };
 
 class QuizPassPage extends React.Component {

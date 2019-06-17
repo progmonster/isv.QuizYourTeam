@@ -2,6 +2,7 @@ import * as PropTypes from 'prop-types';
 import React from 'react';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
 
 export default function Congratulation(
   {
@@ -23,12 +24,12 @@ export default function Congratulation(
 
   return (
     <Grid container>
-      <Grid item xs={12} sm={12} md={12}>
-        {'Congratulation! You\'ve just finished quiz!'}
-        <br />
-        {`You've answered correctly on ${answeredCorrectlyQuestionNumber} from ${totalQuestionNumber} questions`}
-        <br />
-        {`You've achieved ${result} from ${maxPossibleResult} points`}
+      <Grid item xs={12}>
+        <Typography align="center" variant="h4" className={classes.congratulationText}>
+          <p>{'Congratulation! You\'ve just finished quiz!'}</p>
+          <p>{`You've answered correctly on ${answeredCorrectlyQuestionNumber} from ${totalQuestionNumber} questions`}</p>
+          <p>{`You've achieved ${result} from ${maxPossibleResult} points`}</p>
+        </Typography>
       </Grid>
 
       <Grid item xs={12} container className={classes.actionsBlock} justify="space-between">
