@@ -5,6 +5,7 @@ import Button from '@material-ui/core/Button';
 
 export default function Congratulation(
   {
+    classes,
     currentUserId,
     quiz,
     onPreviousStepGo,
@@ -30,20 +31,25 @@ export default function Congratulation(
         {`You've achieved ${result} from ${maxPossibleResult} points`}
       </Grid>
 
-      <Grid item xs={12} sm={12} md={8}>
-        <Button variant="contained" color="primary" onClick={onSeeResults}>
-          See results
-        </Button>
+      <Grid item xs={12} container className={classes.actionsBlock} justify="space-between">
+        <Grid item>
+          <Button variant="contained" color="primary" onClick={onSeeResults}>
+            See results
+          </Button>
+        </Grid>
 
-        <Button variant="contained" color="primary" onClick={onQuizClose}>
-          Exit quiz
-        </Button>
+        <Grid item>
+          <Button variant="contained" color="primary" onClick={onQuizClose}>
+            Exit quiz
+          </Button>
+        </Grid>
       </Grid>
     </Grid>
   );
 }
 
 Congratulation.propTypes = {
+  classes: PropTypes.object.isRequired,
   currentUserId: PropTypes.string.isRequired,
   quiz: PropTypes.object.isRequired,
   onPreviousStepGo: PropTypes.func.isRequired,

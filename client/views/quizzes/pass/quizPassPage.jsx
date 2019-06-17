@@ -7,7 +7,7 @@ import { compose } from 'redux';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardContent from '@material-ui/core/CardContent';
-import { orange } from '@material-ui/core/colors';
+import { green, orange, yellow } from '@material-ui/core/colors';
 import Grid from '@material-ui/core/Grid';
 import Intro from './intro';
 import Question from './question';
@@ -26,6 +26,18 @@ const styles = {
 
   cardSubheaderTitle: {
     color: 'white',
+  },
+
+  actionsBlock: {
+    marginTop: '4em',
+  },
+
+  passedDescription: {
+    color: green[500],
+  },
+
+  yourPassOutdatedNote: {
+    color: yellow[800],
   },
 };
 
@@ -114,6 +126,7 @@ class QuizPassPage extends React.Component {
       currentUserId,
       quiz,
       justPassed,
+      classes
     } = this.props;
 
     if (!quiz) {
@@ -127,6 +140,7 @@ class QuizPassPage extends React.Component {
     if (currentStep === 0) {
       return (
         <Intro
+          classes={classes}
           currentUserId={currentUserId}
           quiz={quiz}
           onStart={this.onNextStepGo}
@@ -139,6 +153,7 @@ class QuizPassPage extends React.Component {
     if (currentStep <= questionCount) {
       return (
         <Question
+          classes={classes}
           question={this.getCurrentQuestion()}
           currentStep={currentStep}
           stepCount={questionCount}
@@ -154,6 +169,7 @@ class QuizPassPage extends React.Component {
 
     return (
       <Congratulation
+        classes={classes}
         currentUserId={currentUserId}
         quiz={quiz}
         onPreviousStepGo={this.onPreviousStepGo}
@@ -167,9 +183,6 @@ class QuizPassPage extends React.Component {
   render() {
     const {
       classes,
-    } = this.props;
-
-    const {
       quiz,
     } = this.props;
 
@@ -179,7 +192,7 @@ class QuizPassPage extends React.Component {
 
     return (
       <Grid container justify="space-around">
-        <Grid item xs={12} sm={12} md={8}>
+        <Grid item xs={12} xl={10}>
           <Card>
             <CardHeader
               classes={{

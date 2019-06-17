@@ -11,6 +11,7 @@ import { SINGLE_CHOICE } from '../../../../model/answerTypes';
 
 export default function Question(
   {
+    classes,
     question,
     currentStep,
     stepCount,
@@ -48,39 +49,44 @@ export default function Question(
 
   return (
     <Grid container>
-      <Grid item xs={12} sm={12} md={12}>
+      <Grid item xs={12}>
         <QuestionStepTitle currentStep={currentStep} stepCount={stepCount} />
       </Grid>
 
-      <Grid item xs={12} sm={12} md={12}>
+      <Grid item xs={12}>
         <p dangerouslySetInnerHTML={{ __html: questionHtml }} />
       </Grid>
 
-      <Grid item xs={12} sm={12} md={12}>
+      <Grid item xs={12}>
         {question.answerType === SINGLE_CHOICE
           ? renderSingleChoiceAnswers()
           : renderMultipleChoiceAnswers()}
       </Grid>
 
-      <Grid item xs={12} sm={12} md={8}>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={onPreviousStepGo}
-          disabled={firstStep && isIntroDisabled}
-        >
-          {firstStep ? 'Intro' : 'Previous step'}
-        </Button>
+      <Grid item xs={12} container className={classes.actionsBlock} justify="space-between">
+        <Grid item>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={onPreviousStepGo}
+            disabled={firstStep && isIntroDisabled}
+          >
+            {firstStep ? 'Intro' : 'Previous step'}
+          </Button>
+        </Grid>
 
-        <Button variant="contained" color="primary" onClick={onNextStepGo}>
-          {lastStep ? 'Finish' : 'Next step'}
-        </Button>
+        <Grid item>
+          <Button variant="contained" color="primary" onClick={onNextStepGo}>
+            {lastStep ? 'Finish' : 'Next step'}
+          </Button>
+        </Grid>
       </Grid>
     </Grid>
   );
 }
 
 Question.propTypes = {
+  classes: PropTypes.object.isRequired,
   question: PropTypes.object.isRequired,
   currentStep: PropTypes.number.isRequired,
   stepCount: PropTypes.number.isRequired,
