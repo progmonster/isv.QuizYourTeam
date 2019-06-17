@@ -33,6 +33,23 @@ const styles = {
     marginTop: '4em',
   },
 
+  introContent: {
+    marginLeft: '2em',
+    marginRight: '2em',
+  },
+
+  paragraphTitle: {
+    marginTop: '1em',
+    marginLeft: '2em',
+    marginRight: '2em',
+  },
+
+  paragraphContent: {
+    marginLeft: '2em',
+    marginRight: '2em',
+    marginTop: '1em',
+  },
+
   congratulationText: {
     marginTop: '4em',
     marginBottom: '4em',
@@ -44,7 +61,7 @@ function Intro({ classes, quiz, onLearningStart }) {
 
   return (
     <Grid container>
-      <Grid item xs={12}>
+      <Grid item xs={12} className={classes.introContent}>
         <p dangerouslySetInnerHTML={{ __html: quizDescriptionHtml }} />
       </Grid>
 
@@ -121,11 +138,11 @@ function Paragraph({ classes, paragraph, currentStep, stepCount, onPreviousStepG
 
   return (
     <Grid container>
-      <Grid item xs={12}>
+      <Grid item xs={12} className={classes.paragraphTitle}>
         <ParagraphStepTitle currentStep={currentStep} stepCount={stepCount} />
       </Grid>
 
-      <Grid item xs={12}>
+      <Grid item xs={12} className={classes.paragraphContent}>
         <p dangerouslySetInnerHTML={{ __html: paragraphContentHtml }} />
       </Grid>
 
