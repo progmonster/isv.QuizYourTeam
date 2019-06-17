@@ -32,6 +32,11 @@ const styles = {
   actionsBlock: {
     marginTop: '4em',
   },
+
+  congratulationText: {
+    marginTop: '4em',
+    marginBottom: '4em',
+  },
 };
 
 function Intro({ classes, quiz, onLearningStart }) {
@@ -62,17 +67,27 @@ function Congratulation({ classes, onPreviousStepGo, onLearningClose }) {
   return (
     <Grid container>
       <Grid item xs={12}>
-        {'Congratulation! You\'ve just finished learning!'}
+        <Typography align="center" variant="h4" className={classes.congratulationText}>
+          {'Congratulation! You\'ve just finished learning!'}
+        </Typography>
       </Grid>
 
-      <Grid item xs={12} className={classes.actionsBlock}>
-        <Button variant="contained" color="primary" onClick={onPreviousStepGo}>
-          Previous step
-        </Button>
+      <Grid item xs={12} className={classes.actionsBlock} container>
+        <Grid item xs={6} container>
+          <Grid item>
+            <Button variant="contained" color="primary" onClick={onPreviousStepGo}>
+              Previous step
+            </Button>
+          </Grid>
+        </Grid>
 
-        <Button variant="contained" color="primary" onClick={onLearningClose}>
-          Exit learning
-        </Button>
+        <Grid item xs={6} container justify="flex-end">
+          <Grid item>
+            <Button variant="contained" color="primary" onClick={onLearningClose}>
+              Exit learning
+            </Button>
+          </Grid>
+        </Grid>
       </Grid>
     </Grid>
   );
@@ -87,7 +102,7 @@ Congratulation.propTypes = {
 function ParagraphStepTitle({ currentStep, stepCount }) {
   return (
     <Typography variant="h5">
-      {`Step ${currentStep} from ${stepCount}`}
+      {`Paragraph ${currentStep} from ${stepCount}`}
     </Typography>
   );
 }
@@ -114,14 +129,22 @@ function Paragraph({ classes, paragraph, currentStep, stepCount, onPreviousStepG
         <p dangerouslySetInnerHTML={{ __html: paragraphContentHtml }} />
       </Grid>
 
-      <Grid item xs={12} className={classes.actionsBlock}>
-        <Button variant="contained" color="primary" onClick={onPreviousStepGo}>
-          {firstStep ? 'Intro' : 'Previous step'}
-        </Button>
+      <Grid item xs={12} className={classes.actionsBlock} container>
+        <Grid item xs={6} container>
+          <Grid item>
+            <Button variant="contained" color="primary" onClick={onPreviousStepGo}>
+              {firstStep ? 'Intro' : 'Previous step'}
+            </Button>
+          </Grid>
+        </Grid>
 
-        <Button variant="contained" color="primary" onClick={onNextStepGo}>
-          {lastStep ? 'Finish learning' : 'Next step'}
-        </Button>
+        <Grid item xs={6} container justify="flex-end">
+          <Grid item>
+            <Button variant="contained" color="primary" onClick={onNextStepGo}>
+              {lastStep ? 'Finish learning' : 'Next step'}
+            </Button>
+          </Grid>
+        </Grid>
       </Grid>
     </Grid>
   );
