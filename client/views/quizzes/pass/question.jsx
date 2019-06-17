@@ -49,15 +49,15 @@ export default function Question(
 
   return (
     <Grid container>
-      <Grid item xs={12}>
+      <Grid item xs={12} className={classes.questionTitle}>
         <QuestionStepTitle currentStep={currentStep} stepCount={stepCount} />
       </Grid>
 
-      <Grid item xs={12}>
+      <Grid item xs={12} className={classes.questionContent}>
         <p dangerouslySetInnerHTML={{ __html: questionHtml }} />
       </Grid>
 
-      <Grid item xs={12}>
+      <Grid item xs={12} className={classes.answerBlock}>
         {question.answerType === SINGLE_CHOICE
           ? renderSingleChoiceAnswers()
           : renderMultipleChoiceAnswers()}

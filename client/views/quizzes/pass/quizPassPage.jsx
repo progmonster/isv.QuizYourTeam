@@ -33,6 +33,8 @@ const styles = {
   },
 
   passedDescription: {
+    marginLeft: '2em',
+    marginRight: '2em',
     color: green[500],
   },
 
@@ -44,6 +46,29 @@ const styles = {
     marginTop: '3em',
     marginBottom: '3em',
     color: green[500],
+  },
+
+  introContent: {
+    marginLeft: '2em',
+    marginRight: '2em',
+  },
+
+  questionTitle: {
+    marginTop: '1em',
+    marginLeft: '2em',
+    marginRight: '2em',
+  },
+
+  questionContent: {
+    marginLeft: '2em',
+    marginRight: '2em',
+    marginTop: '2em',
+    marginBottom: '4em',
+  },
+
+  answerBlock: {
+    marginLeft: '2em',
+    marginRight: '2em',
   },
 };
 

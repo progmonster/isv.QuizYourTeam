@@ -51,7 +51,7 @@ export default function Intro({ classes, currentUserId, quiz, onStart, onSeeResu
         </Grid>
       )}
 
-      <Grid item xs={12}>
+      <Grid item xs={12} className={classes.introContent}>
         <p dangerouslySetInnerHTML={{ __html: quizDescriptionHtml }} />
       </Grid>
 
