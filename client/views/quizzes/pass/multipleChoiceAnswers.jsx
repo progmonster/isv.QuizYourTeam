@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import FormGroup from '@material-ui/core/FormGroup';
 import Grid from '@material-ui/core/Grid';
 import Checkbox from '@material-ui/core/Checkbox';
@@ -9,16 +9,27 @@ import { compose } from 'redux';
 import { withStyles } from '@material-ui/core';
 
 const styles = {
+  uncheckedAnswer: {
+    marginTop: '0.5em',
+    marginBottom: '0.5em',
+  },
+
   validAnswer: {
-    backgroundColor: green[50],
+    backgroundColor: green[100],
+    marginTop: '0.5em',
+    marginBottom: '0.5em',
   },
 
   correctUserAnswer: {
-    backgroundColor: green[500],
+    backgroundColor: green[300],
+    marginTop: '0.5em',
+    marginBottom: '0.5em',
   },
 
   incorrectUserAnswer: {
-    backgroundColor: red[500],
+    backgroundColor: red[100],
+    marginTop: '0.5em',
+    marginBottom: '0.5em',
   },
 };
 
@@ -40,9 +51,12 @@ const MultipleChoiceAnswers = (
     onAnswerChange(Number(event.target.value), checked);
   };
 
+  const isCorrectAnswer = (checked, checkedByUser) => checked && checkedByUser
+    || !checked && !checkedByUser;
+
   const getAnswerClasses = ({ checked, checkedByUser }) => {
     if (!checkAnswer) {
-      return {};
+      return { root: classes.uncheckedAnswer };
     }
 
     if (checked) {
@@ -69,24 +83,29 @@ const MultipleChoiceAnswers = (
   );
 
   return (
-    <Grid container>
-      <Grid item xs={12} sm={12} md={8}>
-        <FormGroup>
-          {answers.map(({ title, checked = false, checkedByUser = false }, answerIdx) => (
-            <FormControlLabel
-              classes={getAnswerClasses({
-                checked,
-                checkedByUser,
-              })}
-              key={answerIdx}
-              value={answerIdx.toString()}
-              label={title}
-              control={renderCheckbox(checkedByUser)}
-            />
-          ))}
-        </FormGroup>
-      </Grid>
-    </Grid>
+    <FormGroup>
+        {answers.map(({ title, checked = false, checkedByUser = false }, answerIdx) => (
+          <Grid container key={answerIdx}>
+            <Grid item xs={11}>
+              <FormControlLabel
+                classes={getAnswerClasses({
+                  checked,
+                  checkedByUser,
+                })}
+                value={answerIdx.toString()}
+                label={title}
+                control={renderCheckbox(checkedByUser)}
+              />
+            </Grid>
+
+            {checkAnswer && (
+              <Grid item xs={1}>
+                {isCorrectAnswer(checked, checkedByUser) && "X" || "V"}
+              </Grid>
+            )}
+          </Grid>
+        ))}
+    </FormGroup>
   );
 };
 
