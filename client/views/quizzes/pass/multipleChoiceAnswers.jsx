@@ -59,16 +59,15 @@ const MultipleChoiceAnswers = (
 
   const getLabelWithAnswer = (title, checkedByUser, checked) => (
     <Typography className={classes.answerLabel}>
-      {(!checked && !checkedByUser && <span>{title}</span>)}
-      {(!checked && checkedByUser && <span className={classes.incorrectUserAnswer}>{title}</span>)}
-      {(checked && !checkedByUser && <span className={classes.incorrectUserAnswer}>{title}</span>)}
-      {(checked && checkedByUser && <span className={classes.correctUserAnswer}>{title}</span>)}
+      {(checked && <span className={classes.correctUserAnswer}>{title}</span>)}
+      {(!checked && <span>{title}</span>)}
 
       &nbsp;
 
-      {(checked && checkedByUser && <Check className={classes.correctUserAnswer} />)}
+      {(!checked && !checkedByUser && <Check className={classes.correctUserAnswer} />)}
       {(!checked && checkedByUser && <Clear className={classes.incorrectUserAnswer} />)}
       {(checked && !checkedByUser && <Clear className={classes.incorrectUserAnswer} />)}
+      {(checked && checkedByUser && <Check className={classes.correctUserAnswer} />)}
     </Typography>
   );
 

@@ -4,12 +4,8 @@ import * as PropTypes from 'prop-types';
 import React from 'react';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
-import FormGroup from '@material-ui/core/FormGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
 import { compose } from 'redux';
-import { Typography, withStyles } from '@material-ui/core';
-import { Clear } from '@material-ui/icons';
+import { withStyles } from '@material-ui/core';
 
 const styles = {};
 
