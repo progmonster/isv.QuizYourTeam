@@ -1,35 +1,32 @@
 import React, { Fragment } from 'react';
 import FormGroup from '@material-ui/core/FormGroup';
-import Grid from '@material-ui/core/Grid';
 import Checkbox from '@material-ui/core/Checkbox';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import * as PropTypes from 'prop-types';
 import { green, red } from '@material-ui/core/colors';
 import { compose } from 'redux';
-import { withStyles } from '@material-ui/core';
+import { Typography, withStyles } from '@material-ui/core';
+import { Check, Clear } from '@material-ui/icons';
 
 const styles = {
+  answerLabel: {
+    display: 'flex',
+    alignItems: 'center',
+  },
+
   uncheckedAnswer: {
-    marginTop: '0.5em',
-    marginBottom: '0.5em',
   },
 
   validAnswer: {
-    backgroundColor: green[100],
-    marginTop: '0.5em',
-    marginBottom: '0.5em',
+    color: green[800],
   },
 
   correctUserAnswer: {
-    backgroundColor: green[300],
-    marginTop: '0.5em',
-    marginBottom: '0.5em',
+    color: green[800],
   },
 
   incorrectUserAnswer: {
-    backgroundColor: red[100],
-    marginTop: '0.5em',
-    marginBottom: '0.5em',
+    color: red[800],
   },
 };
 
@@ -51,28 +48,6 @@ const MultipleChoiceAnswers = (
     onAnswerChange(Number(event.target.value), checked);
   };
 
-  const isCorrectAnswer = (checked, checkedByUser) => checked && checkedByUser
-    || !checked && !checkedByUser;
-
-  const getAnswerClasses = ({ checked, checkedByUser }) => {
-    if (!checkAnswer) {
-      return { root: classes.uncheckedAnswer };
-    }
-
-    if (checked) {
-      if (checkedByUser) {
-        return { root: classes.correctUserAnswer };
-      }
-
-      return { root: classes.validAnswer };
-    }
-
-    if (checkedByUser) {
-      return { root: classes.incorrectUserAnswer };
-    }
-
-    return {};
-  };
 
   const renderCheckbox = checkedByUser => (
     <Checkbox
@@ -82,29 +57,31 @@ const MultipleChoiceAnswers = (
     />
   );
 
+  const getLabelWithAnswer = (title, checkedByUser, checked) => (
+    <Typography className={classes.answerLabel}>
+      {(!checked && !checkedByUser && <span>{title}</span>)}
+      {(!checked && checkedByUser && <span className={classes.incorrectUserAnswer}>{title}</span>)}
+      {(checked && !checkedByUser && <span className={classes.incorrectUserAnswer}>{title}</span>)}
+      {(checked && checkedByUser && <span className={classes.correctUserAnswer}>{title}</span>)}
+
+      &nbsp;
+
+      {(checked && checkedByUser && <Check className={classes.correctUserAnswer} />)}
+      {(!checked && checkedByUser && <Clear className={classes.incorrectUserAnswer} />)}
+      {(checked && !checkedByUser && <Clear className={classes.incorrectUserAnswer} />)}
+    </Typography>
+  );
+
   return (
     <FormGroup>
-        {answers.map(({ title, checked = false, checkedByUser = false }, answerIdx) => (
-          <Grid container key={answerIdx}>
-            <Grid item xs={11}>
-              <FormControlLabel
-                classes={getAnswerClasses({
-                  checked,
-                  checkedByUser,
-                })}
-                value={answerIdx.toString()}
-                label={title}
-                control={renderCheckbox(checkedByUser)}
-              />
-            </Grid>
-
-            {checkAnswer && (
-              <Grid item xs={1}>
-                {isCorrectAnswer(checked, checkedByUser) && "X" || "V"}
-              </Grid>
-            )}
-          </Grid>
-        ))}
+      {answers.map(({ title, checked = false, checkedByUser = false }, answerIdx) => (
+        <FormControlLabel
+          key={answerIdx}
+          value={answerIdx.toString()}
+          label={checkAnswer ? getLabelWithAnswer(title, checkedByUser, checked) : title}
+          control={renderCheckbox(checkedByUser)}
+        />
+      ))}
     </FormGroup>
   );
 };
