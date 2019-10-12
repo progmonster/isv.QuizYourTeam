@@ -1,0 +1,36 @@
+{
+  "plugins": [
+    "jest",
+    "redux-saga"
+  ],
+
+  "env": {
+    "es6": true,
+    "browser": true,
+    "node": true,
+    "meteor": true,
+    "jest/globals": true
+  },
+  "extends": "airbnb",
+  "parser": "babel-eslint",
+  "settings": {
+    "import/resolver": {
+      "meteor": {
+        "extensions": [
+          ".js",
+          ".jsx"
+        ]
+      }
+    }
+  },
+  "rules": {
+    "react/jsx-one-expression-per-line": "off",
+    "no-mixed-operators": "off",
+    "no-console": "off",
+    "no-underscore-dangle": "off",
+    "react/forbid-prop-types": "off",
+    "object-curly-newline": "off",
+    "react/no-danger": "off",
+    "no-param-reassign": ["error", { "props": false }]
+  }
+}

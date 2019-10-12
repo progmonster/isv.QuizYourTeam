@@ -1,0 +1,2 @@
+import './quizMethods';
+import './teamMethods';

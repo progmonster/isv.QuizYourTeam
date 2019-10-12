@@ -1,0 +1,3 @@
+export const SINGLE_CHOICE = 'SINGLE_CHOICE';
+
+export const MULTIPLE_CHOICE = 'MULTIPLE_CHOICE';
