@@ -1,6 +1,6 @@
 # QuizYourTeam
 
-This product can used for improving your teams knowledge by learning and testing material that you prepared.
+This product can be used for improving your teams knowledge by learning and testing material that you prepared.
 You may create different teams and invite your colleagues. For example: business team, development team, etc.
 Also you can create unique set of learning material per team.   
 
